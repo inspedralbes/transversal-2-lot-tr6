@@ -8,7 +8,7 @@ Un cop comenceu heu de canviar aquesta explicació amb la corresponent al vostre
 
 
 # Aquest fitxer ha de contenir com a mínim:
- * Nom dels integrants
+ * Nosaltres sóm Damià Brea, Ismael Alghani i Lucas Costa.
  * Nom del projecte
  * Petita descripció
  * Adreça del prototip del Penpot
