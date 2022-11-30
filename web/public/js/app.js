@@ -5,10 +5,51 @@ const quiz = Vue.component('quiz', {
             <div class="play">
                 <div>
                 <h1> Wanna test your knowledge? </h1>
-                <router-link to="/play" class="button">Play</router-link>
+                <router-link to="/difficulty" class="button">Play</router-link>
                 </div>
             </div>
         </div>`
+});
+
+const difficulty = Vue.component('difficulty', {
+    data: function () {
+        return {
+            categorias: [],
+        }
+    },
+    template: `
+        <div class="play"> 
+            <div class="setParameters">
+                <div class="categories">
+                    <label> Difficulty 
+                        <select>
+                            <option disabled selected>Choose a Category</option>
+                            <option value="fantasy">Fantaseame esta</option>
+                            <option value="cine">Cine</option>
+                            <option value="amongus">Amongus</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="difficulty">
+                <label> Difficulty 
+                    <select>
+                        <option disabled selected>Choose a difficulty</option>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </label>
+                </div>
+                <router-link to="/play" class="button">Play</router-link>
+            </div>
+        </div>`,
+    mounted() {
+        {
+            fetch('https://the-trivia-api.com/api/categories')
+                .then((response) => response.json())
+                .then((categories) => console.log(categories));
+        }
+    }
 });
 
 const play = Vue.component('play', {
@@ -93,6 +134,7 @@ const login = Vue.component('login', {
 const routes = [
     { path: "/", component: quiz },
     { path: "/login", component: login },
+    { path: "/difficulty", component: difficulty },
     { path: "/play", component: play },
 ];
 
