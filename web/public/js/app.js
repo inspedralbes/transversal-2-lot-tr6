@@ -2,27 +2,56 @@ const quiz = Vue.component('quiz', {
     template: `<div>
         <router-link to="/login" class="button">Login</router-link>
         <h1> Wanna test your knowledge? </h1>
-        <router-link to="/play" class="button">Play</router-link>`
+        <router-link to="/play" class="button">Play</router-link>
+        </div>`
 });
 
 const play = Vue.component('play', {
-    template: `<div>
-    <b-card
-      title="Card Title"
-      img-src="https://picsum.photos/600/300/?image=25"
-      img-alt="Image"
-      img-top
-      tag="article"
-      style="max-width: 20rem;"
-      class="mb-2"
-    >
-      <b-card-text>
-        Some quick example text to build on the card title and make up the bulk of the card's content.
-      </b-card-text>
-  
-      <b-button href="#" variant="primary">Go somewhere</b-button>
-    </b-card>
-  </div>`
+    template: `<section> 
+    <ol class="carousel__viewport">
+        <li id="carousel__slide1"
+            tabindex="0"
+            class="carousel__slide">
+        <div class="carousel__snapper">
+        </div>
+        </li>
+        <li id="carousel__slide2"
+            tabindex="0"
+            class="carousel__slide">
+        <div class="carousel__snapper"></div>
+        </li>
+        <li id="carousel__slide3"
+            tabindex="0"
+            class="carousel__slide">
+        <div class="carousel__snapper"></div>
+        </li>
+        <li id="carousel__slide4"
+            tabindex="0"
+            class="carousel__slide">
+        <div class="carousel__snapper"></div>
+        </li>
+    </ol>
+    <aside class="carousel__navigation">
+        <ol class="carousel__navigation-list">
+        <li class="carousel__navigation-item">
+            <a href="#carousel__slide1"
+            class="carousel__navigation-button">Go to slide 1</a>
+        </li>
+        <li class="carousel__navigation-item">
+            <a href="#carousel__slide2"
+            class="carousel__navigation-button">Go to slide 2</a>
+        </li>
+        <li class="carousel__navigation-item">
+            <a href="#carousel__slide3"
+            class="carousel__navigation-button">Go to slide 3</a>
+        </li>
+        <li class="carousel__navigation-item">
+            <a href="#carousel__slide4"
+            class="carousel__navigation-button">Go to slide 4</a>
+        </li>
+        </ol>
+    </aside>
+    </section>`
 });
 
 const login = Vue.component('login', {
