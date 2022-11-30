@@ -1,7 +1,28 @@
 const quiz = Vue.component('quiz', {
     template: `<div>
         <router-link to="/login" class="button">Login</router-link>
-        <h1> Wanna test your knowledge? </h1>`
+        <h1> Wanna test your knowledge? </h1>
+        <router-link to="/play" class="button">Play</router-link>`
+});
+
+const play = Vue.component('play', {
+    template: `<div>
+    <b-card
+      title="Card Title"
+      img-src="https://picsum.photos/600/300/?image=25"
+      img-alt="Image"
+      img-top
+      tag="article"
+      style="max-width: 20rem;"
+      class="mb-2"
+    >
+      <b-card-text>
+        Some quick example text to build on the card title and make up the bulk of the card's content.
+      </b-card-text>
+  
+      <b-button href="#" variant="primary">Go somewhere</b-button>
+    </b-card>
+  </div>`
 });
 
 const login = Vue.component('login', {
@@ -66,6 +87,7 @@ const login = Vue.component('login', {
 const routes = [
     { path: "/", component: quiz },
     { path: "/login", component: login },
+    { path: "/play", component: play},
 ];
 
 const router = new VueRouter({
