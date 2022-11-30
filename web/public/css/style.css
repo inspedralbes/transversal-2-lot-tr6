@@ -1,3 +1,8 @@
+.container-landing {
+    width: 100%;
+    margin: 0;
+}
+
 .button {
     background-color: #3660a0;
     border: none;
@@ -226,3 +231,29 @@
     text-align: center;
     pointer-events: none;
   }
+
+  .login-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.play {
+    margin-left: 45px;
+    justify-content: center;
+    margin: auto;
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.setParameters {
+    background-color: rgb(184, 184, 184);
+    padding: 40px;
+    border-radius: 10px;
+}
+
+.setParameters label {
+    padding: 30px;
+}

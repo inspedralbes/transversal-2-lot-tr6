@@ -1,9 +1,63 @@
 const quiz = Vue.component('quiz', {
+<<<<<<< HEAD
     template: `<div>
         <router-link to="/login" class="button">Login</router-link>
         <h1> Wanna test your knowledge? </h1>
         <router-link to="/play" class="button">Play</router-link>
         </div>`
+=======
+    template: `
+        <div class="container-landing">
+            <router-link to="/login" class="button login-button">Login</router-link>    
+            <div class="play">
+                <div>
+                <h1> Wanna test your knowledge? </h1>
+                <router-link to="/difficulty" class="button">Play</router-link>
+                </div>
+            </div>
+        </div>`
+});
+
+const difficulty = Vue.component('difficulty', {
+    data: function () {
+        return {
+            categorias: [],
+        }
+    },
+    template: `
+        <div class="play"> 
+            <div class="setParameters">
+                <div class="categories">
+                    <label> Difficulty 
+                        <select>
+                            <option disabled selected>Choose a Category</option>
+                            <option value="fantasy">Fantaseame esta</option>
+                            <option value="cine">Cine</option>
+                            <option value="amongus">Amongus</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="difficulty">
+                <label> Difficulty 
+                    <select>
+                        <option disabled selected>Choose a difficulty</option>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </label>
+                </div>
+                <router-link to="/play" class="button">Play</router-link>
+            </div>
+        </div>`,
+    mounted() {
+        {
+            fetch('https://the-trivia-api.com/api/categories')
+                .then((response) => response.json())
+                .then((categories) => console.log(categories));
+        }
+    }
+>>>>>>> 16173899410a09f3fc4aba6fe80d796747a27e46
 });
 
 const play = Vue.component('play', {
@@ -57,7 +111,7 @@ const play = Vue.component('play', {
 const login = Vue.component('login', {
     template: `<div>
         <router-link to="/" class="button">Home</router-link>
-        <div v-show="!logged">
+        <div v-show="!logged" class="button">
             <b-form-input id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>
             <b-form-input id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
             <b-button @click="submitLogin" variant="primary">Login</b-button>
@@ -116,7 +170,8 @@ const login = Vue.component('login', {
 const routes = [
     { path: "/", component: quiz },
     { path: "/login", component: login },
-    { path: "/play", component: play},
+    { path: "/difficulty", component: difficulty },
+    { path: "/play", component: play },
 ];
 
 const router = new VueRouter({
