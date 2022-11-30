@@ -1,3 +1,8 @@
+.container-landing {
+    width: 100%;
+    margin: 0;
+}
+
 .button {
     background-color: #3660a0;
     border: none;
@@ -15,4 +20,20 @@
 .button:hover {
     background-color: #0e3875;
     color: rgb(201, 201, 201);
+}
+
+.login-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.play {
+    margin-left: 45px;
+    justify-content: center;
+    margin: auto;
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
 }

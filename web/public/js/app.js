@@ -1,8 +1,14 @@
 const quiz = Vue.component('quiz', {
-    template: `<div>
-        <router-link to="/login" class="button">Login</router-link>
-        <h1> Wanna test your knowledge? </h1>
-        <router-link to="/play" class="button">Play</router-link>`
+    template: `
+        <div class="container-landing">
+            <router-link to="/login" class="button login-button">Login</router-link>    
+            <div class="play">
+                <div>
+                <h1> Wanna test your knowledge? </h1>
+                <router-link to="/play" class="button">Play</router-link>
+                </div>
+            </div>
+        </div>`
 });
 
 const play = Vue.component('play', {
@@ -28,7 +34,7 @@ const play = Vue.component('play', {
 const login = Vue.component('login', {
     template: `<div>
         <router-link to="/" class="button">Home</router-link>
-        <div v-show="!logged">
+        <div v-show="!logged" class="button">
             <b-form-input id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>
             <b-form-input id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
             <b-button @click="submitLogin" variant="primary">Login</b-button>
@@ -87,7 +93,7 @@ const login = Vue.component('login', {
 const routes = [
     { path: "/", component: quiz },
     { path: "/login", component: login },
-    { path: "/play", component: play},
+    { path: "/play", component: play },
 ];
 
 const router = new VueRouter({
