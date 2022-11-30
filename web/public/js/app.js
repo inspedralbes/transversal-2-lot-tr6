@@ -1,11 +1,4 @@
 const quiz = Vue.component('quiz', {
-<<<<<<< HEAD
-    template: `<div>
-        <router-link to="/login" class="button">Login</router-link>
-        <h1> Wanna test your knowledge? </h1>
-        <router-link to="/play" class="button">Play</router-link>
-        </div>`
-=======
     template: `
         <div class="container-landing">
             <router-link to="/login" class="button login-button">Login</router-link>    
@@ -57,7 +50,6 @@ const difficulty = Vue.component('difficulty', {
                 .then((categories) => console.log(categories));
         }
     }
->>>>>>> 16173899410a09f3fc4aba6fe80d796747a27e46
 });
 
 const play = Vue.component('play', {
