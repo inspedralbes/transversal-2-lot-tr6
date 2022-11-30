@@ -34,11 +34,6 @@
 
 <body>
     <div id="app">
-
-        <router-link to="/login">Login</router-link>
-
-
-        <quiz></quiz>
         <router-view></router-view>
     </div>
 

@@ -1,10 +1,12 @@
-Vue.component('quiz', {
+const quiz = Vue.component('quiz', {
     template: `<div>
+        <router-link to="/login" class="button">Login</router-link>
         <h1> Wanna test your knowledge? </h1>`
 });
 
 const login = Vue.component('login', {
     template: `<div>
+        <router-link to="/" class="button">Home</router-link>
         <div v-show="!logged">
             <b-form-input id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>
             <b-form-input id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
@@ -62,7 +64,7 @@ const login = Vue.component('login', {
 });
 
 const routes = [
-    { path: "/" },
+    { path: "/", component: quiz },
     { path: "/login", component: login },
 ];
 
