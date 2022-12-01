@@ -22,23 +22,18 @@ const difficulty = Vue.component('difficulty', {
             <div class="setParameters">
                 <div class="categories">
                     <label> Difficulty 
-                        <select>
-                            <option disabled selected>Choose a Category</option>
-                            <option value="fantasy">Fantaseame esta</option>
-                            <option value="cine">Cine</option>
-                            <option value="amongus">Amongus</option>
-                        </select>
+                        <b-form-select v-model="selected" :options="categories"></b-form-select>
                     </label>
                 </div>
                 <div class="difficulty">
-                <label> Difficulty 
-                    <select>
-                        <option disabled selected>Choose a difficulty</option>
-                        <option value="easy">Easy</option>
-                        <option value="medium">Medium</option>
-                        <option value="hard">Hard</option>
-                    </select>
-                </label>
+                    <label> Difficulty 
+                        <select>
+                            <option disabled selected>Choose a difficulty</option>
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                        </select>
+                    </label>
                 </div>
                 <router-link to="/play" class="button">Play</router-link>
             </div>
@@ -47,7 +42,7 @@ const difficulty = Vue.component('difficulty', {
         {
             fetch('https://the-trivia-api.com/api/categories')
                 .then((response) => response.json())
-                .then((categories) => console.log(categories));
+                .then((categories) => this.categories = categories);
         }
     }
 });
