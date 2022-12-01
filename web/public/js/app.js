@@ -14,7 +14,7 @@ const quiz = Vue.component('quiz', {
 const difficulty = Vue.component('difficulty', {
     data: function () {
         return {
-            categorias: [],
+            categories: [],
         }
     },
     template: `
@@ -97,7 +97,14 @@ const play = Vue.component('play', {
         </li>
         </ol>
     </aside>
-    </section>`
+    </section>`,
+    mounted() {
+        {
+            fetch('https://the-trivia-api.com/api/questions?categories=*')
+                .then((response) => response.json())
+                .then((questions) => console.log(questions));
+        }
+    }
 });
 
 const login = Vue.component('login', {
@@ -146,7 +153,7 @@ const login = Vue.component('login', {
                         this.logged = true;
 
                         store = userStore()
-                        store.setEstado(this.infoLogin);
+                        store.setStatus(this.infoLogin);
                         store.logged = true;
                     }
                 })
