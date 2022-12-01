@@ -100,7 +100,7 @@ const play = Vue.component('play', {
     </section>`,
     mounted() {
         {
-            fetch('https://the-trivia-api.com/api/questions?categories=*')
+            fetch('https://the-trivia-api.com/api/questions')
                 .then((response) => response.json())
                 .then((questions) => console.log(questions));
         }
