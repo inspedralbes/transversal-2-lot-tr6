@@ -50,17 +50,14 @@ const difficulty = Vue.component('difficulty', {
 const play = Vue.component('play', {
     data: function () {
         return {
-            questions: [],
-            answers: [],
+            questions: []
         }
     },
     template: `
     <div>
     <li v-for="question in questions">
-        <label>{{ question.question }}</label>
-        <br>
-        <label style="background-color: rgb(255, 15, 15);">{{ question.correctAnswer }}</label>
-        <div v-for="answer in question.incorrectAnswers">
+        <h2>{{ question.question }}</h2>
+        <div v-for="answer in question.answers">
             <br>
             <label>{{ answer }}</label>
         </div>
@@ -72,23 +69,27 @@ const play = Vue.component('play', {
                 .then((response) => response.json())
                 .then((questions) => {
                     this.questions = questions;
-
-                    let pos = Math.floor(Math.random() * 4);
                     let length = this.questions.length;
                     let cont=0;
-                    console.log(this.questions);
-                    for(let j=0; j++; j<length){
-                        for (let i=0; i++; i<4) {
+
+                    for(let j=0; j<length; j++){
+                        let pos = Math.floor(Math.random() * 4);
+                        let answers = [];
+                        for (let i=0; i<4; i++) {
                             if (i==pos) {
-                                this.answers.push(this.questions.correctAnswer);
+                                answers.push(this.questions[j].correctAnswer);
+                                this.questions[j].correctIndex = i;
                             }else{
-                                this.answers.push(this.questions.incorrectAnswers[cont]);
+                                answers.push(this.questions[j].incorrectAnswers[cont]);
                                 cont++;
                             }
-                            
                         }
+                        cont=0;
+                        console.log(answers);
+                        this.questions[j].answers = answers;
                     }
-                    console.log(this.answers);
+
+                    console.log(this.questions);
                 });
         }    
 
