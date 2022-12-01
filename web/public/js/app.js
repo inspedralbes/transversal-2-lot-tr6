@@ -51,6 +51,7 @@ const play = Vue.component('play', {
     data: function () {
         return {
             questions: [],
+            answers: [],
         }
     },
     template: `
@@ -58,7 +59,7 @@ const play = Vue.component('play', {
     <li v-for="question in questions">
         <label>{{ question.question }}</label>
         <br>
-        <label>{{ question.correctAnswer }}</label>
+        <label style="background-color: rgb(255, 15, 15);">{{ question.correctAnswer }}</label>
         <div v-for="answer in question.incorrectAnswers">
             <br>
             <label>{{ answer }}</label>
@@ -69,12 +70,29 @@ const play = Vue.component('play', {
         {
             fetch('https://the-trivia-api.com/api/questions')
                 .then((response) => response.json())
-                .then((questions) => this.questions = questions);
-        }
+                .then((questions) => {
+                    this.questions = questions;
+
+                    let pos = Math.floor(Math.random() * 4);
+                    let length = this.questions.length;
+                    let cont=0;
+                    console.log(this.questions);
+                    for(let j=0; j++; j<length){
+                        for (let i=0; i++; i<4) {
+                            if (i==pos) {
+                                this.answers.push(this.questions.correctAnswer);
+                            }else{
+                                this.answers.push(this.questions.incorrectAnswers[cont]);
+                                cont++;
+                            }
+                            
+                        }
+                    }
+                    console.log(this.answers);
+                });
+        }    
+
     },
-    createArrAnswers: function(){
-        let pos = Math.floor(Math.random() * 4);
-    }
 });
 
 const login = Vue.component('login', {
