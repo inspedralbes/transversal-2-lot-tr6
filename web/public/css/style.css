@@ -22,7 +22,9 @@
     color: rgb(201, 201, 201);
 }
 
-/* Hola */
+/*  
+*  A partir de aqui es css para el carrousel
+*/
 
 @keyframes tonext {
     75% {
@@ -222,6 +224,9 @@
     pointer-events: none;
   }
 
+  /*
+  * Hasta aquí es css del carrousel
+  */
   .login-button {
     position: absolute;
     top: 20px;

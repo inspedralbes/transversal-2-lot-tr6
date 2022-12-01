@@ -48,57 +48,32 @@ const difficulty = Vue.component('difficulty', {
 });
 
 const play = Vue.component('play', {
-    template: `<section> 
-    <ol class="carousel__viewport">
-        <li id="carousel__slide1"
-            tabindex="0"
-            class="carousel__slide">
-        <div class="carousel__snapper">
+    data: function () {
+        return {
+            questions: [],
+        }
+    },
+    template: `
+    <div>
+    <li v-for="question in questions">
+        <label>{{ question.question }}</label>
+        <br>
+        <label>{{ question.correctAnswer }}</label>
+        <div v-for="answer in question.incorrectAnswers">
+            <br>
+            <label>{{ answer }}</label>
         </div>
-        </li>
-        <li id="carousel__slide2"
-            tabindex="0"
-            class="carousel__slide">
-        <div class="carousel__snapper"></div>
-        </li>
-        <li id="carousel__slide3"
-            tabindex="0"
-            class="carousel__slide">
-        <div class="carousel__snapper"></div>
-        </li>
-        <li id="carousel__slide4"
-            tabindex="0"
-            class="carousel__slide">
-        <div class="carousel__snapper"></div>
-        </li>
-    </ol>
-    <aside class="carousel__navigation">
-        <ol class="carousel__navigation-list">
-        <li class="carousel__navigation-item">
-            <a href="#carousel__slide1"
-            class="carousel__navigation-button">Go to slide 1</a>
-        </li>
-        <li class="carousel__navigation-item">
-            <a href="#carousel__slide2"
-            class="carousel__navigation-button">Go to slide 2</a>
-        </li>
-        <li class="carousel__navigation-item">
-            <a href="#carousel__slide3"
-            class="carousel__navigation-button">Go to slide 3</a>
-        </li>
-        <li class="carousel__navigation-item">
-            <a href="#carousel__slide4"
-            class="carousel__navigation-button">Go to slide 4</a>
-        </li>
-        </ol>
-    </aside>
-    </section>`,
+    </li>
+    </div>`,
     mounted() {
         {
             fetch('https://the-trivia-api.com/api/questions')
                 .then((response) => response.json())
-                .then((questions) => console.log(questions));
+                .then((questions) => this.questions = questions);
         }
+    },
+    createArrAnswers: function(){
+        let pos = Math.floor(Math.random() * 4);
     }
 });
 
@@ -179,3 +154,7 @@ let app = new Vue({
     methods: {},
 
 });
+
+{/* <li v-for="answer in question.incorrectAnswers">
+<label>{{ answer }}</label>
+</li> */}
