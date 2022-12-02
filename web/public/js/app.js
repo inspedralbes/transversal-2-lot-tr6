@@ -66,20 +66,21 @@ const play = Vue.component('play', {
     data: function () {
         return {
             questions: [],
-            color: "default"
         }
     },
     template: `
     <div>
     <li v-for="(question, indexQ) in questions">
-        <h2>{{ question.question }}</h2>
-        <br>
-        <div v-for="(answer, indexA) in question.answers">
-        <button class="button answer" :class="[color]" @click="verificate(indexQ, indexA)">{{ answer }}</button>
+        <div>
+            <h2>{{ question.question }}</h2>
+            <br>
+            <div v-for="(answer, indexA) in question.answers">
+                <button :id="[indexQ,indexA]" class="button answer" @click="verificate(indexQ, indexA)">{{ answer }}</button>
+            </div>
+            <br>
+            <br>
+            <br>
         </div>
-        <br>
-        <br>
-        <br>
     </li>
     </div>`,
     mounted() {
@@ -104,10 +105,8 @@ const play = Vue.component('play', {
                             }
                         }
                         cont = 0;
-                        console.log(answers);
                         this.questions[j].answers = answers;
                     }
-
                     console.log(this.questions);
                 });
         }
@@ -117,10 +116,16 @@ const play = Vue.component('play', {
         verificate(indexQ, indexA) {
 
             if (this.questions[indexQ].correctIndex == indexA) {
-                this.color = "correct";
-                console.log("correct")
+                document.getElementById(indexQ + "," + indexA).style = "background-color: green";
+                for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
+                    document.getElementById(indexQ + "," + index).disabled = true;
+                }
             } else {
-                this.color = "incorrect";
+                for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
+                    document.getElementById(indexQ + "," + index).style = "background-color: rgb(167, 7, 7); color: rgb(150, 150, 150)";
+                    document.getElementById(indexQ + "," + index).disabled = true;
+                }
+
             }
         }
     }
