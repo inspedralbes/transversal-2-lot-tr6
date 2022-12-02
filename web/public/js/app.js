@@ -53,11 +53,11 @@ const difficulty = Vue.component('difficulty', {
         </div>`,
     mounted() {
         {
-          /*  fetch('https://the-trivia-api.com/api/categories')
-                .then((response) => response.json())
-                .then((categories) => 
-                {this.categories = categories;
-                console.log(categories);});*/
+            /*  fetch('https://the-trivia-api.com/api/categories')
+                  .then((response) => response.json())
+                  .then((categories) => 
+                  {this.categories = categories;
+                  console.log(categories);});*/
         }
     }
 });
@@ -65,16 +65,21 @@ const difficulty = Vue.component('difficulty', {
 const play = Vue.component('play', {
     data: function () {
         return {
-            questions: []
+            questions: [],
         }
     },
     template: `
     <div>
-    <li v-for="question in questions">
-        <h2>{{ question.question }}</h2>
-        <div v-for="answer in question.answers">
+    <li v-for="(question, indexQ) in questions">
+        <div>
+            <h2>{{ question.question }}</h2>
             <br>
-            <label>{{ answer }}</label>
+            <div v-for="(answer, indexA) in question.answers">
+                <button :id="[indexQ,indexA]" class="button answer" @click="verificate(indexQ, indexA)">{{ answer }}</button>
+            </div>
+            <br>
+            <br>
+            <br>
         </div>
     </li>
     </div>`,
@@ -85,30 +90,45 @@ const play = Vue.component('play', {
                 .then((questions) => {
                     this.questions = questions;
                     let length = this.questions.length;
-                    let cont=0;
+                    let cont = 0;
 
-                    for(let j=0; j<length; j++){
+                    for (let j = 0; j < length; j++) {
                         let pos = Math.floor(Math.random() * 4);
                         let answers = [];
-                        for (let i=0; i<4; i++) {
-                            if (i==pos) {
+                        for (let i = 0; i < 4; i++) {
+                            if (i == pos) {
                                 answers.push(this.questions[j].correctAnswer);
                                 this.questions[j].correctIndex = i;
-                            }else{
+                            } else {
                                 answers.push(this.questions[j].incorrectAnswers[cont]);
                                 cont++;
                             }
                         }
-                        cont=0;
-                        console.log(answers);
+                        cont = 0;
                         this.questions[j].answers = answers;
                     }
-
                     console.log(this.questions);
                 });
-        }    
+        }
 
     },
+    methods: {
+        verificate(indexQ, indexA) {
+
+            if (this.questions[indexQ].correctIndex == indexA) {
+                document.getElementById(indexQ + "," + indexA).style = "background-color: green";
+                for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
+                    document.getElementById(indexQ + "," + index).disabled = true;
+                }
+            } else {
+                for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
+                    document.getElementById(indexQ + "," + index).style = "background-color: rgb(167, 7, 7); color: rgb(150, 150, 150)";
+                    document.getElementById(indexQ + "," + index).disabled = true;
+                }
+
+            }
+        }
+    }
 });
 
 const login = Vue.component('login', {
