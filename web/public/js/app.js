@@ -15,12 +15,13 @@ const difficulty = Vue.component('difficulty', {
     data: function () {
         return {
             categoriaSeleccionada: '',
-            dificultadSeleccionada: ''
+            dificultadSeleccionada: '',
+            chosen: false
         }
     },
     template: `
-        <div class="play"> 
-            <div class="setParameters">
+        <div class="play" > 
+            <div v-if="!chosen" class="setParameters">
                 <div class="categories">
                     <label> Category: 
                         <b-form-select v-model="categoriaSeleccionada" >
@@ -46,11 +47,27 @@ const difficulty = Vue.component('difficulty', {
                             <option value="medium">Medium</option>
                             <option value="hard">Hard</option>
                         </b-form-select>
+                        <br>
+                        <button @click="fetchPreguntes" class="button">Play</button>
                     </label>
                 </div>
-                <router-link to="/play" class="button">Play</router-link>
             </div>
-        </div>`,
+            <div v-else>
+                PARTIDA
+            </div>
+        </div>
+        `,
+
+    methods: {
+        fetchPreguntes: function () {
+            fetch(`https://the-trivia-api.com/api/questions?categories=${this.categoriaSeleccionada}&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
+                .then((response) => response.json())
+                .then((preguntes) => {
+                    console.log(preguntes)
+                    this.chosen = true;
+                });
+        }
+    },
     mounted() {
         {
             /*  fetch('https://the-trivia-api.com/api/categories')
@@ -72,18 +89,20 @@ const play = Vue.component('play', {
         }
     },
     template: `
-    <div>
+    <section class="carousel">    
         <div>
-            <h2 class="blanco">{{ questions[currentQuestion].question }}</h2>
-            <br>
-            <div v-for="(answer, indexA) in questions[currentQuestion].answers">
-                <button :id="[currentQuestion,indexA]" :disabled="statusButtons[indexA]" class="button answer" :class="colorButtons[indexA]" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
+            <div class="slides">
+                <div class="slides-item slide-1" id="slide-1">            
+                <h2 class="blanco questionText">{{ questions[currentQuestion].question }}</h2>
+                <div class="btnAnswer" v-for="(answer, indexA) in questions[currentQuestion].answers">
+                    <button :disabled="statusButtons[indexA]" class="button answer" :class="colorButtons[indexA]" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
+                </div>
+                </div>
+                <div class="slides-item slide-2" id="slide-2">2</div> 
             </div>
-            <br>
-            <br>
-            <br>
         </div>
-    </div>`,
+    </section>
+    `,
     mounted() {
         {
             fetch('https://the-trivia-api.com/api/questions')
@@ -162,7 +181,8 @@ const login = Vue.component('login', {
         <img :src="infoLogin.image">
         <b-button @click="logOut" variant="primary">Logout</b-button>
         </div>
-        </div>`,
+        </div>
+        `,
     data: function () {
         return {
             processing: false,
@@ -270,7 +290,3 @@ let app = new Vue({
     methods: {},
 
 });
-
-{/* <li v-for="answer in question.incorrectAnswers">
-<label>{{ answer }}</label>
-</li> */}
