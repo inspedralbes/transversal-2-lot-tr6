@@ -197,8 +197,8 @@ const login = Vue.component('login', {
     }
 });
 
-const signup = Vue.component('signup',{
-    template:`<div>
+const signup = Vue.component('signup', {
+    template: `<div>
         <router-link to="/" class="button">Home</router-link>
         <div class="button">
             <b-form-input id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>
@@ -211,18 +211,18 @@ const signup = Vue.component('signup',{
             </div>
         </div>
         </div>`,
-    data:function () {
+    data: function () {
         return {
             processing: false,
             form: {
                 username: "",
                 password: "",
-                verifyPassword:"",
-                email:"",
+                verifyPassword: "",
+                email: "",
             },
         }
     },
-    methods:{
+    methods: {
         submitSignup() {
             this.processing = true;
             fetch(`http://alvaro.alumnes.inspedralbes.cat/loginGET.php?username=${this.form.username}&pwd=${this.form.password}`)
@@ -240,7 +240,7 @@ const signup = Vue.component('signup',{
                 })
         },
     },
-    mounted(){
+    mounted() {
     }
 })
 
