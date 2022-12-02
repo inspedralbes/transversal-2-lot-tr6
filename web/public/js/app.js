@@ -110,29 +110,29 @@ const play = Vue.component('play', {
     },
     methods: {
         verificate(indexQ, indexA) {
-            // if (this.questions[indexQ].correctIndex == indexA) {
-            //     document.getElementById(indexQ + "," + indexA).style = "background-color: green";
-            //     for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
-            //         document.getElementById(indexQ + "," + index).disabled = true;
-            //     }
-            // } else {
-            //     for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
-            //         document.getElementById(indexQ + "," + index).style = "background-color: rgb(167, 7, 7); color: rgb(150, 150, 150)";
-            //         document.getElementById(indexQ + "," + index).disabled = true;
-            //     }
-
-            // }
-
             if (this.questions[indexQ].correctIndex == indexA) {
-                console.log("correcto");
+                document.getElementById(indexQ + "," + indexA).style = "background-color: green";
+                for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
+                    document.getElementById(indexQ + "," + index).disabled = true;
+                }
             } else {
-                console.log("incorrecto");
+                for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
+                    document.getElementById(indexQ + "," + index).style = "background-color: rgb(167, 7, 7); color: rgb(150, 150, 150)";
+                    document.getElementById(indexQ + "," + index).disabled = true;
+                }
+
             }
 
-            if (this.currentQuestion < this.questions.length - 1) {
-                this.currentQuestion++;
-            }
-        }
+            setTimeout(() => {
+                if (this.currentQuestion < this.questions.length - 1) {
+                    this.currentQuestion++;
+                    for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
+                        document.getElementById(indexQ + "," + index).disabled = false;
+                        document.getElementById(indexQ + "," + index).style = "";
+                    }
+                }
+            }, 1000);
+        },
     }
 });
 
@@ -226,7 +226,7 @@ const signup = Vue.component('signup', {
             fetch(`http://alvaro.alumnes.inspedralbes.cat/loginGET.php?username=${this.form.username}&pwd=${this.form.password}`)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.exito ) {
+                    if (data.exito) {
                         this.infoLogin.name = data.nombre;
                         this.infoLogin.idUser = data.id;
                         this.logged = true;
