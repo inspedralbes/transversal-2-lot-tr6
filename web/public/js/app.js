@@ -47,9 +47,8 @@ const difficulty = Vue.component('difficulty', {
                             <option value="medium">Medium</option>
                             <option value="hard">Hard</option>
                         </b-form-select>
-                        <router-link to="/play" @click="fetchPreguntes" class="button">Play</router-link>
                         <br>
-                        <button @click="fetchPreguntes">Play</button>
+                        <button @click="fetchPreguntes" class="button">Play</button>
                     </label>
                 </div>
             </div>
