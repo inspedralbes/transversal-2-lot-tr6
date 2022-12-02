@@ -84,22 +84,21 @@ const play = Vue.component('play', {
     data: function () {
         return {
             questions: [],
+            currentQuestion: 0
         }
     },
     template: `
     <div>
-    <li v-for="(question, indexQ) in questions">
         <div>
-            <h2>{{ question.question }}</h2>
+            <h2>{{ questions[currentQuestion].question }}</h2>
             <br>
-            <div v-for="(answer, indexA) in question.answers">
-                <button :id="[indexQ,indexA]" class="button answer" @click="verificate(indexQ, indexA)">{{ answer }}</button>
+            <div v-for="(answer, indexA) in questions[currentQuestion].answers">
+                <button :id="[currentQuestion,indexA]" class="button answer" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
             </div>
             <br>
             <br>
             <br>
         </div>
-    </li>
     </div>`,
     mounted() {
         {
@@ -132,7 +131,6 @@ const play = Vue.component('play', {
     },
     methods: {
         verificate(indexQ, indexA) {
-
             if (this.questions[indexQ].correctIndex == indexA) {
                 document.getElementById(indexQ + "," + indexA).style = "background-color: green";
                 for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
@@ -145,7 +143,17 @@ const play = Vue.component('play', {
                 }
 
             }
-        }
+
+            setTimeout(() => {
+                if (this.currentQuestion < this.questions.length - 1) {
+                    this.currentQuestion++;
+                    for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
+                        document.getElementById(indexQ + "," + index).disabled = false;
+                        document.getElementById(indexQ + "," + index).style = "";
+                    }
+                }
+            }, 1000);
+        },
     }
 });
 
@@ -207,8 +215,8 @@ const login = Vue.component('login', {
     }
 });
 
-const signup = Vue.component('signup',{
-    template:`<div>
+const signup = Vue.component('signup', {
+    template: `<div>
         <router-link to="/" class="button">Home</router-link>
         <div class="button">
             <b-form-input id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>
@@ -221,18 +229,18 @@ const signup = Vue.component('signup',{
             </div>
         </div>
         </div>`,
-    data:function () {
+    data: function () {
         return {
             processing: false,
             form: {
                 username: "",
                 password: "",
-                verifyPassword:"",
-                email:"",
+                verifyPassword: "",
+                email: "",
             },
         }
     },
-    methods:{
+    methods: {
         submitSignup() {
             this.processing = true;
             fetch(`http://alvaro.alumnes.inspedralbes.cat/loginGET.php?username=${this.form.username}&pwd=${this.form.password}`)
@@ -250,7 +258,7 @@ const signup = Vue.component('signup',{
                 })
         },
     },
-    mounted(){
+    mounted() {
     }
 })
 
