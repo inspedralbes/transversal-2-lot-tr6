@@ -73,15 +73,12 @@ const play = Vue.component('play', {
     <div>
         <div>
             <h2>{{ questions[currentQuestion].question }}</h2>
-            <br>
             <div v-for="(answer, indexA) in questions[currentQuestion].answers">
                 <button :id="[currentQuestion,indexA]" class="button answer" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
             </div>
-            <br>
-            <br>
-            <br>
         </div>
-    </div>`,
+    </div>
+   `,
     mounted() {
         {
             fetch('https://the-trivia-api.com/api/questions')
@@ -155,7 +152,8 @@ const login = Vue.component('login', {
         <img :src="infoLogin.image">
         <b-button @click="logOut" variant="primary">Logout</b-button>
         </div>
-        </div>`,
+        </div>
+        `,
     data: function () {
         return {
             processing: false,
@@ -228,7 +226,7 @@ const signup = Vue.component('signup', {
             fetch(`http://alvaro.alumnes.inspedralbes.cat/loginGET.php?username=${this.form.username}&pwd=${this.form.password}`)
                 .then(response => response.json())
                 .then(data => {
-                    if (data. ) {
+                    if (data.exito ) {
                         this.infoLogin.name = data.nombre;
                         this.infoLogin.idUser = data.id;
                         this.logged = true;
@@ -263,7 +261,3 @@ let app = new Vue({
     methods: {},
 
 });
-
-{/* <li v-for="answer in question.incorrectAnswers">
-<label>{{ answer }}</label>
-</li> */}
