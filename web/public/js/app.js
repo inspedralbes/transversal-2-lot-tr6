@@ -66,22 +66,21 @@ const play = Vue.component('play', {
     data: function () {
         return {
             questions: [],
+            currentQuestion: 0
         }
     },
     template: `
     <div>
-    <li v-for="(question, indexQ) in questions">
         <div>
-            <h2>{{ question.question }}</h2>
+            <h2>{{ questions[currentQuestion].question }}</h2>
             <br>
-            <div v-for="(answer, indexA) in question.answers">
-                <button :id="[indexQ,indexA]" class="button answer" @click="verificate(indexQ, indexA)">{{ answer }}</button>
+            <div v-for="(answer, indexA) in questions[currentQuestion].answers">
+                <button :id="[currentQuestion,indexA]" class="button answer" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
             </div>
             <br>
             <br>
             <br>
         </div>
-    </li>
     </div>`,
     mounted() {
         {
@@ -114,18 +113,27 @@ const play = Vue.component('play', {
     },
     methods: {
         verificate(indexQ, indexA) {
+            // if (this.questions[indexQ].correctIndex == indexA) {
+            //     document.getElementById(indexQ + "," + indexA).style = "background-color: green";
+            //     for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
+            //         document.getElementById(indexQ + "," + index).disabled = true;
+            //     }
+            // } else {
+            //     for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
+            //         document.getElementById(indexQ + "," + index).style = "background-color: rgb(167, 7, 7); color: rgb(150, 150, 150)";
+            //         document.getElementById(indexQ + "," + index).disabled = true;
+            //     }
+
+            // }
 
             if (this.questions[indexQ].correctIndex == indexA) {
-                document.getElementById(indexQ + "," + indexA).style = "background-color: green";
-                for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
-                    document.getElementById(indexQ + "," + index).disabled = true;
-                }
+                console.log("correcto");
             } else {
-                for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
-                    document.getElementById(indexQ + "," + index).style = "background-color: rgb(167, 7, 7); color: rgb(150, 150, 150)";
-                    document.getElementById(indexQ + "," + index).disabled = true;
-                }
+                console.log("incorrecto");
+            }
 
+            if (this.currentQuestion < this.questions.length - 1) {
+                this.currentQuestion++;
             }
         }
     }
