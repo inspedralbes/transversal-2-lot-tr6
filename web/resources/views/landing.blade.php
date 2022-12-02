@@ -8,6 +8,7 @@
     <title>League Of Trivial</title>
     <link type="text/css" rel="stylesheet" href="/css/normalize.css" />
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style-login.css">
 
     <!-- Load required Bootstrap and BootstrapVue CSS -->
     <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
@@ -33,7 +34,7 @@
 
 </head>
 
-<body>
+<body class="fondo">
     <div id="app">
         <router-view></router-view>
     </div>
@@ -43,7 +44,7 @@
 
 </html>
 
-{{-- 
+{{--
 <section> 
     <ol class="carousel__viewport">
         <li id="carousel__slide1"

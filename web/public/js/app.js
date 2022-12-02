@@ -4,7 +4,7 @@ const quiz = Vue.component('quiz', {
             <router-link to="/login" class="button login-button">Login</router-link>    
             <div class="play">
                 <div>
-                <h1> Wanna test your knowledge? </h1>
+                <h1 class="blanco"> Wanna test your knowledge? </h1>
                 <router-link to="/difficulty" class="button">Play</router-link>
                 </div>
             </div>
@@ -66,16 +66,18 @@ const play = Vue.component('play', {
     data: function () {
         return {
             questions: [],
-            currentQuestion: 0
+            currentQuestion: 0,
+            colorButtons: ["default", "default", "default", "default"],
+            statusButtons: [false, false, false, false]
         }
     },
     template: `
     <div>
         <div>
-            <h2>{{ questions[currentQuestion].question }}</h2>
+            <h2 class="blanco">{{ questions[currentQuestion].question }}</h2>
             <br>
             <div v-for="(answer, indexA) in questions[currentQuestion].answers">
-                <button :id="[currentQuestion,indexA]" class="button answer" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
+                <button :id="[currentQuestion,indexA]" :disabled="statusButtons[indexA]" class="button answer" :class="colorButtons[indexA]" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
             </div>
             <br>
             <br>
@@ -114,25 +116,30 @@ const play = Vue.component('play', {
     methods: {
         verificate(indexQ, indexA) {
             if (this.questions[indexQ].correctIndex == indexA) {
-                document.getElementById(indexQ + "," + indexA).style = "background-color: green";
-                for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
-                    document.getElementById(indexQ + "," + index).disabled = true;
+                for (let i = 0; i < 4; i++) {
+                    if (this.questions[indexQ].correctIndex == i) {
+                        this.colorButtons[i] = "correct";
+                    } else {
+                        this.colorButtons[i] = "incorrect";
+                    }
                 }
             } else {
-                for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
-                    document.getElementById(indexQ + "," + index).style = "background-color: rgb(167, 7, 7); color: rgb(150, 150, 150)";
-                    document.getElementById(indexQ + "," + index).disabled = true;
+                for (let index = 0; index < 4; index++) {
+                    this.colorButtons[index] = "incorrect";
                 }
-
             }
+
+            for (let index = 0; index < 4; index++) {
+                this.statusButtons[index] = true;
+            }
+
+            this.$forceUpdate();
 
             setTimeout(() => {
                 if (this.currentQuestion < this.questions.length - 1) {
                     this.currentQuestion++;
-                    for (let index = 0; index < this.questions[indexQ].answers.length; index++) {
-                        document.getElementById(indexQ + "," + index).disabled = false;
-                        document.getElementById(indexQ + "," + index).style = "";
-                    }
+                    this.colorButtons = ["default", "default", "default", "default"];
+                    this.statusButtons = [false, false, false, false];
                 }
             }, 1000);
         },
@@ -143,9 +150,9 @@ const login = Vue.component('login', {
     template: `<div>
         <router-link to="/" class="button">Home</router-link>
         <div v-show="!logged" class="button">
-            <b-form-input id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>
+            <b-form-input id="input-2" v-model="form.username" p+laceholder="Username" required></b-form-input>
             <b-form-input id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
-            <b-button @click="submitLogin" variant="primary">Login</b-button>
+            <b-button @click="submitLogin" variant="primary">Sing in</b-button>
             <div v-show="processing">
                 <b-spinner></b-spinner>
             </div>

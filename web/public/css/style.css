@@ -3,6 +3,14 @@
   margin: 0;
 }
 
+.fondo {
+  background-color: #333;
+}
+
+.blanco {
+  color: white;
+}
+
 .button {
   background-color: #3660a0;
   border: none;
@@ -38,10 +46,12 @@
 
 .correct {
   background-color: green !important;
+  color: rgb(201, 201, 201);
 }
 
 .incorrect {
   background-color: red !important;
+  color: rgb(201, 201, 201);
 }
 
 /*  
