@@ -68,14 +68,53 @@
 * Carrousel
 */
 
-.slider-container {
-
+.carousel {
+  margin: 0 auto;
+  overflow: hidden;
+  text-align: center;
+  width:1000px;
+  height: 650px;
 }
 
-.slider-item {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	transform-style: preserve-3d;
-	animation: carousel 10s infinite cubic-bezier(1, 0.015, 0.295, 1.225) forwards;
+.slides {
+  display: flex;
+  
+}
+
+.slides-item {
+  align-items: center;
+  border-radius: 10px;
+  display: flex;
+  flex-shrink: 0;
+  font-size: 100px;
+  height: 600px;
+  justify-content: center;
+  margin: none;
+  position: relative;
+  transform: scale(1);
+  transform-origin: center center;
+  transition: transform .5s;
+  width: 100%;
+}
+
+.slide-1 {
+  background-color: rgb(92, 154, 206);
+}
+
+.slide-2 {
+  background-color: #bfd;
+}
+
+/*
+Fin Carrousel
+*/
+
+.questionText {
+  display: flex;
+  align-items: center;
+}
+
+.btnAnswer  {
+  display: flex;
+  align-items: center;
 }

@@ -66,19 +66,25 @@ const play = Vue.component('play', {
     data: function () {
         return {
             questions: [],
-            currentQuestion: 0
+            currentQuestion: 0,
+            estadoPregunta:[0,0,0,0]
         }
     },
     template: `
-    <div>
+    <section class="carousel">    
         <div>
-            <h2>{{ questions[currentQuestion].question }}</h2>
-            <div v-for="(answer, indexA) in questions[currentQuestion].answers">
-                <button :id="[currentQuestion,indexA]" class="button answer" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
+            <div class="slides">
+                <div class="slides-item slide-1" id="slide-1">
+                <h2 class="questionText">{{ questions[currentQuestion].question }}</h2>
+                <div class="btnAnswer" v-for="(answer, indexA) in questions[currentQuestion].answers">
+                    <button :id="[currentQuestion,indexA]" class="button answer" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
+                </div>
+                </div>
+                <div class="slides-item slide-2" id="slide-2">2</div>     
             </div>
         </div>
-    </div>
-   `,
+    </section>
+    `,
     mounted() {
         {
             fetch('https://the-trivia-api.com/api/questions')
