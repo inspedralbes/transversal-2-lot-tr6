@@ -15,12 +15,13 @@ const difficulty = Vue.component('difficulty', {
     data: function () {
         return {
             categoriaSeleccionada: '',
-            dificultadSeleccionada: ''
+            dificultadSeleccionada: '',
+            chosen: false
         }
     },
     template: `
-        <div class="play"> 
-            <div class="setParameters">
+        <div class="play" > 
+            <div v-if="!chosen" class="setParameters">
                 <div class="categories">
                     <label> Category: 
                         <b-form-select v-model="categoriaSeleccionada" >
@@ -46,11 +47,28 @@ const difficulty = Vue.component('difficulty', {
                             <option value="medium">Medium</option>
                             <option value="hard">Hard</option>
                         </b-form-select>
+                        <router-link to="/play" @click="fetchPreguntes" class="button">Play</router-link>
+                        <br>
+                        <button @click="fetchPreguntes">Play</button>
                     </label>
                 </div>
-                <router-link to="/play" class="button">Play</router-link>
             </div>
-        </div>`,
+            <div v-else>
+                PARTIDA
+            </div>
+        </div>
+        `,
+                
+    methods:{
+        fetchPreguntes: function () {
+            fetch(`https://the-trivia-api.com/api/questions?categories=${this.categoriaSeleccionada}&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
+                  .then((response) => response.json())
+                  .then((preguntes) =>{
+                    console.log(preguntes)
+                    this.chosen=true;
+                });
+        }
+    },
     mounted() {
         {
             /*  fetch('https://the-trivia-api.com/api/categories')
