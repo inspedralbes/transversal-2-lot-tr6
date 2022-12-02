@@ -174,9 +174,8 @@ const login = Vue.component('login', {
     methods: {
         submitLogin() {
             this.processing = true;
-            fetch(`http://alvaro.alumnes.inspedralbes.cat/loginGET.php?username=${this.form.username
-                }&pwd=${this.form.password
-                }`).then(response => response.json())
+            fetch(`http://alvaro.alumnes.inspedralbes.cat/loginGET.php?username=${this.form.username}&pwd=${this.form.password}`)
+                .then(response => response.json())
                 .then(data => {
                     if (data.exito) {
                         this.infoLogin.name = data.nombre;
@@ -198,9 +197,57 @@ const login = Vue.component('login', {
     }
 });
 
+const signup = Vue.component('signup',{
+    template:`<div>
+        <router-link to="/" class="button">Home</router-link>
+        <div class="button">
+            <b-form-input id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>
+            <b-form-input id="input-2" v-model="form.email" placeholder="email" required></b-form-input>
+            <b-form-input id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
+            <b-form-input id="input-2" v-model="form.verifyPassword" placeholder="Repeat password" required></b-form-input>
+            <b-button @click="submitSignup" variant="primary">Signup</b-button>
+            <div v-show="processing">
+                <b-spinner></b-spinner>
+            </div>
+        </div>
+        </div>`,
+    data:function () {
+        return {
+            processing: false,
+            form: {
+                username: "",
+                password: "",
+                verifyPassword:"",
+                email:"",
+            },
+        }
+    },
+    methods:{
+        submitSignup() {
+            this.processing = true;
+            fetch(`http://alvaro.alumnes.inspedralbes.cat/loginGET.php?username=${this.form.username}&pwd=${this.form.password}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data. ) {
+                        this.infoLogin.name = data.nombre;
+                        this.infoLogin.idUser = data.id;
+                        this.logged = true;
+
+                        store = userStore()
+                        store.setStatus(this.infoLogin);
+                        store.logged = true;
+                    }
+                })
+        },
+    },
+    mounted(){
+    }
+})
+
 const routes = [
     { path: "/", component: quiz },
     { path: "/login", component: login },
+    { path: "/signup", component: signup },
     { path: "/difficulty", component: difficulty },
     { path: "/play", component: play },
 ];
