@@ -4,7 +4,7 @@
 }
 
 .fondo {
-  background-color: #333;
+  background-image: url(/img/fondo.png);
 }
 
 .blanco {
@@ -36,22 +36,83 @@
   right: 20px;
 }
 
-.answer {
-  float: left;
-}
-
 .default {
-  background-color: grey !important;
+  background-color: rgb(228, 159, 55) !important;
 }
 
 .correct {
-  background-color: green !important;
+  background-color: green;
   color: rgb(201, 201, 201);
+  animation-name: correct-animation;
+  animation-duration: 1.5s;
+}
+
+@keyframes correct-animation {
+  from {
+    background-color: rgb(228, 159, 55);
+  }
+
+  to {
+    background-color: green;
+  }
+}
+
+.simple-incorrect {
+  background-color: red;
+  color: rgb(201, 201, 201);
+  animation-name: incorrect-animation;
+  animation-duration: 1.5s;
 }
 
 .incorrect {
-  background-color: red !important;
+  background-color: red;
   color: rgb(201, 201, 201);
+  animation-name: incorrect-translation-animation;
+  animation-duration: 0.5s;
+}
+
+@keyframes incorrect-translation-animation {
+  0% {
+    background-color: rgb(228, 159, 55);
+  }
+
+  15% {
+    transform: translateX(10px);
+  }
+
+  30% {
+    transform: translateX(-10px);
+  }
+
+  45% {
+    transform: translateX(10px);
+  }
+
+  60% {
+    transform: translateX(-10px);
+  }
+
+  75% {
+    transform: translateX(10px);
+  }
+
+  90% {
+    transform: translateX(-10px);
+  }
+
+  100% {
+    background-color: red;
+  }
+}
+
+@keyframes incorrect-animation {
+  0% {
+    background-color: rgb(228, 159, 55);
+  }
+
+  100% {
+    background-color: red;
+  }
 }
 
 .play {
@@ -82,13 +143,13 @@
   margin: 0 auto;
   overflow: hidden;
   text-align: center;
-  width:1000px;
+  width: 1000px;
   height: 650px;
 }
 
 .slides {
   display: flex;
-  
+
 }
 
 .slides-item {
@@ -96,8 +157,8 @@
   border-radius: 10px;
   display: flex;
   flex-shrink: 0;
-  font-size: 100px;
-  height: 600px;
+  min-height: 600px;
+  max-height: fit-content;
   justify-content: center;
   margin: none;
   position: relative;
@@ -105,6 +166,7 @@
   transform-origin: center center;
   transition: transform .5s;
   width: 100%;
+  padding: 30px;
 }
 
 .slide-1 {
@@ -122,9 +184,30 @@ Fin Carrousel
 .questionText {
   display: flex;
   align-items: center;
+  text-align: center;
 }
 
-.btnAnswer  {
-  display: flex;
-  align-items: center;
+.btnAnswer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+  grid-auto-rows: minmax(100px, auto);
+}
+
+.answer {
+  width: 440px;
+  height: 100%;
+  font-size: 150%;
+  height: 200px;
+  border: 0;
+  border-radius: 10px;
+}
+
+.countAnswers {
+  width: fit-content;
+  color: white;
+  font-size: 35px;
+  background-color: grey;
+  padding: 15px;
+  border-radius: 40%;
 }
