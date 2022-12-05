@@ -16,7 +16,11 @@ const difficulty = Vue.component('difficulty', {
         return {
             categoriaSeleccionada: '',
             dificultadSeleccionada: '',
-            chosen: false
+            chosen: false,
+            questions: [],
+            currentQuestion: 0,
+            colorButtons: ["default", "default", "default", "default"],
+            statusButtons: [false, false, false, false]
         }
     },
     template: `
@@ -53,7 +57,19 @@ const difficulty = Vue.component('difficulty', {
                 </div>
             </div>
             <div v-else>
-                PARTIDA
+                <section class="carousel">    
+                    <div>
+                        <div class="slides">
+                            <div class="slides-item slide-1" id="slide-1">            
+                            <h2 class="blanco questionText">{{ questions[currentQuestion].question }}</h2>
+                            <div class="btnAnswer" v-for="(answer, indexA) in questions[currentQuestion].answers">
+                                <button :disabled="statusButtons[indexA]" class="button answer" :class="colorButtons[indexA]" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
+                            </div>
+                            </div>
+                            <div class="slides-item slide-2" id="slide-2">2</div> 
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
         `,
@@ -62,52 +78,9 @@ const difficulty = Vue.component('difficulty', {
         fetchPreguntes: function () {
             fetch(`https://the-trivia-api.com/api/questions?categories=${this.categoriaSeleccionada}&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
                 .then((response) => response.json())
-                .then((preguntes) => {
-                    console.log(preguntes)
-                    this.chosen = true;
-                });
-        }
-    },
-    mounted() {
-        {
-            /*  fetch('https://the-trivia-api.com/api/categories')
-                  .then((response) => response.json())
-                  .then((categories) => 
-                  {this.categories = categories;
-                  console.log(categories);});*/
-        }
-    }
-});
-
-const play = Vue.component('play', {
-    data: function () {
-        return {
-            questions: [],
-            currentQuestion: 0,
-            colorButtons: ["default", "default", "default", "default"],
-            statusButtons: [false, false, false, false]
-        }
-    },
-    template: `
-    <section class="carousel">    
-        <div>
-            <div class="slides">
-                <div class="slides-item slide-1" id="slide-1">            
-                <h2 class="blanco questionText">{{ questions[currentQuestion].question }}</h2>
-                <div class="btnAnswer" v-for="(answer, indexA) in questions[currentQuestion].answers">
-                    <button :disabled="statusButtons[indexA]" class="button answer" :class="colorButtons[indexA]" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
-                </div>
-                </div>
-                <div class="slides-item slide-2" id="slide-2">2</div> 
-            </div>
-        </div>
-    </section>
-    `,
-    mounted() {
-        {
-            fetch('https://the-trivia-api.com/api/questions')
-                .then((response) => response.json())
                 .then((questions) => {
+                    console.log(questions)
+                    this.chosen = true;
                     this.questions = questions;
                     let length = this.questions.length;
                     let cont = 0;
@@ -127,43 +100,42 @@ const play = Vue.component('play', {
                         cont = 0;
                         this.questions[j].answers = answers;
                     }
-                    console.log(this.questions);
                 });
-        }
-
-    },
-    methods: {
-        verificate(indexQ, indexA) {
-            if (this.questions[indexQ].correctIndex == indexA) {
-                for (let i = 0; i < 4; i++) {
-                    if (this.questions[indexQ].correctIndex == i) {
-                        this.colorButtons[i] = "correct";
-                    } else {
-                        this.colorButtons[i] = "incorrect";
+            },
+            verificate(indexQ, indexA) {
+                if (this.questions[indexQ].correctIndex == indexA) {
+                    for (let i = 0; i < 4; i++) {
+                        if (this.questions[indexQ].correctIndex == i) {
+                            this.colorButtons[i] = "correct";
+                        } else {
+                            this.colorButtons[i] = "incorrect";
+                        }
+                    }
+                } else {
+                    for (let index = 0; index < 4; index++) {
+                        this.colorButtons[index] = "incorrect";
                     }
                 }
-            } else {
+    
                 for (let index = 0; index < 4; index++) {
-                    this.colorButtons[index] = "incorrect";
+                    this.statusButtons[index] = true;
                 }
-            }
+    
+                this.$forceUpdate();
+    
+                setTimeout(() => {
+                    if (this.currentQuestion < this.questions.length - 1) {
+                        this.currentQuestion++;
+                        this.colorButtons = ["default", "default", "default", "default"];
+                        this.statusButtons = [false, false, false, false];
+                    }
+                }, 1000);
+            },
+        }
+    },
+);
 
-            for (let index = 0; index < 4; index++) {
-                this.statusButtons[index] = true;
-            }
 
-            this.$forceUpdate();
-
-            setTimeout(() => {
-                if (this.currentQuestion < this.questions.length - 1) {
-                    this.currentQuestion++;
-                    this.colorButtons = ["default", "default", "default", "default"];
-                    this.statusButtons = [false, false, false, false];
-                }
-            }, 1000);
-        },
-    }
-});
 
 const login = Vue.component('login', {
     template: `<div>
@@ -276,7 +248,6 @@ const routes = [
     { path: "/login", component: login },
     { path: "/signup", component: signup },
     { path: "/difficulty", component: difficulty },
-    { path: "/play", component: play },
 ];
 
 const router = new VueRouter({
