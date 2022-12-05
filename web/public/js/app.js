@@ -141,7 +141,7 @@ const login = Vue.component('login', {
     template: `<div>
         <router-link to="/" class="button">Home</router-link>
         <div v-show="!logged" class="button">
-            <b-form-input id="input-2" v-model="form.username" p+laceholder="Username" required></b-form-input>
+            <b-form-input id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>
             <b-form-input id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
             <b-button @click="submitLogin" variant="primary">Sing in</b-button>
             <div v-show="processing">
@@ -193,6 +193,9 @@ const login = Vue.component('login', {
             this.logged = false;
             //this.processing = false;
         }
+    },
+    mounted(){
+        console.log("login");
     }
 });
 
