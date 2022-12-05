@@ -20,56 +20,73 @@ const difficulty = Vue.component('difficulty', {
             questions: [],
             currentQuestion: 0,
             colorButtons: ["default", "default", "default", "default"],
-            statusButtons: [false, false, false, false]
+            statusButtons: [false, false, false, false],
+            correctAnswers: 0,
+            finish: false,
         }
     },
     template: `
         <div class="play" > 
-            <div v-if="!chosen" class="setParameters">
-                <div class="categories">
-                    <label> Category: 
-                        <b-form-select v-model="categoriaSeleccionada" >
-                            <option disabled selected>Please select a category</option>
-                            <option  value="arts_and_literature">Arts & Literature</option>
-                            <option  value="film_and_tv">Film & TV</option>
-                            <option  value="food_and_drink">Food & Drink</option>
-                            <option  value="general_knowledge">General Knowledge</option>
-                            <option  value="geography">Geography</option>
-                            <option  value="history">History</option>
-                            <option  value="music">Music</option>
-                            <option  value="science">Science</option>
-                            <option  value="society_and_culture">Society & Culture</option>
-                            <option  value="sport_and_leisure">Sport & Leisure</option>
-                        </b-form-select>
-                    </label>
+            <div v-if="!finish">
+                <div v-if="!chosen" class="setParameters">
+                    <div class="categories">
+                        <label> Category: 
+                            <b-form-select v-model="categoriaSeleccionada" >
+                                <option disabled selected>Please select a category</option>
+                                <option  value="arts_and_literature">Arts & Literature</option>
+                                <option  value="film_and_tv">Film & TV</option>
+                                <option  value="food_and_drink">Food & Drink</option>
+                                <option  value="general_knowledge">General Knowledge</option>
+                                <option  value="geography">Geography</option>
+                                <option  value="history">History</option>
+                                <option  value="music">Music</option>
+                                <option  value="science">Science</option>
+                                <option  value="society_and_culture">Society & Culture</option>
+                                <option  value="sport_and_leisure">Sport & Leisure</option>
+                            </b-form-select>
+                        </label>
+                    </div>
+                    <div class="difficulty">
+                        <label> Difficulty: 
+                            <b-form-select v-model="dificultadSeleccionada">
+                                <option disabled selected>Choose a difficulty</option>
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </b-form-select>
+                            <br>
+                            <button @click="fetchPreguntes" class="button">Play</button>
+                        </label>
+                    </div>
                 </div>
-                <div class="difficulty">
-                    <label> Difficulty: 
-                        <b-form-select v-model="dificultadSeleccionada">
-                            <option disabled selected>Choose a difficulty</option>
-                            <option value="easy">Easy</option>
-                            <option value="medium">Medium</option>
-                            <option value="hard">Hard</option>
-                        </b-form-select>
-                        <br>
-                        <button @click="fetchPreguntes" class="button">Play</button>
-                    </label>
+                <div v-else>
+                    <section class="carousel">    
+                        <div>
+                            <div class="slides">
+                                <div class="slides-item slide-1" id="slide-1">            
+                                    <div>
+                                        <h2 class="blanco questionText">{{ questions[currentQuestion].question }}</h2>
+                                        <div class="btnAnswer">
+                                            <div v-for="(answer, indexA) in questions[currentQuestion].answers">
+                                                <div>
+                                                    <button :disabled="statusButtons[indexA]" class="answer" :class="colorButtons[indexA]" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slides-item slide-2" id="slide-2">2</div> 
+                            </div>
+                        </div>
+                    </section>
+                    <div>
+                        <p class="countAnswers">{{correctAnswers}}/10</p>
+                    </div>
                 </div>
             </div>
             <div v-else>
-                <section class="carousel">    
-                    <div>
-                        <div class="slides">
-                            <div class="slides-item slide-1" id="slide-1">            
-                            <h2 class="blanco questionText">{{ questions[currentQuestion].question }}</h2>
-                            <div class="btnAnswer" v-for="(answer, indexA) in questions[currentQuestion].answers">
-                                <button :disabled="statusButtons[indexA]" class="button answer" :class="colorButtons[indexA]" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
-                            </div>
-                            </div>
-                            <div class="slides-item slide-2" id="slide-2">2</div> 
-                        </div>
-                    </div>
-                </section>
+            <p class="countAnswers">You have corrected a total of:</p>
+            <p class="countAnswers">{{correctAnswers}}/10</p>
             </div>
         </div>
         `,
@@ -101,38 +118,43 @@ const difficulty = Vue.component('difficulty', {
                         this.questions[j].answers = answers;
                     }
                 });
-            },
-            verificate(indexQ, indexA) {
-                if (this.questions[indexQ].correctIndex == indexA) {
-                    for (let i = 0; i < 4; i++) {
-                        if (this.questions[indexQ].correctIndex == i) {
-                            this.colorButtons[i] = "correct";
-                        } else {
-                            this.colorButtons[i] = "incorrect";
-                        }
-                    }
-                } else {
-                    for (let index = 0; index < 4; index++) {
-                        this.colorButtons[index] = "incorrect";
+        },
+        verificate(indexQ, indexA) {
+            if (this.questions[indexQ].correctIndex == indexA) {
+                for (let i = 0; i < 4; i++) {
+                    if (this.questions[indexQ].correctIndex == i) {
+                        this.colorButtons[i] = "correct";
+                    } else {
+                        this.colorButtons[i] = "simple-incorrect";
                     }
                 }
-    
+                this.correctAnswers += 1;
+            } else {
                 for (let index = 0; index < 4; index++) {
-                    this.statusButtons[index] = true;
+                    this.colorButtons[index] = "incorrect";
                 }
-    
-                this.$forceUpdate();
-    
-                setTimeout(() => {
-                    if (this.currentQuestion < this.questions.length - 1) {
-                        this.currentQuestion++;
-                        this.colorButtons = ["default", "default", "default", "default"];
-                        this.statusButtons = [false, false, false, false];
-                    }
-                }, 1000);
-            },
-        }
-    },
+            }
+
+            for (let index = 0; index < 4; index++) {
+                this.statusButtons[index] = true;
+            }
+
+            this.$forceUpdate();
+
+            setTimeout(() => {
+                if (this.currentQuestion < this.questions.length) {
+                    this.currentQuestion++;
+                    this.colorButtons = ["default", "default", "default", "default"];
+                    this.statusButtons = [false, false, false, false];
+                }
+
+                if (this.currentQuestion == 10) {
+                    this.finish = true;
+                }
+            }, 1500);
+        },
+    }
+},
 );
 
 
