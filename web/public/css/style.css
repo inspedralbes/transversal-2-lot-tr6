@@ -25,6 +25,10 @@
   border-radius: 5px;
 }
 
+.demo-button {
+  background-color: grey;
+}
+
 .button:hover {
   background-color: #0e3875;
   color: rgb(201, 201, 201);
