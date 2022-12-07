@@ -88,7 +88,7 @@ const difficulty = Vue.component('difficulty', {
                 </div>
             </div>
             <div v-else>
-            <p class="countAnswers">You have corrected a total of:</p>
+            <p class="countAnswers">You have answered correctly a total of:</p>
             <p class="countAnswers">{{correctAnswers}}/10</p>
             </div>
         </div>
@@ -166,18 +166,30 @@ const difficulty = Vue.component('difficulty', {
 const login = Vue.component('login', {
     template: `<div>
         <router-link to="/" class="button">Home</router-link>
-        <div v-show="!logged" class="button">
-            <b-form-input id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>
-            <b-form-input id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
-            <b-button @click="submitLogin" variant="primary">Sing in</b-button>
-            <div v-show="processing">
-                <b-spinner></b-spinner>
+        <div class="login-page">
+            <div v-show="!logged" class="login-form">
+                <b-input-group class="mb-2" size="sm"> 
+                    <b-input-group-prepend is-text>
+                        <b-icon icon="person"></b-icon>
+                    </b-input-group-prepend>
+                    <b-form-input type="text" id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>
+                </b-input-group>
+                <b-input-group class="mb-2" size="sm">
+                    <b-input-group-prepend is-text>
+                        <b-icon icon="key"></b-icon>
+                    </b-input-group-prepend>
+                    <b-form-input id="input-2" v-model="form.password" placeholder="Password" required ></b-form-input>
+                </b-input-group>
+                <b-button @click="submitLogin" variant="primary" class="input">Sing in</b-button>
+                <div v-show="processing">
+                    <b-spinner></b-spinner>
+                </div>
             </div>
-        </div>
         <div v-show="logged">
-        Bienvenido {{infoLogin.name}} 
-        <img :src="infoLogin.image">
+            Bienvenido {{infoLogin.name}} 
+            <img :src="infoLogin.image">
         <b-button @click="logOut" variant="primary">Logout</b-button>
+        </div>
         </div>
         </div>
         `,

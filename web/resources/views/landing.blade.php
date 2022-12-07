@@ -8,7 +8,6 @@
     <title>League Of Trivial</title>
     <link type="text/css" rel="stylesheet" href="/css/normalize.css" />
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/style-login.css">
 
     <!-- Load required Bootstrap and BootstrapVue CSS -->
     <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
@@ -31,6 +30,13 @@
     <!-- Load the following for BootstrapVueIcons support -->
     <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
     <script src="https://unpkg.com/vue-router@3/dist/vue-router.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+    <!-- Load Vue followed by BootstrapVue, and BootstrapVueIcons -->
+    <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
 
 </head>
 

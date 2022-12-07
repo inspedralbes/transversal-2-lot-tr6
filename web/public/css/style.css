@@ -1,3 +1,27 @@
+*{
+  background-color: #141414;
+}
+
+.login-page{
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form{
+  width: 30%;
+  height: 200px;
+  padding: 10px;
+  background-color: #003052;
+  border-radius: 4px;
+}
+
+.input{
+  margin: 5px;
+  padding: 10px;
+}
+
 .container-landing {
   width: 100%;
   margin: 0;
@@ -22,7 +46,7 @@
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 .button:hover {
