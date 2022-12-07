@@ -60,6 +60,9 @@ const difficulty = Vue.component('difficulty', {
                     </div>
                 </div>
                 <div v-else>
+                    <div v-for="(question, indexQ) in questions">
+                        <button style="float: left" disabled>{{indexQ+1}}</button>
+                    </div>
                     <section class="carousel">    
                         <div>
                             <div class="slides">
@@ -153,6 +156,7 @@ const difficulty = Vue.component('difficulty', {
                 }
             }, 1500);
         },
+
     }
 },
 );
@@ -216,7 +220,7 @@ const login = Vue.component('login', {
             //this.processing = false;
         }
     },
-    mounted(){
+    mounted() {
         console.log("login");
     }
 });
