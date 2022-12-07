@@ -6,6 +6,7 @@ const quiz = Vue.component('quiz', {
                 <div>
                 <h1 class="blanco"> Wanna test your knowledge? </h1>
                 <router-link to="/difficulty" class="button">Play</router-link>
+                <router-link to="/difficulty" class="button demo-button">Play as guest</router-link>
                 </div>
             </div>
         </div>`
