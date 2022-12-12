@@ -173,7 +173,7 @@ const login = Vue.component('login', {
                     <b-input-group-prepend is-text>
                         <b-icon icon="person"></b-icon>
                     </b-input-group-prepend>
-                    <b-form-input type="text" id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>
+                    <b-form-input type="text" id="input-2" v-model="form.email" placeholder="Email" required></b-form-input>
                 </b-input-group>
                 <b-input-group class="mb-2" size="sm">
                     <b-input-group-prepend is-text>
@@ -185,10 +185,12 @@ const login = Vue.component('login', {
                 <div v-show="processing">
                     <b-spinner></b-spinner>
                 </div>
+                <div v-show="incorrectLogin">
+                    <p style="color: red">Usuario Inexistente!</p> 
+                </div>
             </div>
         <div v-show="logged">
-            Bienvenido {{infoLogin.name}} 
-            <img :src="infoLogin.image">
+            <p class="blanco">Bienvenido {{infoLogin.name}}</p>
         <b-button @click="logOut" variant="primary">Logout</b-button>
         </div>
         </div>
@@ -198,30 +200,40 @@ const login = Vue.component('login', {
         return {
             processing: false,
             form: {
-                username: "",
+                email: "",
                 password: ""
             },
             infoLogin: {
                 name: "",
-                image: "",
                 idUser: "",
             },
-            logged: false
+            logged: false,
+            incorrectLogin: false
         }
     },
     methods: {
         submitLogin() {
             this.processing = true;
-            fetch(`http://alvaro.alumnes.inspedralbes.cat/loginGET.php?username=${this.form.username}&pwd=${this.form.password}`)
+            this.incorrectLogin = false;
+            fetch(`http://127.0.0.1:8000/api/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(this.form),
+            })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.exito) {
-                        this.infoLogin.name = data.nombre;
-                        this.infoLogin.image = data.imagen;
+                    console.log(data);
+                    if (data == 0) {
+                        this.processing = false;
+                        this.incorrectLogin = true;
+                    } else {
+                        this.infoLogin.name = data.username;
                         this.infoLogin.idUser = data.id;
                         this.logged = true;
 
-                        store = userStore()
+                        store = userStore();
                         store.setStatus(this.infoLogin);
                         store.logged = true;
                     }

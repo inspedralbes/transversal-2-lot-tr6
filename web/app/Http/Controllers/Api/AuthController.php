@@ -18,7 +18,7 @@ class AuthController extends Controller
         $request->validate([
             'username' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
+            'password' => 'required'
         ]);
 
         //alta del usuario
@@ -42,9 +42,11 @@ class AuthController extends Controller
             $user = Auth::user();
             $token = $user->createToken('token')->plainTextToken;
             $cookie = cookie('cookie_token', $token, 60 * 24);
-            return response(["token" => $token], Response::HTTP_OK)->withoutCookie($cookie);
+            $user->token = $token;
+            return response($user, Response::HTTP_OK)->withoutCookie($cookie);
         } else {
-            return response(["message" => "Credenciales inválidas"], Response::HTTP_UNAUTHORIZED);
+            $user = 0;
+            return response($user, Response::HTTP_UNAUTHORIZED);
         }
     }
 
