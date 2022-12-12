@@ -89,7 +89,7 @@ const difficulty = Vue.component('difficulty', {
                         </div>
                     </section>
                     <div>
-                        <p class="countAnswers">{{correctAnswers}}/10</p>
+                        <p class="countAnswers">{{correctAnswers}}/{{currentQuestion+1}}</p>
                     </div>
                 </div>
             </div>
