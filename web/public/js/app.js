@@ -173,7 +173,7 @@ const login = Vue.component('login', {
                     <b-input-group-prepend is-text>
                         <b-icon icon="person"></b-icon>
                     </b-input-group-prepend>
-                    <b-form-input type="text" id="input-2" v-model="form.email" placeholder="Email" required></b-form-input>
+                    <b-form-input class="input" type="text" id="input-1" v-model="form.email" placeholder="Email" required></b-form-input>
                 </b-input-group>
                 <b-input-group class="mb-2" size="sm">
                     <b-input-group-prepend is-text>
@@ -181,10 +181,10 @@ const login = Vue.component('login', {
                     </b-input-group-prepend>
                     <b-form-input id="input-2" v-model="form.password" placeholder="Password" required ></b-form-input>
                 </b-input-group>
-                <b-button @click="submitLogin" variant="primary" class="input">Sing in</b-button>
-                <div v-show="processing">
-                    <b-spinner></b-spinner>
-                </div>
+                <b-button @click="submitLogin" variant="primary" >Sing in
+                    <div v-if="!processing" class="signin-icon"><b-icon icon="check"></b-icon></div>
+                    <div v-else="processing" class="signin-icon"><b-spinner small></b-spinner></div>
+                </b-button>
                 <div v-show="incorrectLogin">
                     <p style="color: red">Usuario Inexistente!</p> 
                 </div>
