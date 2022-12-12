@@ -14,10 +14,6 @@
   border-radius: 4px;
 }
 
-.input{
-  
-}
-
 .input:hover{
   background-color: #ebebeb;
 }
@@ -253,10 +249,23 @@ Fin Carrousel
   border-radius: 40%;
 }
 
-.nQuestion {
-  
+.nQuestionContainer {
+  width: 30px;
+  float: center;
 }
 
-.nCurQuestion {
+.nCurrQuestion {
   background-color: green;
+}
+span {
+  float: center;
+  background-color: #707070;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0;
+  width: 30px;
+  width: 25px;
 }
