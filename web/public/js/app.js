@@ -9,53 +9,7 @@ const quiz = Vue.component('quiz', {
                 <router-link to="/difficulty" class="button demo-button">Play as guest</router-link>
                 </div>
             </div>
-            <div class="containterStadistics">
-                <canvas id="ranking"></canvas>
-                <canvas id="playedGames"></canvas>
-            </div>
-        </div>`,
-        mounted() {
-            let chartRanking = document.getElementById('ranking');
-            let chartGames = document.getElementById('playedGames');
-
-            new Chart(chartRanking, {
-                type: 'bar',
-                data: {
-                  labels: ['Julian', 'Peter', 'Ermel', 'Gracie', 'Lydia', 'Cesar'],
-                  datasets: [{
-                    label: 'Score',
-                    data: [12, 19, 3, 5, 2, 3],
-                    borderWidth: 1
-                  }]
-                },
-                options: {
-                  scales: {
-                    y: {
-                      beginAtZero: true
-                    }
-                  }
-                }
-              });
-            
-              new Chart(chartGames, {
-                type: 'bar',
-                data: {
-                  labels: ['History', 'Science', 'Sports', 'Music', 'Technology', 'Art'],
-                  datasets: [{
-                    label: 'Times played',
-                    data: [12, 19, 3, 5, 2, 3],
-                    borderWidth: 1
-                  }]
-                },
-                options: {
-                  scales: {
-                    y: {
-                      beginAtZero: true
-                    }
-                  }
-                }
-              });
-        }
+        </div>`
 });
 
 const difficulty = Vue.component('difficulty', {
@@ -135,7 +89,7 @@ const difficulty = Vue.component('difficulty', {
                         </div>
                     </section>
                     <div>
-                        <p class="countAnswers">{{correctAnswers}}/{{currentQuestion}}</p>
+                        <p class="countAnswers">{{correctAnswers}}/10</p>
                     </div>
                 </div>
             </div>
@@ -221,26 +175,27 @@ const login = Vue.component('login', {
         <div class="login-page">
             <div v-show="!logged" class="login-form">
                 <b-input-group class="mb-2" size="sm"> 
-                    <b-input-group-append is-text>
-                        <b-icon icon="person" shift-h="-4"></b-icon>
+                    <b-input-group-prepend is-text>
+                        <b-icon icon="person"></b-icon>
                     </b-input-group-prepend>
-                    <b-form-input class="input" type="text" id="input-1" v-model="form.username" placeholder="Username" required></b-form-input>
+                    <b-form-input class="input" type="text" id="input-1" v-model="form.email" placeholder="Email" required></b-form-input>
                 </b-input-group>
                 <b-input-group class="mb-2" size="sm">
-                    <b-input-group-append is-text>
-                        <b-icon icon="key" shift-h="-4"></b-icon>
+                    <b-input-group-prepend is-text>
+                        <b-icon icon="key"></b-icon>
                     </b-input-group-prepend>
-                    <b-form-input class="input" type="password" id="input-2" v-model="form.password" placeholder="Password" required ></b-form-input>
+                    <b-form-input id="input-2" v-model="form.password" placeholder="Password" required ></b-form-input>
                 </b-input-group>
                 <b-button @click="submitLogin" variant="primary" >Sing in
                     <div v-if="!processing" class="signin-icon"><b-icon icon="check"></b-icon></div>
                     <div v-else="processing" class="signin-icon"><b-spinner small></b-spinner></div>
                 </b-button>
-                
+                <div v-show="incorrectLogin">
+                    <p style="color: red">Usuario Inexistente!</p> 
+                </div>
             </div>
         <div v-show="logged">
-            Bienvenido {{infoLogin.name}} 
-            <img :src="infoLogin.image">
+            <p class="blanco">Bienvenido {{infoLogin.name}}</p>
         <b-button @click="logOut" variant="primary">Logout</b-button>
         </div>
         </div>
@@ -250,30 +205,40 @@ const login = Vue.component('login', {
         return {
             processing: false,
             form: {
-                username: "",
+                email: "",
                 password: ""
             },
             infoLogin: {
                 name: "",
-                image: "",
                 idUser: "",
             },
-            logged: false
+            logged: false,
+            incorrectLogin: false
         }
     },
     methods: {
         submitLogin() {
             this.processing = true;
-            fetch(`http://alvaro.alumnes.inspedralbes.cat/loginGET.php?username=${this.form.username}&pwd=${this.form.password}`)
+            this.incorrectLogin = false;
+            fetch(`http://127.0.0.1:8000/api/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(this.form),
+            })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.exito) {
-                        this.infoLogin.name = data.nombre;
-                        this.infoLogin.image = data.imagen;
+                    console.log(data);
+                    if (data == 0) {
+                        this.processing = false;
+                        this.incorrectLogin = true;
+                    } else {
+                        this.infoLogin.name = data.username;
                         this.infoLogin.idUser = data.id;
                         this.logged = true;
 
-                        store = userStore()
+                        store = userStore();
                         store.setStatus(this.infoLogin);
                         store.logged = true;
                     }
@@ -294,10 +259,10 @@ const signup = Vue.component('signup', {
     template: `<div>
         <router-link to="/" class="button">Home</router-link>
         <div class="button">
-            <b-form-input id="input-1" v-model="form.username" placeholder="Username" required></b-form-input>
+            <b-form-input id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>
             <b-form-input id="input-2" v-model="form.email" placeholder="email" required></b-form-input>
-            <b-form-input id="input-3" v-model="form.password" placeholder="Password" required></b-form-input>
-            <b-form-input id="input-4" v-model="form.verifyPassword" placeholder="Repeat password" required></b-form-input>
+            <b-form-input id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
+            <b-form-input id="input-2" v-model="form.verifyPassword" placeholder="Repeat password" required></b-form-input>
             <b-button @click="submitSignup" variant="primary">Signup</b-button>
             <div v-show="processing">
                 <b-spinner></b-spinner>
