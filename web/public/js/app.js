@@ -9,7 +9,7 @@ const quiz = Vue.component('quiz', {
                 <router-link to="/difficulty" class="button demo-button">Play as guest</router-link>
                 </div>
             </div>
-            <div>
+            <div class="containterStadistics">
                 <canvas id="ranking"></canvas>
                 <canvas id="playedGames"></canvas>
             </div>
@@ -108,7 +108,12 @@ const difficulty = Vue.component('difficulty', {
                 </div>
                 <div v-else>
                     <div v-for="(question, indexQ) in questions">
-                        <button style="float: left" disabled>{{indexQ+1}}</button>
+                        <label style="float: left" v-if="currentQuestion!=indexQ">
+                            <button class="nQuestion" disabled>{{indexQ+1}}</button>
+                        </label>
+                        <label style="float: left" v-else>
+                            <button class="nCurQuestion" disabled>{{indexQ+1}}</button>
+                        </label>
                     </div>
                     <section class="carousel">    
                         <div>

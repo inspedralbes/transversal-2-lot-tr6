@@ -42,7 +42,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body class="fondo">
+<body class="background">
     <div id="app">
         <router-view></router-view>
     </div>
