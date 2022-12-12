@@ -1,7 +1,16 @@
+@font-face {
+  font-family: "Friz Quadrata";
+  src: url(friz-quadrata-std-medium-5870338ec7ef8.otf);
+}
+
+*{
+  font-family:'Friz Quadrata'!important;
+}
+
 body{
   background-color: #141414;
 }
-
+ 
 .login-page{
   width: 80%;
   display: flex;
@@ -10,25 +19,41 @@ body{
   margin-left: 10%; 
 }
 
-.login-form{
+
+.login-form-form{
   width: 30%;
   height: 200px;
   padding: 10px;
   background-color: #003052;
-  border-radius: 4px;
+  border-radius: 0 4px 4px 0;
+  padding-left: 5%;
 }
 
-.input{
-  
+.login-form-text{
+  width: 30%;
+  height: 200px;
+  padding: 10px;
+  background-color: #4A2966;
+  border-radius: 4px 0 0 4px;
+  text-align: center;
+  color: #d6efff;
+}
+
+.login-form-text h1{
+  color: #d6efff;
 }
 
 .input:hover{
-  background-color: #ebebeb;
+  background-color: #d6efff;
 }
 
 .signin-icon{
   float: right;
   margin-left: 5px;
+}
+
+.signin-button{
+  width: 68% !important;
 }
 
 .container-landing {

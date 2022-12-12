@@ -214,7 +214,11 @@ const login = Vue.component('login', {
     template: `<div>
         <router-link to="/" class="button">Home</router-link>
         <div class="login-page">
-            <div v-show="!logged" class="login-form">
+            <div v-show="!logged" class="login-form-text">
+                <h1>Welcome back</h1>
+                <p>Enter your details and sign in</p>
+            </div>
+            <div v-show="!logged" class="login-form-form">
                 <b-input-group class="mb-2" size="sm"> 
                     <b-input-group-append is-text>
                         <b-icon icon="person" shift-h="-4"></b-icon>
@@ -227,7 +231,7 @@ const login = Vue.component('login', {
                     </b-input-group-prepend>
                     <b-form-input class="input" type="password" id="input-2" v-model="form.password" placeholder="Password" required ></b-form-input>
                 </b-input-group>
-                <b-button @click="submitLogin" variant="primary" >Sing in
+                <b-button @click="submitLogin" variant="primary" class="signin-button">Sing in
                     <div v-if="!processing" class="signin-icon"><b-icon icon="check"></b-icon></div>
                     <div v-else="processing" class="signin-icon"><b-spinner small></b-spinner></div>
                 </b-button>
