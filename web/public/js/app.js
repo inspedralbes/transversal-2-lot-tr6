@@ -173,13 +173,19 @@ const login = Vue.component('login', {
                     <b-input-group-prepend is-text>
                         <b-icon icon="person"></b-icon>
                     </b-input-group-prepend>
-                    <b-form-input class="input" type="text" id="input-1" v-model="form.email" placeholder="Email" required></b-form-input>
+                    <b-form-input class="input" :state="statusLogin" type="email" id="input-1" v-model="form.email" placeholder="Email" required></b-form-input>
+                    <b-form-invalid-feedback id="input-live-feedback">
+                        Introduce un email valido.
+                    </b-form-invalid-feedback>
                 </b-input-group>
                 <b-input-group class="mb-2" size="sm">
                     <b-input-group-prepend is-text>
                         <b-icon icon="key"></b-icon>
                     </b-input-group-prepend>
-                    <b-form-input id="input-2" v-model="form.password" placeholder="Password" required ></b-form-input>
+                    <b-form-input id="input-2" :state="statusLogin" v-model="form.password" placeholder="Password" required ></b-form-input>
+                    <b-form-invalid-feedback id="input-live-feedback">
+                        Introduce una contraseña valida, entre 8 y 16 caracteres. Ademas debe contener una mayuscula y una minuscula.
+                    </b-form-invalid-feedback>
                 </b-input-group>
                 <b-button @click="submitLogin" variant="primary" >Sing in
                     <div v-if="!processing" class="signin-icon"><b-icon icon="check"></b-icon></div>
@@ -208,41 +214,47 @@ const login = Vue.component('login', {
                 idUser: "",
             },
             logged: false,
-            incorrectLogin: false
+            incorrectLogin: false,
+            statusLogin: "null"
         }
     },
     methods: {
         submitLogin() {
-            this.processing = true;
-            this.incorrectLogin = false;
-            fetch(`http://127.0.0.1:8000/api/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(this.form),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    if (data == 0) {
-                        this.processing = false;
-                        this.incorrectLogin = true;
-                    } else {
-                        this.infoLogin.name = data.username;
-                        this.infoLogin.idUser = data.id;
-                        this.logged = true;
-
-                        store = userStore();
-                        store.setStatus(this.infoLogin);
-                        store.logged = true;
-                    }
+            if (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(this.form.email) && /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/g.test(this.form.password)) {
+                this.processing = true;
+                this.incorrectLogin = false;
+                fetch(`http://127.0.0.1:8000/api/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(this.form),
                 })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        if (data == 0) {
+                            this.processing = false;
+                            this.incorrectLogin = true;
+                        } else {
+                            this.infoLogin.name = data.username;
+                            this.infoLogin.idUser = data.id;
+                            this.logged = true;
+
+                            // store = userStore();
+                            // store.setStatus(this.infoLogin);
+                            // store.logged = true;
+                        }
+                    })
+            } else {
+                console.log(9);
+                this.statusLogin = false;
+            }
         },
         logOut() {
-            userStore().logged = false;
+            //userStore().logged = false;
             this.logged = false;
-            //this.processing = false;
+            this.processing = false;
         }
     },
     mounted() {
