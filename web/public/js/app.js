@@ -9,7 +9,53 @@ const quiz = Vue.component('quiz', {
                 <router-link to="/difficulty" class="button demo-button">Play as guest</router-link>
                 </div>
             </div>
-        </div>`
+            <div>
+                <canvas id="ranking"></canvas>
+                <canvas id="playedGames"></canvas>
+            </div>
+        </div>`,
+        mounted() {
+            let chartRanking = document.getElementById('ranking');
+            let chartGames = document.getElementById('playedGames');
+
+            new Chart(chartRanking, {
+                type: 'bar',
+                data: {
+                  labels: ['Julian', 'Peter', 'Ermel', 'Gracie', 'Lydia', 'Cesar'],
+                  datasets: [{
+                    label: 'Score',
+                    data: [12, 19, 3, 5, 2, 3],
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
+                  }
+                }
+              });
+            
+              new Chart(chartGames, {
+                type: 'bar',
+                data: {
+                  labels: ['History', 'Science', 'Sports', 'Music', 'Technology', 'Art'],
+                  datasets: [{
+                    label: 'Times played',
+                    data: [12, 19, 3, 5, 2, 3],
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
+                  }
+                }
+              });
+        }
 });
 
 const difficulty = Vue.component('difficulty', {
@@ -84,7 +130,7 @@ const difficulty = Vue.component('difficulty', {
                         </div>
                     </section>
                     <div>
-                        <p class="countAnswers">{{correctAnswers}}/10</p>
+                        <p class="countAnswers">{{correctAnswers}}/{{currentQuestion}}</p>
                     </div>
                 </div>
             </div>
