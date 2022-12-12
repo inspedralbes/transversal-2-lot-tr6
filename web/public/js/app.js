@@ -170,21 +170,22 @@ const login = Vue.component('login', {
         <div class="login-page">
             <div v-show="!logged" class="login-form">
                 <b-input-group class="mb-2" size="sm"> 
-                    <b-input-group-prepend is-text>
-                        <b-icon icon="person"></b-icon>
+                    <b-input-group-append is-text>
+                        <b-icon icon="person" shift-h="-4"></b-icon>
                     </b-input-group-prepend>
-                    <b-form-input type="text" id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>
+                    <b-form-input class="input" type="text" id="input-1" v-model="form.username" placeholder="Username" required></b-form-input>
                 </b-input-group>
                 <b-input-group class="mb-2" size="sm">
-                    <b-input-group-prepend is-text>
-                        <b-icon icon="key"></b-icon>
+                    <b-input-group-append is-text>
+                        <b-icon icon="key" shift-h="-4"></b-icon>
                     </b-input-group-prepend>
-                    <b-form-input id="input-2" v-model="form.password" placeholder="Password" required ></b-form-input>
+                    <b-form-input class="input" type="password" id="input-2" v-model="form.password" placeholder="Password" required ></b-form-input>
                 </b-input-group>
-                <b-button @click="submitLogin" variant="primary" class="input">Sing in</b-button>
-                <div v-show="processing">
-                    <b-spinner></b-spinner>
-                </div>
+                <b-button @click="submitLogin" variant="primary" >Sing in
+                    <div v-if="!processing" class="signin-icon"><b-icon icon="check"></b-icon></div>
+                    <div v-else="processing" class="signin-icon"><b-spinner small></b-spinner></div>
+                </b-button>
+                
             </div>
         <div v-show="logged">
             Bienvenido {{infoLogin.name}} 
@@ -242,10 +243,10 @@ const signup = Vue.component('signup', {
     template: `<div>
         <router-link to="/" class="button">Home</router-link>
         <div class="button">
-            <b-form-input id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>
+            <b-form-input id="input-1" v-model="form.username" placeholder="Username" required></b-form-input>
             <b-form-input id="input-2" v-model="form.email" placeholder="email" required></b-form-input>
-            <b-form-input id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
-            <b-form-input id="input-2" v-model="form.verifyPassword" placeholder="Repeat password" required></b-form-input>
+            <b-form-input id="input-3" v-model="form.password" placeholder="Password" required></b-form-input>
+            <b-form-input id="input-4" v-model="form.verifyPassword" placeholder="Repeat password" required></b-form-input>
             <b-button @click="submitSignup" variant="primary">Signup</b-button>
             <div v-show="processing">
                 <b-spinner></b-spinner>

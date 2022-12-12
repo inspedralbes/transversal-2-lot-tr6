@@ -1,12 +1,13 @@
-*{
+body{
   background-color: #141414;
 }
 
 .login-page{
   width: 80%;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  margin-left: 10%; 
 }
 
 .login-form{
@@ -18,8 +19,16 @@
 }
 
 .input{
-  margin: 5px;
-  padding: 10px;
+  
+}
+
+.input:hover{
+  background-color: #ebebeb;
+}
+
+.signin-icon{
+  float: right;
+  margin-left: 5px;
 }
 
 .container-landing {
