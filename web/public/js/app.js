@@ -61,8 +61,13 @@ const difficulty = Vue.component('difficulty', {
                     </div>
                 </div>
                 <div v-else>
-                    <div v-for="(question, indexQ) in questions">
-                        <button style="float: left" disabled>{{indexQ+1}}</button>
+                    <div class="nQuestionContainer" v-for="(question, indexQ) in questions">
+                        <label v-if="currentQuestion!=indexQ">
+                            <span class="nQuestion">{{indexQ+1}}</span>
+                        </label>
+                        <label v-else>
+                            <span class="nCurrQuestion">{{indexQ+1}}</span>
+                        </label>
                     </div>
                     <section class="carousel">    
                         <div>
@@ -84,7 +89,7 @@ const difficulty = Vue.component('difficulty', {
                         </div>
                     </section>
                     <div>
-                        <p class="countAnswers">{{correctAnswers}}/10</p>
+                        <p class="countAnswers">{{correctAnswers}}/{{currentQuestion+1}}</p>
                     </div>
                 </div>
             </div>
