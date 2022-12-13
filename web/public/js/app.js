@@ -181,17 +181,17 @@ const login = Vue.component('login', {
                 <b-input-group class="mb-2" size="sm"> 
                     <b-input-group-append is-text>
                         <b-icon icon="person" shift-h="-4"></b-icon>
-                    </b-input-group-prepend>
-                    <b-form-input class="input" :state="statusLogin" type="email" id="input-1" v-model="form.email" placeholder="Email" required></b-form-input>
-                    <b-form-invalid-feedback id="input-live-feedback">
-                        Introduce un email valido.
-                    </b-form-invalid-feedback>
+                        <b-form-input class="input" :state="statusLogin" type="email" id="input-1" v-model="form.email" placeholder="Email" required></b-form-input>
+                    </b-input-group-append>
+                    <div v-show="!statusLogin" id="input-live-feedback" style="color: #F04848">
+                        Introduce un email correcto.
+                    <div>
                 </b-input-group>
                 <b-input-group class="mb-2" size="sm">
                     <b-input-group-append is-text>
                         <b-icon icon="key" shift-h="-4"></b-icon>
-                    </b-input-group-prepend>
-                    <b-form-input id="input-2" :state="statusLogin" v-model="form.password" placeholder="Password" required ></b-form-input>
+                        <b-form-input id="input-2" :state="statusLogin" v-model="form.password" placeholder="Password" required ></b-form-input>
+                    </b-input-group-append>
                 </b-input-group>
                 <b-button @click="submitLogin" variant="primary" class="signin-button">Sing in
                     <div v-if="!processing" class="signin-icon"><b-icon icon="check"></b-icon></div>
@@ -201,10 +201,10 @@ const login = Vue.component('login', {
                     <p style="color: red">Usuario Inexistente!</p> 
                 </div>
             </div>
-        <div v-show="logged">
-            <p class="blanco">Bienvenido {{infoLogin.name}}</p>
-        <b-button @click="logOut" variant="primary">Logout</b-button>
-        </div>
+            <div v-show="logged">
+                <p class="blanco">Bienvenido {{infoLogin.name}}</p>
+            <b-button @click="logOut" variant="primary">Logout</b-button>
+            </div>
         </div>
         </div>
         `,
@@ -229,6 +229,7 @@ const login = Vue.component('login', {
             if (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(this.form.email)) {
                 this.processing = true;
                 this.incorrectLogin = false;
+                this.statusLogin = "null";
                 fetch(`http://127.0.0.1:8000/api/login`, {
                     method: 'POST',
                     headers: {
