@@ -14,7 +14,7 @@ const quiz = Vue.component('quiz', {
         </div>`,
         mounted() {
             const ChartScore = document.getElementById('topScore');
-
+            
             new Chart(ChartScore, {
               type: 'bar',
               data: {
@@ -85,13 +85,11 @@ const difficulty = Vue.component('difficulty', {
                     </div>
                 </div>
                 <div v-else>
-                    <div class="nQuestionContainer" v-for="(question, indexQ) in questions">
-                        <label v-if="currentQuestion!=indexQ">
-                            <span class="nQuestion">{{indexQ+1}}</span>
-                        </label>
-                        <label v-else>
-                            <span class="nCurrQuestion">{{indexQ+1}}</span>
-                        </label>
+                    <div class="nQuestionContainer">
+                        <div v-for="(question, indexQ) in questions">
+                            <span v-if="currentQuestion!=indexQ" class="nQuestion">{{indexQ+1}}</span>
+                            <span v-else class="nCurrQuestion">{{indexQ+1}}</span>
+                        </div>
                     </div>
                     <section class="carousel">    
                         <div>
