@@ -345,7 +345,8 @@ const signup = Vue.component('signup', {
                 <b-input-group class="mb-2" size="sm"> 
                     <b-input-group-append is-text>
                         <b-icon icon="person" shift-h="-4"></b-icon>
-                        <b-form-input id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>                    </b-input-group-append>
+                        <b-form-input id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>                    
+                    </b-input-group-append>
                 </b-input-group>
 
                 <b-input-group class="mb-2" size="sm">
