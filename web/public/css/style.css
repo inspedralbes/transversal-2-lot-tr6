@@ -87,8 +87,28 @@ body{
   background-color: #3d3d3d;
 }
 
-.blanco {
-  color: white;
+.title-landing{
+  font-size: 95px;
+  color: #d6efff;
+}
+
+.button-play{
+  background-color: #3660a000;
+  border:1px solid;
+  color:#d6efff;
+  padding: 10px 25px;
+  text-align: center;
+  text-decoration: none;
+  margin: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 55px;
+}
+
+.button-play:hover{
+  text-decoration: none;
+  color: #3660a0;
 }
 
 .button {

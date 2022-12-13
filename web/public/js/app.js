@@ -4,8 +4,9 @@ const quiz = Vue.component('quiz', {
             <router-link to="/login" class="button login-button">Login</router-link>    
             <div class="play">
                 <div>
-                <h1 class="blanco"> Wanna test your knowledge? </h1>
-                <router-link to="/difficulty" class="button">Play</router-link>
+                <h1 class="title-landing"> Wanna test your knowledge? </h1>
+                <router-link to="/difficulty" class="button-play">Play</router-link>
+                <br>
                 <router-link to="/difficulty" class="button demo-button">Play as guest</router-link>
                 </div>
             </div>
