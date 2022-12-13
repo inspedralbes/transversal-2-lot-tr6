@@ -38,6 +38,13 @@
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
 
+    <!-- PINIA -->
+    <script src="https://unpkg.com/@vue/composition-api"></script>
+    <script src="https://unpkg.com/vue-demi"></script>
+    <script src="https://unpkg.com/pinia"></script>
+
+
+
     {{-- Vue chart --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
