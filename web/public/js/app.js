@@ -10,7 +10,30 @@ const quiz = Vue.component('quiz', {
                 <router-link to="/difficulty" class="button demo-button">Play as guest</router-link>
                 </div>
             </div>
-        </div>`
+            <canvas id="topScore"></canvas>
+        </div>`,
+        mounted() {
+            const ChartScore = document.getElementById('topScore');
+
+            new Chart(ChartScore, {
+              type: 'bar',
+              data: {
+                labels: ['Lydia', 'Peter', 'Ermel', 'Cesar', 'Julian', 'Maria'],
+                datasets: [{
+                  label: 'Top Scorer',
+                  data: [12, 19, 3, 5, 2, 3],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true
+                  }
+                }
+              }
+            });
+        }
 });
 
 const difficulty = Vue.component('difficulty', {
