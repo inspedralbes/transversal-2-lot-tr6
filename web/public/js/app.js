@@ -179,8 +179,8 @@ const login = Vue.component('login', {
             </div>
             <div v-show="!logged" class="login-form-form">
                 <b-input-group class="mb-2" size="sm"> 
-                    <b-input-group-prepend is-text>
-                        <b-icon icon="person"></b-icon>
+                    <b-input-group-append is-text>
+                        <b-icon icon="person" shift-h="-4"></b-icon>
                     </b-input-group-prepend>
                     <b-form-input class="input" :state="statusLogin" type="email" id="input-1" v-model="form.email" placeholder="Email" required></b-form-input>
                     <b-form-invalid-feedback id="input-live-feedback">
@@ -188,13 +188,10 @@ const login = Vue.component('login', {
                     </b-form-invalid-feedback>
                 </b-input-group>
                 <b-input-group class="mb-2" size="sm">
-                    <b-input-group-prepend is-text>
-                        <b-icon icon="key"></b-icon>
+                    <b-input-group-append is-text>
+                        <b-icon icon="key" shift-h="-4"></b-icon>
                     </b-input-group-prepend>
                     <b-form-input id="input-2" :state="statusLogin" v-model="form.password" placeholder="Password" required ></b-form-input>
-                    <b-form-invalid-feedback id="input-live-feedback">
-                        Introduce una contraseña valida, entre 8 y 16 caracteres. Ademas debe contener una mayuscula y una minuscula.
-                    </b-form-invalid-feedback>
                 </b-input-group>
                 <b-button @click="submitLogin" variant="primary" class="signin-button">Sing in
                     <div v-if="!processing" class="signin-icon"><b-icon icon="check"></b-icon></div>
@@ -229,7 +226,7 @@ const login = Vue.component('login', {
     },
     methods: {
         submitLogin() {
-            if (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(this.form.email) && /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/g.test(this.form.password)) {
+            if (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(this.form.email)) {
                 this.processing = true;
                 this.incorrectLogin = false;
                 fetch(`http://127.0.0.1:8000/api/login`, {
