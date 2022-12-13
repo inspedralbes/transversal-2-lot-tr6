@@ -3,24 +3,24 @@
   src: url(friz-quadrata-std-medium-5870338ec7ef8.otf);
 }
 
-*{
-  font-family:'Friz Quadrata'!important;
+* {
+  font-family: 'Friz Quadrata' !important;
 }
 
-body{
+body {
   background-color: #141414;
 }
- 
-.login-page{
+
+.login-page {
   width: 80%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 10%; 
+  margin-left: 10%;
 }
 
 
-.login-form-form{
+.login-form-form {
   width: 25%;
   height: 200px;
   padding: 10px;
@@ -29,7 +29,7 @@ body{
   padding-left: 5%;
 }
 
-.login-form-text{
+.login-form-text {
   width: 25%;
   height: 200px;
   padding: 10px;
@@ -39,44 +39,13 @@ body{
   background-color: #4A2966;
 }
 
-.signup-form-form{
-  width: 25%;
-  height: 20%;
-  padding: 10px;
-  background-color: #003052;
-  border-radius: 4px 0 0 4px;
-  padding-left: 5%;
-}
-
-.signup-form-text{
-  width: 25%;
-  height: 20%;
-  padding: 10px;
-  border-radius: 0 4px 4px 0;
-  text-align: center;
-  color:#d6efff ;
-  background-color: #4A2966;
-}
-
-.signup-form-text h1{
+.login-form-text h1 {
   color: #d6efff;
 }
 
-.login-form-text h1{
-  color: #d6efff;
-}
-
-.signup-page{
-  width: 80%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 10%; 
-}
-
-.button-router{
+.button-router {
   background-color: #3660a000;
-  border:1px solid;
+  border: 1px solid;
   color: white;
   padding: 10px 25px;
   text-align: center;
@@ -87,21 +56,21 @@ body{
   text-decoration: none;
 }
 
-.button-router:hover{
+.button-router:hover {
   text-decoration: none;
   color: #d6efff;
 }
 
-.input:hover{
+.input:hover {
   background-color: #d6efff;
 }
 
-.signin-icon{
+.signin-icon {
   float: right;
   margin-left: 5px;
 }
 
-.signin-button{
+.signin-button {
   width: 85% !important;
 }
 
@@ -118,15 +87,15 @@ body{
   background-color: #3d3d3d;
 }
 
-.title-landing{
+.title-landing {
   font-size: 95px;
   color: #d6efff;
 }
 
-.button-play{
+.button-play {
   background-color: #3660a000;
-  border:1px solid;
-  color:#d6efff;
+  border: 1px solid;
+  color: #d6efff;
   padding: 10px 25px;
   text-align: center;
   text-decoration: none;
@@ -137,7 +106,7 @@ body{
   font-size: 55px;
 }
 
-.button-play:hover{
+.button-play:hover {
   text-decoration: none;
   color: #3660a0;
 }
@@ -352,23 +321,24 @@ Fin Carrousel
 }
 
 .nQuestionContainer {
-  width: 30px;
+  display: flex;
+  margin: auto;
+  border: 0;
+  padding: 0;
+  width: 10%;
+  height: 50%;
   float: center;
 }
 
 .nCurrQuestion {
   background-color: green;
 }
+
 span {
-  float: center;
   background-color: #707070;
-  border: none;
   color: white;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
-  margin: 0;
-  width: 30px;
-  width: 25px;
+  display: fit-content;
 }
 
