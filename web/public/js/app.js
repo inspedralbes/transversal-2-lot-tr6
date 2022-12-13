@@ -30,7 +30,7 @@ const quiz = Vue.component('quiz', {
                 <router-link to="/login" class="button login-button">Login</router-link>   
             </div>
             <div v-else>
-                <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{username}}</p></router-link>   
+                <router-link to="/login" class="user"><div style="text-align: center"><b-icon icon="person-fill" class="h1"></b-icon><p>{{username}}</p></div></router-link>   
             </div>
             <div class="play">
                 <div v-if="logged">
