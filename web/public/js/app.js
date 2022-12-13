@@ -275,25 +275,56 @@ const login = Vue.component('login', {
 const signup = Vue.component('signup', {
     template: `<div>
         <router-link to="/" class="button">Home</router-link>
-        <div class="button" v-show="!registered">
-            <b-form-input id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>
-            <b-form-input id="input-2" :state="statusEmail" v-model="form.email" placeholder="email" required></b-form-input>
-            <div v-show="!statusEmail" id="input-live-feedback" style="color: #F04848">
-                Enter a correct mail.
+        <div class="signup-page">
+            <div class="button" v-show="!registered" class="signup-form-form">
+                <b-input-group class="mb-2" size="sm"> 
+                    <b-input-group-append is-text>
+                        <b-icon icon="person" shift-h="-4"></b-icon>
+                        <b-form-input id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>                    </b-input-group-append>
+                </b-input-group>
+
+                <b-input-group class="mb-2" size="sm">
+                    <b-input-group-append is-text>
+                        <b-icon icon="envelope" shift-h="-4"></b-icon>
+                        <b-form-input id="input-2" :state="statusEmail" v-model="form.email" placeholder="email" required></b-form-input>
+                        <div v-show="!statusEmail" id="input-live-feedback" style="color: #F04848">
+                            Enter a correct mail.
+                        </div>
+                    </b-input-group-append>
+                </b-input-group>
+                
+                <b-input-group class="mb-2" size="sm">
+                    <b-input-group-append is-text>
+                        <b-icon icon="key" shift-h="-4"></b-icon>
+                        <b-form-input id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
+                    </b-input-group-append>
+                </b-input-group>
+
+                <b-input-group class="mb-2" size="sm">
+                    <b-input-group-append is-text>
+                        <b-icon icon="arrow-clockwise" shift-h="-4"></b-icon>
+                        <b-form-input id="input-2" :state="statusPassword" v-model="form.verifyPassword" placeholder="Repeat password" required></b-form-input>
+                        <div v-show="!statusPassword" id="input-live-feedback" style="color: #F04848">
+                            The passwords don't match.
+                        </div>
+                    </b-input-group-append>
+                </b-input-group>
+                <b-button @click="submitSignup" variant="primary">Signup</b-button>
+                <div v-show="processing">
+                    <b-spinner></b-spinner>
+                </div>
             </div>
-            <b-form-input id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
-            <b-form-input id="input-2" :state="statusPassword" v-model="form.verifyPassword" placeholder="Repeat password" required></b-form-input>
-            <div v-show="!statusPassword" id="input-live-feedback" style="color: #F04848">
-                The passwords doesn't match.
-            </div>
-            <b-button @click="submitSignup" variant="primary">Signup</b-button>
-            <div v-show="processing">
-                <b-spinner></b-spinner>
+            <div v-show="!registered" class="signup-form-text">
+                <h1>Welcome back</h1>
+                <p>Create an account and start playing</p>
+                <p>If you already have an account sign in here</p>
+                <router-link to="/login" class="button-router">Sign in</router-link>
             </div>
         </div>
         <div class="button" v-show="registered">
             <p>Te has registrado maquinote</p>
             <router-link to="/login" class="signin-button">Login</router-link>
+        </div>
         </div>
         </div>`,
     data: function () {
