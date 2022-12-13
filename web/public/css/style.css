@@ -33,13 +33,31 @@ body{
   width: 25%;
   height: 200px;
   padding: 10px;
-  background-color: #4A2966;
   border-radius: 4px 0 0 4px;
   text-align: center;
   color: #d6efff;
+  background-color: #4A2966;
 }
 
 .login-form-text h1{
+  color: #d6efff;
+}
+
+.button-router{
+  background-color: #3660a000;
+  border:1px solid;
+  color: white;
+  padding: 10px 25px;
+  text-align: center;
+  text-decoration: none;
+  margin: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.button-router:hover{
+  text-decoration: none;
   color: #d6efff;
 }
 
