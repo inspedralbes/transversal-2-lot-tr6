@@ -243,6 +243,12 @@ body {
   padding: 30px;
 }
 
+.user {
+  float: right;
+  margin: 25px;
+  color: white !important;
+}
+
 /*
 * Carrousel
 */

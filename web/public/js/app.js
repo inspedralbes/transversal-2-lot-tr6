@@ -3,10 +3,7 @@ const userStore = Pinia.defineStore('usuario', {
         return {
             logged: false,
             loginInfo: {
-                success: true,
-                name: 'Nombre del almacen',
-                image: '',
-                idUser: ''
+                username: ''
             }
         }
     },
@@ -21,9 +18,20 @@ Vue.use(Pinia.PiniaVuePlugin)
 const pinia = Pinia.createPinia();
 
 const quiz = Vue.component('quiz', {
+    data: function () {
+        return {
+            logged: userStore().logged,
+            username: userStore().loginInfo.username
+        }
+    },
     template: `
         <div class="container-landing">
-            <router-link to="/login" class="button login-button">Login</router-link>    
+            <div v-if="!logged">
+                <router-link to="/login" class="button login-button">Login</router-link>   
+            </div>
+            <div v-else>
+                <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{username}}</p></router-link>   
+            </div>
             <div class="play">
                 <div>
                 <h1 class="title-landing"> Wanna test your knowledge? </h1>
@@ -34,28 +42,28 @@ const quiz = Vue.component('quiz', {
             </div>
             <canvas id="topScore"></canvas>
         </div>`,
-        mounted() {
-            const ChartScore = document.getElementById('topScore');
+    mounted() {
+        const ChartScore = document.getElementById('topScore');
 
-            new Chart(ChartScore, {
-              type: 'bar',
-              data: {
+        new Chart(ChartScore, {
+            type: 'bar',
+            data: {
                 labels: ['Lydia', 'Peter', 'Ermel', 'Cesar', 'Julian', 'Maria'],
                 datasets: [{
-                  label: 'Top Scorer',
-                  data: [12, 19, 3, 5, 2, 3],
-                  borderWidth: 1
+                    label: 'Top Scorer',
+                    data: [12, 19, 3, 5, 2, 3],
+                    borderWidth: 1
                 }]
-              },
-              options: {
+            },
+            options: {
                 scales: {
-                  y: {
-                    beginAtZero: true
-                  }
+                    y: {
+                        beginAtZero: true
+                    }
                 }
-              }
-            });
-        }
+            }
+        });
+    }
 });
 
 const difficulty = Vue.component('difficulty', {
@@ -70,6 +78,7 @@ const difficulty = Vue.component('difficulty', {
             statusButtons: [false, false, false, false],
             correctAnswers: 0,
             finish: false,
+            error: false
         }
     },
     template: `
@@ -102,6 +111,9 @@ const difficulty = Vue.component('difficulty', {
                                 <option value="hard">Hard</option>
                             </b-form-select>
                             <br>
+                            <div v-show="error" style="color:red">
+                                Select the difficulty and category
+                            </div>
                             <button @click="fetchPreguntes" class="button">Play</button>
                         </label>
                     </div>
@@ -148,31 +160,37 @@ const difficulty = Vue.component('difficulty', {
 
     methods: {
         fetchPreguntes: function () {
-            fetch(`https://the-trivia-api.com/api/questions?categories=${this.categoriaSeleccionada}&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
-                .then((response) => response.json())
-                .then((questions) => {
-                    console.log(questions)
-                    this.chosen = true;
-                    this.questions = questions;
-                    let length = this.questions.length;
-                    let cont = 0;
+            if (this.categoriaSeleccionada == '' || this.dificultadSeleccionada == '') {
+                this.error = true;
+            } else {
+                this.error = false;
+                fetch(`https://the-trivia-api.com/api/questions?categories=${this.categoriaSeleccionada}&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
+                    .then((response) => response.json())
+                    .then((questions) => {
+                        console.log(questions)
+                        this.chosen = true;
+                        this.questions = questions;
+                        let length = this.questions.length;
+                        let cont = 0;
 
-                    for (let j = 0; j < length; j++) {
-                        let pos = Math.floor(Math.random() * 4);
-                        let answers = [];
-                        for (let i = 0; i < 4; i++) {
-                            if (i == pos) {
-                                answers.push(this.questions[j].correctAnswer);
-                                this.questions[j].correctIndex = i;
-                            } else {
-                                answers.push(this.questions[j].incorrectAnswers[cont]);
-                                cont++;
+                        for (let j = 0; j < length; j++) {
+                            let pos = Math.floor(Math.random() * 4);
+                            let answers = [];
+                            for (let i = 0; i < 4; i++) {
+                                if (i == pos) {
+                                    answers.push(this.questions[j].correctAnswer);
+                                    this.questions[j].correctIndex = i;
+                                } else {
+                                    answers.push(this.questions[j].incorrectAnswers[cont]);
+                                    cont++;
+                                }
                             }
+                            cont = 0;
+                            this.questions[j].answers = answers;
                         }
-                        cont = 0;
-                        this.questions[j].answers = answers;
-                    }
-                });
+                    });
+            }
+
         },
         verificate(indexQ, indexA) {
             if (this.questions[indexQ].correctIndex == indexA) {
@@ -267,7 +285,7 @@ const login = Vue.component('login', {
                 name: "",
                 idUser: "",
             },
-            logged: false,
+            logged: userStore().logged,
             incorrectLogin: false,
             statusLogin: "null"
         }
@@ -296,6 +314,7 @@ const login = Vue.component('login', {
                             this.infoLogin.idUser = data.id;
                             this.logged = true;
                             userStore().logged = true;
+                            userStore().loginInfo.username = data.username;
                         }
                     })
             } else {
@@ -305,6 +324,7 @@ const login = Vue.component('login', {
         },
         logOut() {
             userStore().logged = false;
+            userStore().loginInfo.username = '';
             this.logged = false;
             this.processing = false;
         }
