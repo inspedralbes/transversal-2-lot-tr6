@@ -1,3 +1,25 @@
+const userStore = Pinia.defineStore('usuario', {
+    state() {
+        return {
+            logged: false,
+            loginInfo: {
+                success: true,
+                name: 'Nombre del almacen',
+                image: '',
+                idUser: ''
+            }
+        }
+    },
+    actions: {
+        setEstado(i) {
+            this.loginInfo = i
+        }
+    }
+});
+
+Vue.use(Pinia.PiniaVuePlugin)
+const pinia = Pinia.createPinia();
+
 const quiz = Vue.component('quiz', {
     template: `
         <div class="container-landing">
@@ -250,10 +272,7 @@ const login = Vue.component('login', {
                             this.infoLogin.name = data.username;
                             this.infoLogin.idUser = data.id;
                             this.logged = true;
-
-                            // store = userStore();
-                            // store.setStatus(this.infoLogin);
-                            // store.logged = true;
+                            userStore().logged = true;
                         }
                     })
             } else {
@@ -262,7 +281,7 @@ const login = Vue.component('login', {
             }
         },
         logOut() {
-            //userStore().logged = false;
+            userStore().logged = false;
             this.logged = false;
             this.processing = false;
         }
@@ -359,7 +378,10 @@ const router = new VueRouter({
 let app = new Vue({
     el: '#app',
     router,
+    pinia,
     data: {},
+    computed: {
+        ...Pinia.mapState(userStore, ['loginInfo', 'logged'])
+    },
     methods: {},
-
 });
