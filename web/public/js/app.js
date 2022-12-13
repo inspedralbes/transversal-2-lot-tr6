@@ -176,6 +176,8 @@ const login = Vue.component('login', {
             <div v-show="!logged" class="login-form-text">
                 <h1>Welcome back</h1>
                 <p>Enter your details and sign in</p>
+                <p>If you still don't have an account sign up here</p>
+                <router-link to="/signup" class="button-router">Sign up</router-link>
             </div>
             <div v-show="!logged" class="login-form-form">
                 <b-input-group class="mb-2" size="sm"> 
