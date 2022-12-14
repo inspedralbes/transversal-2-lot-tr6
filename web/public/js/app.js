@@ -269,7 +269,8 @@ const login = Vue.component('login', {
                 <b-input-group class="mb-2" size="sm">
                     <b-input-group-append is-text>
                         <b-icon icon="key" shift-h="-4"></b-icon>
-                        <b-form-input id="input-2" :state="statusLogin" v-model="form.password" placeholder="Password" required ></b-form-input>
+                        <b-form-input :type="type" id="input-2" :state="statusLogin" v-model="form.password" placeholder="Password" required ></b-form-input>
+                        <b-button @click="showPass"><b-icon icon="eye-fill" shift-v="1" size="sm"></b-icon></b-button>
                     </b-input-group-append>
                 </b-input-group>
                 <b-button @click="submitLogin" variant="primary" class="signin-button">Sing in
@@ -300,7 +301,8 @@ const login = Vue.component('login', {
             },
             logged: userStore().logged,
             incorrectLogin: false,
-            statusLogin: "null"
+            statusLogin: "null",
+            type: "password"
         }
     },
     methods: {
@@ -340,6 +342,13 @@ const login = Vue.component('login', {
             userStore().loginInfo.username = '';
             this.logged = false;
             this.processing = false;
+        },
+        showPass(){
+            if (this.type=="password") {
+                this.type="text"
+            }else{
+                this.type="password"
+            }
         }
     },
     mounted() {
@@ -372,14 +381,16 @@ const signup = Vue.component('signup', {
                 <b-input-group class="mb-2" size="sm">
                     <b-input-group-append is-text>
                         <b-icon icon="key" shift-h="-4"></b-icon>
-                        <b-form-input id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
+                        <b-form-input :type="typeFirst" id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
+                        <b-button @click="showPassFirst"><b-icon icon="eye-fill" shift-v="1" size="sm"></b-icon></b-button>
                     </b-input-group-append>
                 </b-input-group>
 
                 <b-input-group class="mb-2" size="sm">
                     <b-input-group-append is-text>
                         <b-icon icon="arrow-clockwise" shift-h="-4"></b-icon>
-                        <b-form-input id="input-2" :state="statusPassword" v-model="form.verifyPassword" placeholder="Repeat password" required></b-form-input>
+                        <b-form-input :type="typeConfirm" id="input-2" :state="statusPassword" v-model="form.verifyPassword" placeholder="Repeat password" required></b-form-input>
+                        <b-button @click="showPassConfirm"><b-icon icon="eye-fill" shift-v="1" size="sm"></b-icon></b-button>
                         <div v-show="!statusPassword" id="input-live-feedback" style="color: #F04848">
                             The passwords don't match.
                         </div>
@@ -414,7 +425,9 @@ const signup = Vue.component('signup', {
             },
             statusEmail: "null",
             statusPassword: "null",
-            registered: false
+            registered: false,
+            typeFirst: "password",
+            typeConfirm: "password"
         }
     },
     methods: {
@@ -447,6 +460,20 @@ const signup = Vue.component('signup', {
             }
 
         },
+        showPassFirst(){
+            if (this.typeFirst=="password") {
+                this.typeFirst="text"
+            }else{
+                this.typeFirst="password"
+            }
+        },
+        showPassConfirm(){
+            if (this.typeConfirm=="password") {
+                this.typeConfirm="text"
+            }else{
+                this.typeConfirm="password"
+            }
+        }
     },
     mounted() {
     }
