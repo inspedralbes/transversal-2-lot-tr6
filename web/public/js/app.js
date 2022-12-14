@@ -30,7 +30,7 @@ const quiz = Vue.component('quiz', {
                 <router-link to="/login" class="button login-button">Login</router-link>   
             </div>
             <div v-else>
-                <router-link to="/login" class="user"><div style="text-align: center"><b-icon icon="person-fill" class="h1"></b-icon><p>{{username}}</p></div></router-link>   
+                <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{username}}</p></router-link>   
             </div>
             <div class="play">
                 <div v-if="logged">
@@ -83,7 +83,9 @@ const difficulty = Vue.component('difficulty', {
             statusButtons: [false, false, false, false],
             correctAnswers: 0,
             finish: false,
-            error: false
+            error: false,
+            failed: false,
+            correction: ''
         }
     },
     template: `
@@ -142,6 +144,10 @@ const difficulty = Vue.component('difficulty', {
                                                     <button :disabled="statusButtons[indexA]" class="answer" :class="colorButtons[indexA]" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
                                                 </div>
                                             </div>
+                                            <br>
+                                            <div v-show="failed">
+                                                <h2></h2> The correct asnwer is: {{ correction }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -197,6 +203,7 @@ const difficulty = Vue.component('difficulty', {
         },
         verificate(indexQ, indexA) {
             if (this.questions[indexQ].correctIndex == indexA) {
+                this.failed = false;
                 for (let i = 0; i < 4; i++) {
                     if (this.questions[indexQ].correctIndex == i) {
                         this.colorButtons[i] = "correct";
@@ -206,8 +213,10 @@ const difficulty = Vue.component('difficulty', {
                 }
                 this.correctAnswers += 1;
             } else {
+                this.failed = true;
                 for (let index = 0; index < 4; index++) {
                     this.colorButtons[index] = "incorrect";
+                    this.correction = this.questions[indexQ].correctAnswer
                 }
             }
 
@@ -216,12 +225,13 @@ const difficulty = Vue.component('difficulty', {
             }
 
             this.$forceUpdate();
-
+            
             setTimeout(() => {
                 if (this.currentQuestion < this.questions.length) {
                     this.currentQuestion++;
                     this.colorButtons = ["default", "default", "default", "default"];
                     this.statusButtons = [false, false, false, false];
+                    this.failed = false;
                 }
 
                 if (this.currentQuestion == 10) {
