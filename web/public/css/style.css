@@ -289,6 +289,13 @@ body {
   padding: 30px;
 }
 
+.user {
+  color: white;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
 /*
 * Carrousel
 */
