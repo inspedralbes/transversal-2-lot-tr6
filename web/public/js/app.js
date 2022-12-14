@@ -34,15 +34,15 @@ const quiz = Vue.component('quiz', {
             </div>
             <div class="play">
                 <div v-if="logged">
-                <h1 class="title-landing"> Wanna test your knowledge? </h1>
-                <router-link to="/difficulty" class="button-play">Play</router-link>
-                <br>
+                        <h1 class="title-landing"> Wanna test your knowledge? </h1>
+                        <router-link to="/difficulty" class="button-play">Play</router-link>
+                        <br>
                 </div>
                 <div v-else>
-                <h1 class="title-landing"> Wanna test your knowledge? </h1>
-                <router-link to="/login" class="button-play">Play</router-link>
-                <br>
-                <router-link to="/difficulty" class="button demo-button">Play as guest</router-link>
+                        <h1 class="title-landing"> Wanna test your knowledge? </h1>
+                        <router-link to="/login" class="button-play">Play</router-link>
+                        <br>
+                        <router-link to="/difficulty" class="button demo-button">Play as guest</router-link>
                 </div>
             </div>
             <canvas id="topScore"></canvas>
@@ -74,6 +74,7 @@ const quiz = Vue.component('quiz', {
 const difficulty = Vue.component('difficulty', {
     data: function () {
         return {
+            logged: userStore().logged,
             categoriaSeleccionada: '',
             dificultadSeleccionada: '',
             chosen: false,
@@ -87,77 +88,81 @@ const difficulty = Vue.component('difficulty', {
         }
     },
     template: `
+    <div>
         <div class="play" > 
-            <div v-if="!finish">
-                <div v-if="!chosen" class="setParameters">
-                    <div class="categories">
-                        <label> Category: 
-                            <b-form-select v-model="categoriaSeleccionada" >
-                                <option disabled selected>Please select a category</option>
-                                <option  value="arts_and_literature">Arts & Literature</option>
-                                <option  value="film_and_tv">Film & TV</option>
-                                <option  value="food_and_drink">Food & Drink</option>
-                                <option  value="general_knowledge">General Knowledge</option>
-                                <option  value="geography">Geography</option>
-                                <option  value="history">History</option>
-                                <option  value="music">Music</option>
-                                <option  value="science">Science</option>
-                                <option  value="society_and_culture">Society & Culture</option>
-                                <option  value="sport_and_leisure">Sport & Leisure</option>
-                            </b-form-select>
-                        </label>
-                    </div>
-                    <div class="difficulty">
-                        <label> Difficulty: 
-                            <b-form-select v-model="dificultadSeleccionada">
-                                <option disabled selected>Choose a difficulty</option>
-                                <option value="easy">Easy</option>
-                                <option value="medium">Medium</option>
-                                <option value="hard">Hard</option>
-                            </b-form-select>
-                            <br>
-                            <div v-show="error" style="color:red">
-                                Select the difficulty and category
-                            </div>
-                            <button @click="fetchPreguntes" class="button">Play</button>
-                        </label>
-                    </div>
-                </div>
-                <div v-else>
-                    <div class="nQuestionContainer">
-                        <div v-for="(question, indexQ) in questions">
-                            <span v-if="currentQuestion!=indexQ" class="nQuestion">{{indexQ+1}}</span>
-                            <span v-else class="nCurrQuestion">{{indexQ+1}}</span>
+            <div v-if="$route.params.type!="demo">
+                <div v-if="!finish">
+                    <div v-if="!chosen" class="setParameters">
+                        <div class="categories">
+                            <label> Category: 
+                                <b-form-select v-model="categoriaSeleccionada" >
+                                    <option disabled selected>Please select a category</option>
+                                    <option  value="arts_and_literature">Arts & Literature</option>
+                                    <option  value="film_and_tv">Film & TV</option>
+                                    <option  value="food_and_drink">Food & Drink</option>
+                                    <option  value="general_knowledge">General Knowledge</option>
+                                    <option  value="geography">Geography</option>
+                                    <option  value="history">History</option>
+                                    <option  value="music">Music</option>
+                                    <option  value="science">Science</option>
+                                    <option  value="society_and_culture">Society & Culture</option>
+                                    <option  value="sport_and_leisure">Sport & Leisure</option>
+                                </b-form-select>
+                            </label>
+                        </div>
+                        <div class="difficulty">
+                            <label> Difficulty: 
+                                <b-form-select v-model="dificultadSeleccionada">
+                                    <option disabled selected>Choose a difficulty</option>
+                                    <option value="easy">Easy</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="hard">Hard</option>
+                                </b-form-select>
+                                <br>
+                                <div v-show="error" style="color:red">
+                                    Select the difficulty and category
+                                </div>
+                                <button @click="fetchPreguntes" class="button">Play</button>
+                            </label>
                         </div>
                     </div>
-                    <section class="carousel">    
-                        <div>
-                            <div class="slides">
-                                <div class="slides-item slide-1" id="slide-1">            
-                                    <div>
-                                        <h2 class="blanco questionText">{{ questions[currentQuestion].question }}</h2>
-                                        <div class="btnAnswer">
-                                            <div v-for="(answer, indexA) in questions[currentQuestion].answers">
-                                                <div>
-                                                    <button :disabled="statusButtons[indexA]" class="answer" :class="colorButtons[indexA]" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
+                    <div v-else>
+                        <div class="nQuestionContainer">
+                            <div v-for="(question, indexQ) in questions">
+                                <span v-if="currentQuestion!=indexQ" class="nQuestion">{{indexQ+1}}</span>
+                                <span v-else class="nCurrQuestion">{{indexQ+1}}</span>
+                            </div>
+                        </div>
+                        <section class="carousel">    
+                            <div>
+                                <div class="slides">
+                                    <div class="slides-item slide-1" id="slide-1">            
+                                        <div>
+                                            <h2 class="blanco questionText">{{ questions[currentQuestion].question }}</h2>
+                                            <div class="btnAnswer">
+                                                <div v-for="(answer, indexA) in questions[currentQuestion].answers">
+                                                    <div>
+                                                        <button :disabled="statusButtons[indexA]" class="answer" :class="colorButtons[indexA]" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="slides-item slide-2" id="slide-2">2</div> 
                                 </div>
-                                <div class="slides-item slide-2" id="slide-2">2</div> 
                             </div>
+                        </section>
+                        <div>
+                            <p class="countAnswers">{{correctAnswers}}/{{currentQuestion+1}}</p>
                         </div>
-                    </section>
-                    <div>
-                        <p class="countAnswers">{{correctAnswers}}/{{currentQuestion+1}}</p>
                     </div>
                 </div>
-            </div>
-            <div v-else>
-            <p class="countAnswers">You have answered correctly a total of:</p>
-            <p class="countAnswers">{{correctAnswers}}/10</p>
-            </div>
+                    <div v-else>
+                        <p class="countAnswers">You have answered correctly a total of:</p>
+                        <p class="countAnswers">{{correctAnswers}}/10</p>
+                    </div>
+                </div>
+                
         </div>
         `,
 
@@ -193,6 +198,41 @@ const difficulty = Vue.component('difficulty', {
                         }
                     });
             }
+
+
+        },
+        fetchDemo: function () {
+            if (this.dificultadSeleccionada == '') {
+                this.error = true;
+            } else {
+                this.error = false;
+                fetch(`https://the-trivia-api.com/api/questions?categories=music&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
+                    .then((response) => response.json())
+                    .then((questions) => {
+                        console.log(questions)
+                        this.chosen = true;
+                        this.questions = questions;
+                        let length = this.questions.length;
+                        let cont = 0;
+
+                        for (let j = 0; j < length; j++) {
+                            let pos = Math.floor(Math.random() * 4);
+                            let answers = [];
+                            for (let i = 0; i < 4; i++) {
+                                if (i == pos) {
+                                    answers.push(this.questions[j].correctAnswer);
+                                    this.questions[j].correctIndex = i;
+                                } else {
+                                    answers.push(this.questions[j].incorrectAnswers[cont]);
+                                    cont++;
+                                }
+                            }
+                            cont = 0;
+                            this.questions[j].answers = answers;
+                        }
+                    });
+            }
+
 
         },
         verificate(indexQ, indexA) {
