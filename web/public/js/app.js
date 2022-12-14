@@ -30,7 +30,7 @@ const quiz = Vue.component('quiz', {
                 <router-link to="/login" class="button login-button">Login</router-link>   
             </div>
             <div v-else>
-                <router-link to="/login" class="user"><div style="text-align: center"><b-icon icon="person-fill" class="h1"></b-icon><p>{{username}}</p></div></router-link>   
+                <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{username}}</p></router-link>   
             </div>
             <div class="play">
                 <div v-if="logged">
@@ -84,7 +84,9 @@ const difficulty = Vue.component('difficulty', {
             statusButtons: [false, false, false, false],
             correctAnswers: 0,
             finish: false,
-            error: false
+            error: false,
+            failed: false,
+            correction: ''
         }
     },
     template: `
@@ -145,6 +147,10 @@ const difficulty = Vue.component('difficulty', {
                                                         <button :disabled="statusButtons[indexA]" class="answer" :class="colorButtons[indexA]" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <br>
+                                            <div v-show="failed">
+                                                <h2></h2> The correct asnwer is: {{ correction }}
                                             </div>
                                         </div>
                                     </div>
@@ -237,6 +243,7 @@ const difficulty = Vue.component('difficulty', {
         },
         verificate(indexQ, indexA) {
             if (this.questions[indexQ].correctIndex == indexA) {
+                this.failed = false;
                 for (let i = 0; i < 4; i++) {
                     if (this.questions[indexQ].correctIndex == i) {
                         this.colorButtons[i] = "correct";
@@ -246,8 +253,10 @@ const difficulty = Vue.component('difficulty', {
                 }
                 this.correctAnswers += 1;
             } else {
+                this.failed = true;
                 for (let index = 0; index < 4; index++) {
                     this.colorButtons[index] = "incorrect";
+                    this.correction = this.questions[indexQ].correctAnswer
                 }
             }
 
@@ -256,12 +265,13 @@ const difficulty = Vue.component('difficulty', {
             }
 
             this.$forceUpdate();
-
+            
             setTimeout(() => {
                 if (this.currentQuestion < this.questions.length) {
                     this.currentQuestion++;
                     this.colorButtons = ["default", "default", "default", "default"];
                     this.statusButtons = [false, false, false, false];
+                    this.failed = false;
                 }
 
                 if (this.currentQuestion == 10) {
@@ -299,7 +309,8 @@ const login = Vue.component('login', {
                 <b-input-group class="mb-2" size="sm">
                     <b-input-group-append is-text>
                         <b-icon icon="key" shift-h="-4"></b-icon>
-                        <b-form-input id="input-2" :state="statusLogin" v-model="form.password" placeholder="Password" required ></b-form-input>
+                        <b-form-input :type="type" id="input-2" :state="statusLogin" v-model="form.password" placeholder="Password" required ></b-form-input>
+                        <b-button @click="showPass"><b-icon icon="eye-fill" shift-v="1" size="sm"></b-icon></b-button>
                     </b-input-group-append>
                 </b-input-group>
                 <b-button @click="submitLogin" variant="primary" class="signin-button">Sing in
@@ -330,7 +341,8 @@ const login = Vue.component('login', {
             },
             logged: userStore().logged,
             incorrectLogin: false,
-            statusLogin: "null"
+            statusLogin: "null",
+            type: "password"
         }
     },
     methods: {
@@ -370,6 +382,13 @@ const login = Vue.component('login', {
             userStore().loginInfo.username = '';
             this.logged = false;
             this.processing = false;
+        },
+        showPass(){
+            if (this.type=="password") {
+                this.type="text"
+            }else{
+                this.type="password"
+            }
         }
     },
     mounted() {
@@ -402,14 +421,16 @@ const signup = Vue.component('signup', {
                 <b-input-group class="mb-2" size="sm">
                     <b-input-group-append is-text>
                         <b-icon icon="key" shift-h="-4"></b-icon>
-                        <b-form-input id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
+                        <b-form-input :type="typeFirst" id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
+                        <b-button @click="showPassFirst"><b-icon icon="eye-fill" shift-v="1" size="sm"></b-icon></b-button>
                     </b-input-group-append>
                 </b-input-group>
 
                 <b-input-group class="mb-2" size="sm">
                     <b-input-group-append is-text>
                         <b-icon icon="arrow-clockwise" shift-h="-4"></b-icon>
-                        <b-form-input id="input-2" :state="statusPassword" v-model="form.verifyPassword" placeholder="Repeat password" required></b-form-input>
+                        <b-form-input :type="typeConfirm" id="input-2" :state="statusPassword" v-model="form.verifyPassword" placeholder="Repeat password" required></b-form-input>
+                        <b-button @click="showPassConfirm"><b-icon icon="eye-fill" shift-v="1" size="sm"></b-icon></b-button>
                         <div v-show="!statusPassword" id="input-live-feedback" style="color: #F04848">
                             The passwords don't match.
                         </div>
@@ -444,7 +465,9 @@ const signup = Vue.component('signup', {
             },
             statusEmail: "null",
             statusPassword: "null",
-            registered: false
+            registered: false,
+            typeFirst: "password",
+            typeConfirm: "password"
         }
     },
     methods: {
@@ -477,6 +500,20 @@ const signup = Vue.component('signup', {
             }
 
         },
+        showPassFirst(){
+            if (this.typeFirst=="password") {
+                this.typeFirst="text"
+            }else{
+                this.typeFirst="password"
+            }
+        },
+        showPassConfirm(){
+            if (this.typeConfirm=="password") {
+                this.typeConfirm="text"
+            }else{
+                this.typeConfirm="password"
+            }
+        }
     },
     mounted() {
     }
