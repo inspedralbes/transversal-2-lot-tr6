@@ -555,6 +555,7 @@ const routes = [
     { path: "/signup", component: signup },
     { path: "/difficulty", component: difficulty },
     { path: "/finishGame", component: finishGame },
+    { path: "/profile", component: profile }
 ];
 
 const router = new VueRouter({
