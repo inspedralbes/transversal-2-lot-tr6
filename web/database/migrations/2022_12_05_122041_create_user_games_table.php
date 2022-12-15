@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamps();
             $table->integer('score');
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('id_game')->references('id')->on('game')->onDelete('cascade');
+            $table->foreign('id_game')->references('id')->on('games')->onDelete('cascade');
         });
     }
 
