@@ -197,9 +197,22 @@ const difficulty = Vue.component('difficulty', {
                             this.questions[j].answers = answers;
                         }
                     });
+
+                let questionsPost = {
+                    "category": this.categoriaSeleccionada,
+                    "difficulty": this.difficulty,
+                    "table-name": this.categoriaSeleccionada + '-' + this.difficulty,
+                    "play_count": 1,
+                }
+
+                fetch(`http://127.0.0.1:8000/api/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(questionsPost),
+                })
             }
-
-
         },
         fetchDemo: function () {
             if (this.dificultadSeleccionada == '') {
