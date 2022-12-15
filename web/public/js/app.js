@@ -281,7 +281,19 @@ const difficulty = Vue.component('difficulty', {
 );
 
 const finishGame = Vue.component('finishGame', {
-    template: `<h1>hola</h1>`,
+    template: `<div>
+        <div class="countAnswers">Your score was</div>
+        <div class="countAnswers">Wanna try again? <router-link to="/difficulty" class="button-play">Play</router-link> </div>
+    </div>`,
+    data: function () {
+        return{
+            logged: userStore().logged,
+            username: userStore().loginInfo.username
+        }
+    },
+    methods:{
+
+    }
 });
 
 
