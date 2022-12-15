@@ -86,7 +86,6 @@ const difficulty = Vue.component('difficulty', {
             colorButtons: ["default", "default", "default", "default"],
             statusButtons: [false, false, false, false],
             correctAnswers: 0,
-            finish: false,
             error: false,
             failed: false,
             correction: '',
@@ -99,83 +98,74 @@ const difficulty = Vue.component('difficulty', {
                 <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{user.username}}</p></router-link>   
             </div>
             <div v-if="$route.params.type!="demo">
-                <div v-if="!finish">
-                    <div v-if="!chosen" class="setParameters">
-                        <div class="categories">
-                            <label> Category: 
-                                <b-form-select v-model="categoriaSeleccionada" >
-                                    <option disabled selected>Please select a category</option>
-                                    <option  value="arts_and_literature">Arts & Literature</option>
-                                    <option  value="film_and_tv">Film & TV</option>
-                                    <option  value="food_and_drink">Food & Drink</option>
-                                    <option  value="general_knowledge">General Knowledge</option>
-                                    <option  value="geography">Geography</option>
-                                    <option  value="history">History</option>
-                                    <option  value="music">Music</option>
-                                    <option  value="science">Science</option>
-                                    <option  value="society_and_culture">Society & Culture</option>
-                                    <option  value="sport_and_leisure">Sport & Leisure</option>
-                                </b-form-select>
-                            </label>
-                        </div>
-                        <div class="difficulty">
-                            <label> Difficulty: 
-                                <b-form-select v-model="dificultadSeleccionada">
-                                    <option disabled selected>Choose a difficulty</option>
-                                    <option value="easy">Easy</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="hard">Hard</option>
-                                </b-form-select>
-                                <br>
-                                <div v-show="error" style="color:red">
-                                    Select the difficulty and category
-                                </div>
-                                <button @click="fetchPreguntes" class="button">Play</button>
-                            </label>
+                <div v-if="!chosen" class="setParameters">
+                    <div class="categories">
+                        <label> Category: 
+                            <b-form-select v-model="categoriaSeleccionada" >
+                                <option disabled selected>Please select a category</option>
+                                <option  value="arts_and_literature">Arts & Literature</option>
+                                <option  value="film_and_tv">Film & TV</option>
+                                <option  value="food_and_drink">Food & Drink</option>
+                                <option  value="general_knowledge">General Knowledge</option>
+                                <option  value="geography">Geography</option>
+                                <option  value="history">History</option>
+                                <option  value="music">Music</option>
+                                <option  value="science">Science</option>
+                                <option  value="society_and_culture">Society & Culture</option>
+                                <option  value="sport_and_leisure">Sport & Leisure</option>
+                            </b-form-select>
+                        </label>
+                    </div>
+                    <div class="difficulty">
+                        <label> Difficulty: 
+                            <b-form-select v-model="dificultadSeleccionada">
+                                <option disabled selected>Choose a difficulty</option>
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </b-form-select>
+                            <br>
+                            <div v-show="error" style="color:red">
+                                Select the difficulty and category
+                            </div>
+                            <button @click="fetchPreguntes" class="button">Play</button>
+                        </label>
+                    </div>
+                </div>
+                <div v-else>
+                    <div class="nQuestionContainer">
+                        <div v-for="(question, indexQ) in questions">
+                            <span v-if="currentQuestion!=indexQ" class="nQuestion">{{indexQ+1}}</span>
+                            <span v-else class="nCurrQuestion">{{indexQ+1}}</span>
                         </div>
                     </div>
-                    <div v-else>
-                        <div class="nQuestionContainer">
-                            <div v-for="(question, indexQ) in questions">
-                                <span v-if="currentQuestion!=indexQ" class="nQuestion">{{indexQ+1}}</span>
-                                <span v-else class="nCurrQuestion">{{indexQ+1}}</span>
-                            </div>
-                        </div>
-                        <section class="carousel">    
-                            <div>
-                                <div class="slides">
-                                    <div class="slides-item slide-1" id="slide-1">            
-                                        <div>
-                                            <h2 class="blanco questionText">{{ questions[currentQuestion].question }}</h2>
-                                            <div class="btnAnswer">
-                                                <div v-for="(answer, indexA) in questions[currentQuestion].answers">
-                                                    <div>
-                                                        <button :disabled="statusButtons[indexA]" class="answer" :class="colorButtons[indexA]" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
-                                                    </div>
+                    <section class="carousel">    
+                        <div>
+                            <div class="slides">
+                                <div class="slides-item slide-1" id="slide-1">            
+                                    <div>
+                                        <h2 class="blanco questionText">{{ questions[currentQuestion].question }}</h2>
+                                        <div class="btnAnswer">
+                                            <div v-for="(answer, indexA) in questions[currentQuestion].answers">
+                                                <div>
+                                                    <button :disabled="statusButtons[indexA]" class="answer" :class="colorButtons[indexA]" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
                                                 </div>
                                             </div>
-                                            <br>
-                                            <div v-show="failed">
-                                                <h2></h2> The correct asnwer is: {{ correction }}
-                                            </div>
+                                        </div>
+                                        <br>
+                                        <div v-show="failed">
+                                            <h2></h2> The correct asnwer is: {{ correction }}
                                         </div>
                                     </div>
-                                    <div class="slides-item slide-2" id="slide-2">2</div> 
                                 </div>
+                                <div class="slides-item slide-2" id="slide-2">2</div> 
                             </div>
-                        </section>
-                        <div>
-                            <p class="countAnswers">{{correctAnswers}}/{{currentQuestion+1}}</p>
                         </div>
-                    </div>
+                    </section>
                 </div>
-                    <div v-else>
-                        <p class="countAnswers">You have answered correctly a total of:</p>
-                        <p class="countAnswers">{{correctAnswers}}/10</p>
-                    </div>
-                </div>
-                
+            </div>
         </div>
+    </div>
         `,
 
     methods: {
@@ -281,7 +271,7 @@ const difficulty = Vue.component('difficulty', {
                 }
 
                 if (this.currentQuestion == 10) {
-                    this.finish = true;
+                    this.$router.replace('/finishGame');
                 }
             }, 1500);
         },
@@ -291,7 +281,7 @@ const difficulty = Vue.component('difficulty', {
 );
 
 const finishGame = Vue.component('finishGame', {
-    template: ``,
+    template: `<h1>hola</h1>`,
 });
 
 
