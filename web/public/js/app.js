@@ -531,6 +531,24 @@ const signup = Vue.component('signup', {
     }
 })
 
+const profile = Vue.component('profile',{
+    template:`<div>
+    <p>Perfil d'usuari</p>
+    </div>`,
+    data: function () {
+        return{
+            logged: userStore().logged,
+            username: userStore().loginInfo.username
+        }
+    },
+    methods:{
+        
+    },
+    mounted(){
+
+    }
+})
+
 const routes = [
     { path: "/", component: quiz },
     { path: "/login", component: login },
