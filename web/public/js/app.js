@@ -294,7 +294,19 @@ const difficulty = Vue.component('difficulty', {
 );
 
 const finishGame = Vue.component('finishGame', {
-    template: `<h1>hola</h1>`,
+    template: `<div>
+        <div class="countAnswers">Your score was</div>
+        <div class="countAnswers">Wanna try again? <router-link to="/difficulty" class="button-play">Play</router-link> </div>
+    </div>`,
+    data: function () {
+        return{
+            logged: userStore().logged,
+            username: userStore().loginInfo.username
+        }
+    },
+    methods:{
+
+    }
 });
 
 
@@ -532,12 +544,31 @@ const signup = Vue.component('signup', {
     }
 })
 
+const profile = Vue.component('profile',{
+    template:`<div>
+    <p>Perfil d'usuari</p>
+    </div>`,
+    data: function () {
+        return{
+            logged: userStore().logged,
+            username: userStore().loginInfo.username
+        }
+    },
+    methods:{
+        
+    },
+    mounted(){
+
+    }
+})
+
 const routes = [
     { path: "/", component: quiz },
     { path: "/login", component: login },
     { path: "/signup", component: signup },
     { path: "/difficulty", component: difficulty },
     { path: "/finishGame", component: finishGame },
+    { path: "/profile", component: profile }
 ];
 
 const router = new VueRouter({
