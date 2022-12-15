@@ -74,7 +74,10 @@ const quiz = Vue.component('quiz', {
 const difficulty = Vue.component('difficulty', {
     data: function () {
         return {
-            logged: userStore().logged,
+            user: {
+                logged: userStore().logged,
+                username: userStore().loginInfo.username,
+            },
             categoriaSeleccionada: '',
             dificultadSeleccionada: '',
             chosen: false,
@@ -86,12 +89,15 @@ const difficulty = Vue.component('difficulty', {
             finish: false,
             error: false,
             failed: false,
-            correction: ''
+            correction: '',
         }
     },
     template: `
     <div>
         <div class="play" > 
+            <div v-show="user.logged">
+                <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{user.username}}</p></router-link>   
+            </div>
             <div v-if="$route.params.type!="demo">
                 <div v-if="!finish">
                     <div v-if="!chosen" class="setParameters">
@@ -265,7 +271,7 @@ const difficulty = Vue.component('difficulty', {
             }
 
             this.$forceUpdate();
-            
+
             setTimeout(() => {
                 if (this.currentQuestion < this.questions.length) {
                     this.currentQuestion++;
@@ -283,6 +289,10 @@ const difficulty = Vue.component('difficulty', {
     }
 },
 );
+
+const finishGame = Vue.component('finishGame', {
+    template: ``,
+});
 
 
 
@@ -383,11 +393,11 @@ const login = Vue.component('login', {
             this.logged = false;
             this.processing = false;
         },
-        showPass(){
-            if (this.type=="password") {
-                this.type="text"
-            }else{
-                this.type="password"
+        showPass() {
+            if (this.type == "password") {
+                this.type = "text"
+            } else {
+                this.type = "password"
             }
         }
     },
@@ -500,18 +510,18 @@ const signup = Vue.component('signup', {
             }
 
         },
-        showPassFirst(){
-            if (this.typeFirst=="password") {
-                this.typeFirst="text"
-            }else{
-                this.typeFirst="password"
+        showPassFirst() {
+            if (this.typeFirst == "password") {
+                this.typeFirst = "text"
+            } else {
+                this.typeFirst = "password"
             }
         },
-        showPassConfirm(){
-            if (this.typeConfirm=="password") {
-                this.typeConfirm="text"
-            }else{
-                this.typeConfirm="password"
+        showPassConfirm() {
+            if (this.typeConfirm == "password") {
+                this.typeConfirm = "text"
+            } else {
+                this.typeConfirm = "password"
             }
         }
     },
@@ -524,6 +534,7 @@ const routes = [
     { path: "/login", component: login },
     { path: "/signup", component: signup },
     { path: "/difficulty", component: difficulty },
+    { path: "/finishGame", component: finishGame },
 ];
 
 const router = new VueRouter({
