@@ -179,15 +179,15 @@ const difficulty = Vue.component('difficulty', {
             var timer = 3;
 
 
-            let idTimer=setInterval(() => {
+            let idTimer = setInterval(() => {
                 seconds = timer;
 
                 this.contador = seconds;
 
                 if (--timer < 0) {
-                    noTime=true;
+                    noTime = true;
                     clearInterval(idTimer);
-                    
+
                 }
             }, 1000);
         },
@@ -212,7 +212,7 @@ const difficulty = Vue.component('difficulty', {
 
                         let length = this.questions.length;
                         let cont = 0;
-                        
+
                         for (let j = 0; j < length; j++) {
                             let pos = Math.floor(Math.random() * 4);
                             let answers = [];
@@ -239,92 +239,87 @@ const difficulty = Vue.component('difficulty', {
             }
         },
         fetchDemo: function () {
-        if (this.dificultadSeleccionada == '') {
-            this.error = true;
-        } else {
-            this.error = false;
-            fetch(`https://the-trivia-api.com/api/questions?categories=music&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
-                .then((response) => response.json())
-                .then((questions) => {
-                    console.log(questions)
-                    this.chosen = true;
-                    this.questions = questions;
-                    let length = this.questions.length;
-                    let cont = 0;
+            if (this.dificultadSeleccionada == '') {
+                this.error = true;
+            } else {
+                this.error = false;
+                fetch(`https://the-trivia-api.com/api/questions?categories=music&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
+                    .then((response) => response.json())
+                    .then((questions) => {
+                        console.log(questions)
+                        this.chosen = true;
+                        this.questions = questions;
+                        let length = this.questions.length;
+                        let cont = 0;
 
-                    for (let j = 0; j < length; j++) {
-                        let pos = Math.floor(Math.random() * 4);
-                        let answers = [];
-                        for (let i = 0; i < 4; i++) {
-                            if (i == pos) {
-                                answers.push(this.questions[j].correctAnswer);
-                                this.questions[j].correctIndex = i;
-                            } else {
-                                answers.push(this.questions[j].incorrectAnswers[cont]);
-                                cont++;
+                        for (let j = 0; j < length; j++) {
+                            let pos = Math.floor(Math.random() * 4);
+                            let answers = [];
+                            for (let i = 0; i < 4; i++) {
+                                if (i == pos) {
+                                    answers.push(this.questions[j].correctAnswer);
+                                    this.questions[j].correctIndex = i;
+                                } else {
+                                    answers.push(this.questions[j].incorrectAnswers[cont]);
+                                    cont++;
+                                }
                             }
+                            cont = 0;
+                            this.questions[j].answers = answers;
                         }
-                        cont = 0;
-                        this.questions[j].answers = answers;
-                    }
-                });
+                    });
                 this.setTimer();
             }
-
-
         },
-    },
-
-    verificate(indexQ, indexA) {
-        if (this.questions[indexQ].correctIndex == indexA) {
-            this.failed = false;
-            for (let i = 0; i < 4; i++) {
-                if (this.questions[indexQ].correctIndex == i) {
-                    this.colorButtons[i] = "correct";
-                } else {
-                    this.colorButtons[i] = "simple-incorrect";
+        verificate(indexQ, indexA) {
+            if (this.questions[indexQ].correctIndex == indexA) {
+                this.failed = false;
+                for (let i = 0; i < 4; i++) {
+                    if (this.questions[indexQ].correctIndex == i) {
+                        this.colorButtons[i] = "correct";
+                    } else {
+                        this.colorButtons[i] = "simple-incorrect";
+                    }
+                }
+                this.correctAnswers += 1;
+            } else {
+                this.failed = true;
+                for (let index = 0; index < 4; index++) {
+                    this.colorButtons[index] = "incorrect";
+                    this.correction = this.questions[indexQ].correctAnswer
                 }
             }
-            this.correctAnswers += 1;
-        } else {
-            this.failed = true;
+
             for (let index = 0; index < 4; index++) {
-                this.colorButtons[index] = "incorrect";
-                this.correction = this.questions[indexQ].correctAnswer
-            }
-        }
-
-        for (let index = 0; index < 4; index++) {
-            this.statusButtons[index] = true;
-        }
-
-        this.$forceUpdate();
-
-        setTimeout(() => {
-            if (this.currentQuestion < this.questions.length) {
-                this.currentQuestion++;
-                this.colorButtons = ["default", "default", "default", "default"];
-                this.statusButtons = [false, false, false, false];
-                this.failed = false;
+                this.statusButtons[index] = true;
             }
 
-            if (this.currentQuestion == 10) {
-                let scoreUser = new FormData();
-                scoreUser.append('id_user', this.a);
-                scoreUser.append('id_game', this.a);
-                scoreUser.append('score', JSON.stringify());
+            this.$forceUpdate();
 
-                fetch(`http://127.0.0.1:8000/api/store-user`, {
-                    method: 'POST',
-                    body: questionsFormData,
-                })
-                this.$router.replace('/finishGame');
-            }
-        }, 1500);
+            setTimeout(() => {
+                if (this.currentQuestion < this.questions.length) {
+                    this.currentQuestion++;
+                    this.colorButtons = ["default", "default", "default", "default"];
+                    this.statusButtons = [false, false, false, false];
+                    this.failed = false;
+                }
+
+                if (this.currentQuestion == 10) {
+                    let scoreUser = new FormData();
+                    scoreUser.append('id_user', this.a);
+                    scoreUser.append('id_game', this.a);
+                    scoreUser.append('score', JSON.stringify());
+
+                    fetch(`http://127.0.0.1:8000/api/store-user`, {
+                        method: 'POST',
+                        body: questionsFormData,
+                    })
+                    this.$router.replace('/finishGame');
+                }
+            }, 1500);
+        },
     },
-
-},
-);
+},);
 
 const finishGame = Vue.component('finishGame', {
     template: `<div>
