@@ -74,7 +74,10 @@ const quiz = Vue.component('quiz', {
 const difficulty = Vue.component('difficulty', {
     data: function () {
         return {
-            logged: userStore().logged,
+            user: {
+                logged: userStore().logged,
+                username: userStore().loginInfo.username,
+            },
             categoriaSeleccionada: '',
             dificultadSeleccionada: '',
             chosen: false,
@@ -83,93 +86,85 @@ const difficulty = Vue.component('difficulty', {
             colorButtons: ["default", "default", "default", "default"],
             statusButtons: [false, false, false, false],
             correctAnswers: 0,
-            finish: false,
             error: false,
             failed: false,
-            correction: ''
+            correction: '',
         }
     },
     template: `
     <div>
         <div class="play" > 
+            <div v-show="user.logged">
+                <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{user.username}}</p></router-link>   
+            </div>
             <div v-if="$route.params.type!="demo">
-                <div v-if="!finish">
-                    <div v-if="!chosen" class="setParameters">
-                        <div class="categories">
-                            <label> Category: 
-                                <b-form-select v-model="categoriaSeleccionada" >
-                                    <option disabled selected>Please select a category</option>
-                                    <option  value="arts_and_literature">Arts & Literature</option>
-                                    <option  value="film_and_tv">Film & TV</option>
-                                    <option  value="food_and_drink">Food & Drink</option>
-                                    <option  value="general_knowledge">General Knowledge</option>
-                                    <option  value="geography">Geography</option>
-                                    <option  value="history">History</option>
-                                    <option  value="music">Music</option>
-                                    <option  value="science">Science</option>
-                                    <option  value="society_and_culture">Society & Culture</option>
-                                    <option  value="sport_and_leisure">Sport & Leisure</option>
-                                </b-form-select>
-                            </label>
-                        </div>
-                        <div class="difficulty">
-                            <label> Difficulty: 
-                                <b-form-select v-model="dificultadSeleccionada">
-                                    <option disabled selected>Choose a difficulty</option>
-                                    <option value="easy">Easy</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="hard">Hard</option>
-                                </b-form-select>
-                                <br>
-                                <div v-show="error" style="color:red">
-                                    Select the difficulty and category
-                                </div>
-                                <button @click="fetchPreguntes" class="button">Play</button>
-                            </label>
+                <div v-if="!chosen" class="setParameters">
+                    <div v-show="user.logged"class="categories">
+                        <label> Category: 
+                            <b-form-group v-model="categoriaSeleccionada" >
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="arts_and_literature">Arts & Literature</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="film_and_tv">Film & TV</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="food_and_drink">Food & Drink</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="general_knowledge">General Knowledge</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="geography">Geography</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="history">History</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="music">Music</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="science">Science</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="society_and_culture">Society & Culture</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="sport_and_leisure">Sport & Leisure</b-form-radio>
+                            </b-form-group>
+                        </label>
+                    </div>
+                    <div class="difficulty">
+                        <label> Difficulty: 
+                            <b-form-group v-model="dificultadSeleccionada">
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-outline-success btn-catdiff" v-model="dificultadSeleccionada" name="difficulty" value="easy">Easy</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-outline-warning btn-catdiff" v-model="dificultadSeleccionada" name="difficulty" value="medium">Medium</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-outline-danger btn-catdiff" v-model="dificultadSeleccionada" name="difficulty" value="hard">Hard</b-form-radio>
+                            </b-form-group>
+                            <br>
+                            <div v-show="error" style="color:red">
+                                Select the difficulty and category
+                            </div>
+                            <button v-if="user.logged" @click="fetchPreguntes" class="button">Play</button>
+                            <button v-else @click="fetchDemo" class="button">Play Demo Game</button>
+                        </label>
+                    </div>
+                </div>
+                <div v-else>
+                    <div class="nQuestionContainer">
+                        <div v-for="(question, indexQ) in questions">
+                            <span v-if="currentQuestion!=indexQ" class="nQuestion">{{indexQ+1}}</span>
+                            <span v-else class="nCurrQuestion">{{indexQ+1}}</span>
                         </div>
                     </div>
-                    <div v-else>
-                        <div class="nQuestionContainer">
-                            <div v-for="(question, indexQ) in questions">
-                                <span v-if="currentQuestion!=indexQ" class="nQuestion">{{indexQ+1}}</span>
-                                <span v-else class="nCurrQuestion">{{indexQ+1}}</span>
-                            </div>
-                        </div>
-                        <section class="carousel">    
-                            <div>
-                                <div class="slides">
-                                    <div class="slides-item slide-1" id="slide-1">            
-                                        <div>
-                                            <h2 class="blanco questionText">{{ questions[currentQuestion].question }}</h2>
-                                            <div class="btnAnswer">
-                                                <div v-for="(answer, indexA) in questions[currentQuestion].answers">
-                                                    <div>
-                                                        <button :disabled="statusButtons[indexA]" class="answer" :class="colorButtons[indexA]" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
-                                                    </div>
+                    <section class="carousel">    
+                        <div>
+                            <div class="slides">
+                                <div class="slides-item slide-1" id="slide-1">            
+                                    <div>
+                                        <h2 class="blanco questionText">{{ questions[currentQuestion].question }}</h2>
+                                        <div class="btnAnswer">
+                                            <div v-for="(answer, indexA) in questions[currentQuestion].answers">
+                                                <div>
+                                                    <button :disabled="statusButtons[indexA]" class="answer" :class="colorButtons[indexA]" @click="verificate(currentQuestion, indexA)">{{ answer }}</button>
                                                 </div>
                                             </div>
-                                            <br>
-                                            <div v-show="failed">
-                                                <h2></h2> The correct asnwer is: {{ correction }}
-                                            </div>
+                                        </div>
+                                        <br>
+                                        <div v-show="failed">
+                                            <h2></h2> The correct asnwer is: {{ correction }}
                                         </div>
                                     </div>
-                                    <div class="slides-item slide-2" id="slide-2">2</div> 
                                 </div>
+                                <div class="slides-item slide-2" id="slide-2">2</div> 
                             </div>
-                        </section>
-                        <div>
-                            <p class="countAnswers">{{correctAnswers}}/{{currentQuestion+1}}</p>
                         </div>
-                    </div>
+                    </section>
                 </div>
-                    <div v-else>
-                        <p class="countAnswers">You have answered correctly a total of:</p>
-                        <p class="countAnswers">{{correctAnswers}}/10</p>
-                    </div>
-                </div>
-                
+            </div>
         </div>
+    </div>
         `,
 
     methods: {
@@ -177,6 +172,12 @@ const difficulty = Vue.component('difficulty', {
             if (this.categoriaSeleccionada == '' || this.dificultadSeleccionada == '') {
                 this.error = true;
             } else {
+                let questionsPost = {
+                    "category": this.categoriaSeleccionada,
+                    "difficulty": this.dificultadSeleccionada,
+                    "table_name": this.categoriaSeleccionada + '-' + this.dificultadSeleccionada,
+                }
+
                 this.error = false;
                 fetch(`https://the-trivia-api.com/api/questions?categories=${this.categoriaSeleccionada}&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
                     .then((response) => response.json())
@@ -203,9 +204,18 @@ const difficulty = Vue.component('difficulty', {
                             this.questions[j].answers = answers;
                         }
                     });
+                console.log(questionsPost.table_name);
+                fetch(`http://127.0.0.1:8000/api/search-game`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: questionsPost.table_name,
+                }).then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                    })
             }
-
-
         },
         fetchDemo: function () {
             if (this.dificultadSeleccionada == '') {
@@ -265,7 +275,7 @@ const difficulty = Vue.component('difficulty', {
             }
 
             this.$forceUpdate();
-            
+
             setTimeout(() => {
                 if (this.currentQuestion < this.questions.length) {
                     this.currentQuestion++;
@@ -275,7 +285,7 @@ const difficulty = Vue.component('difficulty', {
                 }
 
                 if (this.currentQuestion == 10) {
-                    this.finish = true;
+                    this.$router.replace('/finishGame');
                 }
             }, 1500);
         },
@@ -283,6 +293,22 @@ const difficulty = Vue.component('difficulty', {
     }
 },
 );
+
+const finishGame = Vue.component('finishGame', {
+    template: `<div>
+        <div class="countAnswers">Your score was</div>
+        <div class="countAnswers">Wanna try again? <router-link to="/difficulty" class="button-play">Play</router-link> </div>
+    </div>`,
+    data: function () {
+        return {
+            logged: userStore().logged,
+            username: userStore().loginInfo.username
+        }
+    },
+    methods: {
+
+    }
+});
 
 
 
@@ -383,11 +409,11 @@ const login = Vue.component('login', {
             this.logged = false;
             this.processing = false;
         },
-        showPass(){
-            if (this.type=="password") {
-                this.type="text"
-            }else{
-                this.type="password"
+        showPass() {
+            if (this.type == "password") {
+                this.type = "text"
+            } else {
+                this.type = "password"
             }
         }
     },
@@ -500,22 +526,40 @@ const signup = Vue.component('signup', {
             }
 
         },
-        showPassFirst(){
-            if (this.typeFirst=="password") {
-                this.typeFirst="text"
-            }else{
-                this.typeFirst="password"
+        showPassFirst() {
+            if (this.typeFirst == "password") {
+                this.typeFirst = "text"
+            } else {
+                this.typeFirst = "password"
             }
         },
-        showPassConfirm(){
-            if (this.typeConfirm=="password") {
-                this.typeConfirm="text"
-            }else{
-                this.typeConfirm="password"
+        showPassConfirm() {
+            if (this.typeConfirm == "password") {
+                this.typeConfirm = "text"
+            } else {
+                this.typeConfirm = "password"
             }
         }
     },
     mounted() {
+    }
+})
+
+const profile = Vue.component('profile', {
+    template: `<div>
+    <p>Perfil d'usuari</p>
+    </div>`,
+    data: function () {
+        return {
+            logged: userStore().logged,
+            username: userStore().loginInfo.username
+        }
+    },
+    methods: {
+
+    },
+    mounted() {
+
     }
 })
 
@@ -524,6 +568,8 @@ const routes = [
     { path: "/login", component: login },
     { path: "/signup", component: signup },
     { path: "/difficulty", component: difficulty },
+    { path: "/finishGame", component: finishGame },
+    { path: "/profile", component: profile }
 ];
 
 const router = new VueRouter({

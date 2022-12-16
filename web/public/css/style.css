@@ -190,6 +190,28 @@ body {
   right: 20px;
 }
 
+/*Pagina seleccio dificultad i categoria*/
+/* .categories {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+} */
+
+input[name='categories'] {
+  display: none;
+}
+
+input[name='difficulty'] {
+  display: none;
+}
+
+.btn-catdiff{
+  padding: 25px !important;
+}
+
+
 .default {
   background-color: rgb(228, 159, 55) !important;
 }
@@ -294,6 +316,12 @@ body {
   position: absolute;
   top: 20px;
   right: 20px;
+  text-align: center;
+}
+
+.user:hover {
+  filter: brightness(0.8);
+  color: white;
 }
 
 /*
