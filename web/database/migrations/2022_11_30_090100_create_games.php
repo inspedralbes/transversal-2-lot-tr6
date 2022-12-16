@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('category');
             $table->string('difficulty');
-            $table->string('JSONQuestions');
+            $table->string('JSONQuestions', 10000);
             $table->integer('play_count');
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
