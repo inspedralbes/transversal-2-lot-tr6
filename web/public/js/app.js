@@ -95,10 +95,10 @@ const difficulty = Vue.component('difficulty', {
     },
     template: `
     <div>
-        <router-link to="/" class="button home-button">Home</router-link>  
-        <div class="timer">
-        <span class="timer_part seconds">{{contador}}</span>
-        </div> 
+        <router-link to="/" class="button home-button">Home</router-link>       
+            <div class="timer">
+                <span class="timer_part seconds">{{contador}}</span>
+            </div> 
         <div class="play" >
             <div v-show="user.logged">
                 <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{user.username}}</p></router-link>   
@@ -132,8 +132,8 @@ const difficulty = Vue.component('difficulty', {
                             <div v-show="error" style="color:red">
                                 <p>Select the difficulty</p><p v-show="user.logged">and category</p>
                             </div>
-                            <button v-if="user.logged" @click="fetchPreguntes" class="button">Play</button>
-                            <button v-else @click="fetchDemo" class="button">Play Demo Game</button>
+                            <button v-if="user.logged" @click="setTimer();fetchPreguntes()" class="button">Play</button>
+                            <button v-else @click="setTimer(); fetchDemo()" class="button">Play Demo Game</button>
                         </label>
                     </div>
                 </div>
@@ -175,23 +175,19 @@ const difficulty = Vue.component('difficulty', {
 
     methods: {
         setTimer: function () {
+            let noTime = false;
+            var timer = 3;
 
-            var timer = 120;
 
+            let idTimer=setInterval(() => {
+                seconds = timer;
 
-            setInterval(() => {
-
-                minutes = parseInt(timer / 60, 10);
-                seconds = parseInt(timer % 60, 10);
-
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
-
-                this.contador = minutes + ":" + seconds;
-
+                this.contador = seconds;
 
                 if (--timer < 0) {
-                    timer = duration;
+                    noTime=true;
+                    clearInterval(idTimer);
+                    
                 }
             }, 1000);
         },
@@ -216,7 +212,7 @@ const difficulty = Vue.component('difficulty', {
 
                         let length = this.questions.length;
                         let cont = 0;
-                        this.setTimer();
+                        
                         for (let j = 0; j < length; j++) {
                             let pos = Math.floor(Math.random() * 4);
                             let answers = [];
@@ -239,10 +235,10 @@ const difficulty = Vue.component('difficulty', {
                             body: questionsFormData,
                         })
                     });
+                this.setTimer();
             }
-        }
-    },
-    fetchDemo: function () {
+        },
+        fetchDemo: function () {
         if (this.dificultadSeleccionada == '') {
             this.error = true;
         } else {
@@ -272,11 +268,13 @@ const difficulty = Vue.component('difficulty', {
                         this.questions[j].answers = answers;
                     }
                 });
-            this.setTimer();
-        }
+                this.setTimer();
+            }
 
 
+        },
     },
+
     verificate(indexQ, indexA) {
         if (this.questions[indexQ].correctIndex == indexA) {
             this.failed = false;
