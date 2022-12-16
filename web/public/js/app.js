@@ -214,7 +214,7 @@ const difficulty = Vue.component('difficulty', {
 
                         let length = this.questions.length;
                         let cont = 0;
-
+                        this.setTimer();
                         for (let j = 0; j < length; j++) {
                             let pos = Math.floor(Math.random() * 4);
                             let answers = [];
@@ -229,7 +229,7 @@ const difficulty = Vue.component('difficulty', {
                             }
                             cont = 0;
                             this.questions[j].answers = answers;
-                            setTimer();
+                           
                         }
 
                         fetch(`http://127.0.0.1:8000/api/store`, {
