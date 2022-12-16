@@ -3,8 +3,9 @@ const userStore = Pinia.defineStore('usuario', {
         return {
             logged: false,
             loginInfo: {
-                username: ''
-            }
+                username: '',
+                id_user: null
+            },
         }
     },
     actions: {
@@ -233,9 +234,8 @@ const difficulty = Vue.component('difficulty', {
 
                         }
 
-                        fetch(`http://127.0.0.1:8000/api/store`, {
+                        fetch(`http://127.0.0.1:8000/api/store-game`, {
                             method: 'POST',
-
                             body: questionsFormData,
                         })
                     });
@@ -311,6 +311,15 @@ const difficulty = Vue.component('difficulty', {
             }
 
             if (this.currentQuestion == 10) {
+                let scoreUser = new FormData();
+                scoreUser.append('id_user', this.a);
+                scoreUser.append('id_game', this.a);
+                scoreUser.append('score', JSON.stringify());
+
+                fetch(`http://127.0.0.1:8000/api/store-user`, {
+                    method: 'POST',
+                    body: questionsFormData,
+                })
                 this.$router.replace('/finishGame');
             }
         }, 1500);
@@ -321,17 +330,21 @@ const difficulty = Vue.component('difficulty', {
 
 const finishGame = Vue.component('finishGame', {
     template: `<div>
-        <div class="countAnswers">Your score was</div>
+        <div class="countAnswers" @click="hola()">Your score was</div>
         <div class="countAnswers">Wanna try again? <router-link to="/difficulty" class="button-play">Play</router-link> </div>
     </div>`,
     data: function () {
         return {
             logged: userStore().logged,
-            username: userStore().loginInfo.username
+            username: userStore().loginInfo.username,
+            id_user: userStore().loginInfo.id_user
         }
     },
     methods: {
+        hola: function () {
 
+            console.log(this.id_user);
+        },
     }
 });
 
@@ -411,7 +424,6 @@ const login = Vue.component('login', {
                 })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data);
                         if (data == 0) {
                             this.processing = false;
                             this.incorrectLogin = true;
@@ -421,6 +433,7 @@ const login = Vue.component('login', {
                             this.logged = true;
                             userStore().logged = true;
                             userStore().loginInfo.username = data.username;
+                            userStore().loginInfo.id_user = data.id;
                         }
                     })
             } else {
