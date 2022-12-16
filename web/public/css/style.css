@@ -396,5 +396,6 @@ span {
   color: white;
   text-align: center;
   text-decoration: none;
-  display: fit-content;
+  width: 100%;
+  height: 100%;
 }
