@@ -99,7 +99,7 @@ const difficulty = Vue.component('difficulty', {
             </div>
             <div v-if="$route.params.type!="demo">
                 <div v-if="!chosen" class="setParameters">
-                    <div class="categories">
+                    <div v-show="user.logged"class="categories">
                         <label> Category: 
                             <b-form-group v-model="categoriaSeleccionada" >
                                 <b-form-radio button size="sm" button-variant="btn btn-dark" v-model="categoriaSeleccionada"  name="categories"  value="arts_and_literature">Arts & Literature</b-form-radio>
@@ -126,7 +126,8 @@ const difficulty = Vue.component('difficulty', {
                             <div v-show="error" style="color:red">
                                 Select the difficulty and category
                             </div>
-                            <button @click="fetchPreguntes" class="button">Play</button>
+                            <button v-if="user.logged" @click="fetchPreguntes" class="button">Play</button>
+                            <button v-else @click="fetchDemo" class="button">Play Demo Game</button>
                         </label>
                     </div>
                 </div>
