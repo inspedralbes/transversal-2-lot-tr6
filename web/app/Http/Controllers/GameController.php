@@ -15,7 +15,7 @@ class GameController extends Controller
         $game = new Game();
         $game->category = $request->category;
         $game->difficulty = $request->difficulty;
-        $game->table_name = $request->table_name;
+        $game->JSONQuestions = $request->JSONQuestions;
         $game->play_count = 1;
         $game->save();
         return response($game, Response::HTTP_CREATED);

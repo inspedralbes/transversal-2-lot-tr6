@@ -26,6 +26,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 Route::get('users', [AuthController::class, 'allUsers']);
 
-Route::post('game', [GameController::class, 'store']);
+Route::post('store', [GameController::class, 'store']);
 
 Route::post('search-game', [GameController::class, 'search']);

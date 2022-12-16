@@ -198,12 +198,6 @@ const difficulty = Vue.component('difficulty', {
             if (this.categoriaSeleccionada == '' || this.dificultadSeleccionada == '') {
                 this.error = true;
             } else {
-                let questionsPost = {
-                    "category": this.categoriaSeleccionada,
-                    "difficulty": this.dificultadSeleccionada,
-                    "table_name": this.categoriaSeleccionada + '-' + this.dificultadSeleccionada,
-                }
-
                 this.error = false;
                 fetch(`https://the-trivia-api.com/api/questions?categories=${this.categoriaSeleccionada}&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
                     .then((response) => response.json())
@@ -231,16 +225,31 @@ const difficulty = Vue.component('difficulty', {
                             setTimer();
                         }
                     });
-                console.log(questionsPost.table_name);
+
+                let questionsFormData = new FormData();
+                questionsFormData.append("table_name", questionsPost.table_name);
+
                 fetch(`http://127.0.0.1:8000/api/search-game`, {
+                    body: JSON.stringify(questionsFormData),
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                    },
-                    body: questionsPost.table_name,
+                    }
                 }).then(response => response.json())
                     .then(data => {
                         console.log(data);
+                        questionsFormData.append('category', questionsPost.category);
+                        questionsFormData.append('difficulty', questionsPost.difficulty);
+
+                        if (data == "EMPTY") {
+                            fetch(`http://127.0.0.1:8000/api/store`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: questionsFormData,
+                            })
+                        }
                     })
             }
         },
