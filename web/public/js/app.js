@@ -207,7 +207,7 @@ const difficulty = Vue.component('difficulty', {
                         this.questions = questions;
                         let length = this.questions.length;
                         let cont = 0;
-
+                        this.setTimer();
                         for (let j = 0; j < length; j++) {
                             let pos = Math.floor(Math.random() * 4);
                             let answers = [];
@@ -222,8 +222,9 @@ const difficulty = Vue.component('difficulty', {
                             }
                             cont = 0;
                             this.questions[j].answers = answers;
-                            setTimer();
+                           
                         }
+                        
                     });
 
                 let questionsFormData = new FormData();
@@ -252,6 +253,7 @@ const difficulty = Vue.component('difficulty', {
                         }
                     })
             }
+            
         },
         fetchDemo: function () {
             if (this.dificultadSeleccionada == '') {
