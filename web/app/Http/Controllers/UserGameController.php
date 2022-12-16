@@ -3,20 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserGame;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserGameRequest;
 use App\Http\Requests\UpdateUserGameRequest;
 
 class UserGameController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function storeUserGame(Request $request)
     {
-        //
+        $UserGame = new UserGame();
+        $UserGame->id_user = $request->id_user;
+        $UserGame->id_game = $request->id_game;
+        $UserGame->score = $request->score;
+        $UserGame->save();
+        return response($UserGame);
     }
 
     /**

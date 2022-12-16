@@ -3,8 +3,9 @@ const userStore = Pinia.defineStore('usuario', {
         return {
             logged: false,
             loginInfo: {
-                username: ''
-            }
+                username: '',
+                id_user: null
+            },
         }
     },
     actions: {
@@ -27,7 +28,7 @@ const quiz = Vue.component('quiz', {
     template: `
         <div class="container-landing">
             <div v-if="!logged">
-                <router-link to="/login" class="button login-button">Login</router-link>   
+                <router-link to="/login" class="button login-button button-router">Login</router-link>   
             </div>
             <div v-else>
                 <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{username}}</p></router-link>   
@@ -35,7 +36,7 @@ const quiz = Vue.component('quiz', {
             <div class="play">
                 <div v-if="logged">
                         <h1 class="title-landing"> Wanna test your knowledge? </h1>
-                        <router-link to="/difficulty" class="button-play">Play</router-link>
+                        <router-link to="/difficulty" class="button-play button-router">Play</router-link>
                         <br>
                 </div>
                 <div v-else>
@@ -178,15 +179,15 @@ const difficulty = Vue.component('difficulty', {
             var timer = 3;
 
 
-            let idTimer=setInterval(() => {
+            let idTimer = setInterval(() => {
                 seconds = timer;
 
                 this.contador = seconds;
 
                 if (--timer < 0) {
-                    noTime=true;
+                    noTime = true;
                     clearInterval(idTimer);
-                    
+
                 }
             }, 1000);
         },
@@ -211,7 +212,7 @@ const difficulty = Vue.component('difficulty', {
 
                         let length = this.questions.length;
                         let cont = 0;
-                        
+
                         for (let j = 0; j < length; j++) {
                             let pos = Math.floor(Math.random() * 4);
                             let answers = [];
@@ -229,9 +230,8 @@ const difficulty = Vue.component('difficulty', {
 
                         }
 
-                        fetch(`http://127.0.0.1:8000/api/store`, {
+                        fetch(`http://127.0.0.1:8000/api/store-game`, {
                             method: 'POST',
-
                             body: questionsFormData,
                         })
                     });
@@ -239,97 +239,105 @@ const difficulty = Vue.component('difficulty', {
             }
         },
         fetchDemo: function () {
-        if (this.dificultadSeleccionada == '') {
-            this.error = true;
-        } else {
-            this.error = false;
-            fetch(`https://the-trivia-api.com/api/questions?categories=music&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
-                .then((response) => response.json())
-                .then((questions) => {
-                    console.log(questions)
-                    this.chosen = true;
-                    this.questions = questions;
-                    let length = this.questions.length;
-                    let cont = 0;
+            if (this.dificultadSeleccionada == '') {
+                this.error = true;
+            } else {
+                this.error = false;
+                fetch(`https://the-trivia-api.com/api/questions?categories=music&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
+                    .then((response) => response.json())
+                    .then((questions) => {
+                        console.log(questions)
+                        this.chosen = true;
+                        this.questions = questions;
+                        let length = this.questions.length;
+                        let cont = 0;
 
-                    for (let j = 0; j < length; j++) {
-                        let pos = Math.floor(Math.random() * 4);
-                        let answers = [];
-                        for (let i = 0; i < 4; i++) {
-                            if (i == pos) {
-                                answers.push(this.questions[j].correctAnswer);
-                                this.questions[j].correctIndex = i;
-                            } else {
-                                answers.push(this.questions[j].incorrectAnswers[cont]);
-                                cont++;
+                        for (let j = 0; j < length; j++) {
+                            let pos = Math.floor(Math.random() * 4);
+                            let answers = [];
+                            for (let i = 0; i < 4; i++) {
+                                if (i == pos) {
+                                    answers.push(this.questions[j].correctAnswer);
+                                    this.questions[j].correctIndex = i;
+                                } else {
+                                    answers.push(this.questions[j].incorrectAnswers[cont]);
+                                    cont++;
+                                }
                             }
+                            cont = 0;
+                            this.questions[j].answers = answers;
                         }
-                        cont = 0;
-                        this.questions[j].answers = answers;
-                    }
-                });
+                    });
                 this.setTimer();
             }
-
-
         },
-    },
-
-    verificate(indexQ, indexA) {
-        if (this.questions[indexQ].correctIndex == indexA) {
-            this.failed = false;
-            for (let i = 0; i < 4; i++) {
-                if (this.questions[indexQ].correctIndex == i) {
-                    this.colorButtons[i] = "correct";
-                } else {
-                    this.colorButtons[i] = "simple-incorrect";
+        verificate(indexQ, indexA) {
+            if (this.questions[indexQ].correctIndex == indexA) {
+                this.failed = false;
+                for (let i = 0; i < 4; i++) {
+                    if (this.questions[indexQ].correctIndex == i) {
+                        this.colorButtons[i] = "correct";
+                    } else {
+                        this.colorButtons[i] = "simple-incorrect";
+                    }
+                }
+                this.correctAnswers += 1;
+            } else {
+                this.failed = true;
+                for (let index = 0; index < 4; index++) {
+                    this.colorButtons[index] = "incorrect";
+                    this.correction = this.questions[indexQ].correctAnswer
                 }
             }
-            this.correctAnswers += 1;
-        } else {
-            this.failed = true;
+
             for (let index = 0; index < 4; index++) {
-                this.colorButtons[index] = "incorrect";
-                this.correction = this.questions[indexQ].correctAnswer
-            }
-        }
-
-        for (let index = 0; index < 4; index++) {
-            this.statusButtons[index] = true;
-        }
-
-        this.$forceUpdate();
-
-        setTimeout(() => {
-            if (this.currentQuestion < this.questions.length) {
-                this.currentQuestion++;
-                this.colorButtons = ["default", "default", "default", "default"];
-                this.statusButtons = [false, false, false, false];
-                this.failed = false;
+                this.statusButtons[index] = true;
             }
 
-            if (this.currentQuestion == 10) {
-                this.$router.replace('/finishGame');
-            }
-        }, 1500);
+            this.$forceUpdate();
+
+            setTimeout(() => {
+                if (this.currentQuestion < this.questions.length) {
+                    this.currentQuestion++;
+                    this.colorButtons = ["default", "default", "default", "default"];
+                    this.statusButtons = [false, false, false, false];
+                    this.failed = false;
+                }
+
+                if (this.currentQuestion == 10) {
+                    let scoreUser = new FormData();
+                    scoreUser.append('id_user', this.a);
+                    scoreUser.append('id_game', this.a);
+                    scoreUser.append('score', JSON.stringify());
+
+                    fetch(`http://127.0.0.1:8000/api/store-user`, {
+                        method: 'POST',
+                        body: questionsFormData,
+                    })
+                    this.$router.replace('/finishGame');
+                }
+            }, 1500);
+        },
     },
-
-},
-);
+},);
 
 const finishGame = Vue.component('finishGame', {
     template: `<div>
-        <div class="countAnswers">Your score was</div>
+        <div class="countAnswers" @click="hola()">Your score was</div>
         <div class="countAnswers">Wanna try again? <router-link to="/difficulty" class="button-play">Play</router-link> </div>
     </div>`,
     data: function () {
         return {
             logged: userStore().logged,
-            username: userStore().loginInfo.username
+            username: userStore().loginInfo.username,
+            id_user: userStore().loginInfo.id_user
         }
     },
     methods: {
+        hola: function () {
 
+            console.log(this.id_user);
+        },
     }
 });
 
@@ -339,41 +347,43 @@ const login = Vue.component('login', {
     template: `<div>
         <router-link to="/" class="button">Home</router-link>
         <div class="login-page">
-            <div v-show="!logged" class="login-form-text">
-                <h1>Welcome back</h1>
-                <p>Enter your details and sign in</p>
-                <p>If you still don't have an account sign up here</p>
-                <router-link to="/signup" class="button-router">Sign up</router-link>
-            </div>
-            <div v-show="!logged" class="login-form-form">
-                <b-input-group class="mb-2" size="sm"> 
-                    <b-input-group-append is-text>
-                        <b-icon icon="person" shift-h="-4"></b-icon>
-                        <b-form-input class="input" :state="statusLogin" type="email" id="input-1" v-model="form.email" placeholder="Email" required></b-form-input>
-                    </b-input-group-append>
-                    <div v-show="!statusLogin" id="input-live-feedback" style="color: #F04848">
-                        Introduce un email correcto.
-                    </div>
-                </b-input-group>
-                <b-input-group class="mb-2" size="sm">
-                    <b-input-group-append is-text>
-                        <b-icon icon="key" shift-h="-4"></b-icon>
-                        <b-form-input :type="type" id="input-2" :state="statusLogin" v-model="form.password" placeholder="Password" required ></b-form-input>
-                        <b-button @click="showPass"><b-icon icon="eye-fill" shift-v="1" size="sm"></b-icon></b-button>
-                    </b-input-group-append>
-                </b-input-group>
-                <b-button @click="submitLogin" variant="primary" class="signin-button">Sing in
-                    <div v-if="!processing" class="signin-icon"><b-icon icon="check"></b-icon></div>
-                    <div v-else="processing" class="signin-icon"><b-spinner small></b-spinner></div>
-                </b-button>
-                <div v-show="incorrectLogin">
-                    <p style="color: red">Usuario Inexistente!</p> 
+                <div v-show="!logged" class="login-form-text">
+                    <h1>Welcome back</h1>
+                    <p>Enter your details and sign in</p>
+                    <BR></br>
+                    <p>If you still don't have an account sign up here</p>
+                    <router-link to="/signup" class="button-router">Sign up</router-link>
                 </div>
-            </div>
-            <div v-show="logged">
-                <p class="blanco">Bienvenido {{infoLogin.name}}</p>
-            <b-button @click="logOut" variant="primary">Logout</b-button>
-            </div>
+                <div v-show="!logged" class="login-form-form">
+                <h1>Sign in</h1>
+                    <b-input-group class="mb-2" size="sm"> 
+                        <b-input-group-append is-text class="input">
+                            <b-icon icon="person" shift-h="-4"></b-icon>
+                            <b-form-input class="font-input" :state="statusLogin" type="email" id="input-1" v-model="form.email" placeholder="Email" required></b-form-input>
+                        </b-input-group-append>
+                        <div v-show="!statusLogin" id="input-live-feedback" style="color: #F04848; margin-left: 18%;">
+                            Introduce un email correcto.
+                        </div>
+                    </b-input-group>
+                    <b-input-group class="mb-2" size="sm">
+                        <b-input-group-append is-text class="input">
+                            <b-icon icon="key" shift-h="-4"></b-icon>
+                            <b-form-input class="font-input" :type="type" id="input-2" :state="statusLogin" v-model="form.password" placeholder="Password" required ></b-form-input>
+                            <b-button @click="showPass"><b-icon icon="eye-fill" shift-v="1" size="sm"></b-icon></b-button>
+                        </b-input-group-append>
+                    </b-input-group>
+                    <b-button @click="submitLogin" variant="primary" class="signin-button">Sign in
+                        <div v-if="!processing" class="signin-icon"><b-icon icon="check"></b-icon></div>
+                        <div v-else="processing" class="signin-icon" ><b-spinner></b-spinner></div>
+                    </b-button>
+                    <div v-show="incorrectLogin">
+                        <p style="color: red; margin: 18%;">Usuario Inexistente!</p> 
+                    </div>
+                </div>
+                <div v-show="logged">
+                    <p class="blanco">Bienvenido {{infoLogin.name}}</p>
+                <b-button @click="logOut" variant="primary">Logout</b-button>
+                </div>
         </div>
         </div>
         `,
@@ -409,7 +419,6 @@ const login = Vue.component('login', {
                 })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data);
                         if (data == 0) {
                             this.processing = false;
                             this.incorrectLogin = true;
@@ -419,6 +428,7 @@ const login = Vue.component('login', {
                             this.logged = true;
                             userStore().logged = true;
                             userStore().loginInfo.username = data.username;
+                            userStore().loginInfo.id_user = data.id;
                         }
                     })
             } else {
@@ -450,17 +460,18 @@ const signup = Vue.component('signup', {
         <router-link to="/" class="button">Home</router-link>
         <div class="signup-page">
             <div class="button" v-show="!registered" class="signup-form-form">
+            <h1>Sign up</h1>
                 <b-input-group class="mb-2" size="sm"> 
-                    <b-input-group-append is-text>
+                    <b-input-group-append is-text class="input">
                         <b-icon icon="person" shift-h="-4"></b-icon>
-                        <b-form-input id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>                    
+                        <b-form-input class="font-input" id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>                    
                     </b-input-group-append>
                 </b-input-group>
 
                 <b-input-group class="mb-2" size="sm">
-                    <b-input-group-append is-text>
+                    <b-input-group-append is-text class="input">
                         <b-icon icon="envelope" shift-h="-4"></b-icon>
-                        <b-form-input id="input-2" :state="statusEmail" v-model="form.email" placeholder="email" required></b-form-input>
+                        <b-form-input class="font-input" id="input-2" :state="statusEmail" v-model="form.email" placeholder="email" required></b-form-input>
                         <div v-show="!statusEmail" id="input-live-feedback" style="color: #F04848">
                             Enter a correct mail.
                         </div>
@@ -468,31 +479,32 @@ const signup = Vue.component('signup', {
                 </b-input-group>
                 
                 <b-input-group class="mb-2" size="sm">
-                    <b-input-group-append is-text>
+                    <b-input-group-append is-text class="input">
                         <b-icon icon="key" shift-h="-4"></b-icon>
-                        <b-form-input :type="typeFirst" id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
+                        <b-form-input class="font-input" :type="typeFirst" id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
                         <b-button @click="showPassFirst"><b-icon icon="eye-fill" shift-v="1" size="sm"></b-icon></b-button>
                     </b-input-group-append>
                 </b-input-group>
 
                 <b-input-group class="mb-2" size="sm">
-                    <b-input-group-append is-text>
+                    <b-input-group-append is-text class="input">
                         <b-icon icon="arrow-clockwise" shift-h="-4"></b-icon>
-                        <b-form-input :type="typeConfirm" id="input-2" :state="statusPassword" v-model="form.verifyPassword" placeholder="Repeat password" required></b-form-input>
+                        <b-form-input class="font-input" :type="typeConfirm" id="input-2" :state="statusPassword" v-model="form.verifyPassword" placeholder="Repeat password" required></b-form-input>
                         <b-button @click="showPassConfirm"><b-icon icon="eye-fill" shift-v="1" size="sm"></b-icon></b-button>
                         <div v-show="!statusPassword" id="input-live-feedback" style="color: #F04848">
                             The passwords don't match.
                         </div>
                     </b-input-group-append>
                 </b-input-group>
-                <b-button @click="submitSignup" variant="primary">Signup</b-button>
-                <div v-show="processing">
-                    <b-spinner></b-spinner>
-                </div>
+                <b-button @click="submitSignup" variant="primary" class="signin-button">Signup
+                    <div v-if="!processing" class="signin-icon"><b-icon icon="check"></b-icon></div>
+                    <div v-else="processing" class="signin-icon" ><b-spinner></b-spinner></div>
+                </b-button>
             </div>
             <div v-show="!registered" class="signup-form-text">
                 <h1>Welcome back</h1>
                 <p>Create an account and start playing</p>
+                <br></br>
                 <p>If you already have an account sign in here</p>
                 <router-link to="/login" class="button-router">Sign in</router-link>
             </div>
