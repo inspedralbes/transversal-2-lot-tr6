@@ -89,11 +89,15 @@ const difficulty = Vue.component('difficulty', {
             error: false,
             failed: false,
             correction: '',
+            contador:''
         }
     },
     template: `
     <div>
-        <router-link to="/" class="button home-button">Home</router-link>   
+        <router-link to="/" class="button home-button">Home</router-link>  
+        <div class="timer">
+        <span class="timer_part seconds">{{contador}}</span>
+        </div> 
         <div class="play" >
             <div v-show="user.logged">
                 <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{user.username}}</p></router-link>   
@@ -169,6 +173,27 @@ const difficulty = Vue.component('difficulty', {
         `,
 
     methods: {
+        setTimer: function () {
+         
+            var timer=120;
+         
+            
+            setInterval( () =>  {
+        
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+        
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+        
+                this.contador = minutes + ":" + seconds;
+               
+        
+                if (--timer < 0) {
+                    timer = duration;
+                }
+            }, 1000);
+        },
         fetchPreguntes: function () {
             if (this.categoriaSeleccionada == '' || this.dificultadSeleccionada == '') {
                 this.error = true;
@@ -203,6 +228,7 @@ const difficulty = Vue.component('difficulty', {
                             }
                             cont = 0;
                             this.questions[j].answers = answers;
+                            setTimer();
                         }
                     });
                 console.log(questionsPost.table_name);
@@ -248,6 +274,7 @@ const difficulty = Vue.component('difficulty', {
                             this.questions[j].answers = answers;
                         }
                     });
+                    this.setTimer();
             }
 
 

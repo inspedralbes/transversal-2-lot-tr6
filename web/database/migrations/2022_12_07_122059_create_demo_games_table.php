@@ -18,6 +18,8 @@ return new class extends Migration
             $table->Integer('difficulty');
             $table->string('question');
             $table->primary('id_Question');
+            $table->string('incorrectAnswers');
+            $table->string('correctAnswer');
         });
     }
 
