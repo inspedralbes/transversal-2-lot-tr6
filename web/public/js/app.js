@@ -102,25 +102,25 @@ const difficulty = Vue.component('difficulty', {
                     <div v-show="user.logged"class="categories">
                         <label> Category: 
                             <b-form-group v-model="categoriaSeleccionada" >
-                                <b-form-radio button size="sm" button-variant="btn btn-dark" v-model="categoriaSeleccionada"  name="categories"  value="arts_and_literature">Arts & Literature</b-form-radio>
-                                <b-form-radio button size="sm" button-variant="btn btn-dark" v-model="categoriaSeleccionada"  name="categories"  value="film_and_tv">Film & TV</b-form-radio>
-                                <b-form-radio button size="sm" button-variant="btn btn-dark" v-model="categoriaSeleccionada"  name="categories"  value="food_and_drink">Food & Drink</b-form-radio>
-                                <b-form-radio button size="sm" button-variant="btn btn-dark" v-model="categoriaSeleccionada"  name="categories"  value="general_knowledge">General Knowledge</b-form-radio>
-                                <b-form-radio button size="sm" button-variant="btn btn-dark" v-model="categoriaSeleccionada"  name="categories"  value="geography">Geography</b-form-radio>
-                                <b-form-radio button size="sm" button-variant="btn btn-dark" v-model="categoriaSeleccionada"  name="categories"  value="history">History</b-form-radio>
-                                <b-form-radio button size="sm" button-variant="btn btn-dark" v-model="categoriaSeleccionada"  name="categories"  value="music">Music</b-form-radio>
-                                <b-form-radio button size="sm" button-variant="btn btn-dark" v-model="categoriaSeleccionada"  name="categories"  value="science">Science</b-form-radio>
-                                <b-form-radio button size="sm" button-variant="btn btn-dark" v-model="categoriaSeleccionada"  name="categories"  value="society_and_culture">Society & Culture</b-form-radio>
-                                <b-form-radio button size="sm" button-variant="btn btn-dark" v-model="categoriaSeleccionada"  name="categories"  value="sport_and_leisure">Sport & Leisure</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="arts_and_literature">Arts & Literature</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="film_and_tv">Film & TV</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="food_and_drink">Food & Drink</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="general_knowledge">General Knowledge</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="geography">Geography</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="history">History</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="music">Music</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="science">Science</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="society_and_culture">Society & Culture</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-catdiff" v-model="categoriaSeleccionada"  name="categories"  value="sport_and_leisure">Sport & Leisure</b-form-radio>
                             </b-form-group>
                         </label>
                     </div>
                     <div class="difficulty">
                         <label> Difficulty: 
                             <b-form-group v-model="dificultadSeleccionada">
-                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-outline-success" v-model="dificultadSeleccionada" name="difficulty" value="easy">Easy</b-form-radio>
-                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-outline-warning" v-model="dificultadSeleccionada" name="difficulty" value="medium">Medium</b-form-radio>
-                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-outline-danger" v-model="dificultadSeleccionada" name="difficulty" value="hard">Hard</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-outline-success btn-catdiff" v-model="dificultadSeleccionada" name="difficulty" value="easy">Easy</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-outline-warning btn-catdiff" v-model="dificultadSeleccionada" name="difficulty" value="medium">Medium</b-form-radio>
+                                <b-form-radio button size="sm" button-variant="btn btn-dark btn-outline-danger btn-catdiff" v-model="dificultadSeleccionada" name="difficulty" value="hard">Hard</b-form-radio>
                             </b-form-group>
                             <br>
                             <div v-show="error" style="color:red">
