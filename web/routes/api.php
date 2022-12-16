@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\UserGameController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 Route::get('users', [AuthController::class, 'allUsers']);
 
-Route::post('game', [GameController::class, 'store']);
+Route::post('store-game', [GameController::class, 'store']);
+
+Route::post('store-user', [UserGameController::class, 'storeUserGame']);
 
 Route::post('search-game', [GameController::class, 'search']);

@@ -3,8 +3,9 @@ const userStore = Pinia.defineStore('usuario', {
         return {
             logged: false,
             loginInfo: {
-                username: ''
-            }
+                username: '',
+                id_user: null
+            },
         }
     },
     actions: {
@@ -89,11 +90,16 @@ const difficulty = Vue.component('difficulty', {
             error: false,
             failed: false,
             correction: '',
+            contador: ''
         }
     },
     template: `
     <div>
-        <div class="play" > 
+        <router-link to="/" class="button home-button">Home</router-link>       
+            <div class="timer">
+                <span class="timer_part seconds">{{contador}}</span>
+            </div> 
+        <div class="play" >
             <div v-show="user.logged">
                 <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{user.username}}</p></router-link>   
             </div>
@@ -124,10 +130,10 @@ const difficulty = Vue.component('difficulty', {
                             </b-form-group>
                             <br>
                             <div v-show="error" style="color:red">
-                                Select the difficulty and category
+                                <p>Select the difficulty</p><p v-show="user.logged">and category</p>
                             </div>
-                            <button v-if="user.logged" @click="fetchPreguntes" class="button">Play</button>
-                            <button v-else @click="fetchDemo" class="button">Play Demo Game</button>
+                            <button v-if="user.logged" @click="setTimer();fetchPreguntes()" class="button">Play</button>
+                            <button v-else @click="setTimer(); fetchDemo()" class="button">Play Demo Game</button>
                         </label>
                     </div>
                 </div>
@@ -168,23 +174,42 @@ const difficulty = Vue.component('difficulty', {
         `,
 
     methods: {
+        setTimer: function () {
+            let noTime = false;
+            var timer = 3;
+
+
+            let idTimer = setInterval(() => {
+                seconds = timer;
+
+                this.contador = seconds;
+
+                if (--timer < 0) {
+                    noTime = true;
+                    clearInterval(idTimer);
+
+                }
+            }, 1000);
+        },
         fetchPreguntes: function () {
             if (this.categoriaSeleccionada == '' || this.dificultadSeleccionada == '') {
                 this.error = true;
             } else {
-                let questionsPost = {
-                    "category": this.categoriaSeleccionada,
-                    "difficulty": this.dificultadSeleccionada,
-                    "table_name": this.categoriaSeleccionada + '-' + this.dificultadSeleccionada,
-                }
-
                 this.error = false;
+
+
                 fetch(`https://the-trivia-api.com/api/questions?categories=${this.categoriaSeleccionada}&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
                     .then((response) => response.json())
                     .then((questions) => {
                         console.log(questions)
                         this.chosen = true;
                         this.questions = questions;
+
+                        let questionsFormData = new FormData();
+                        questionsFormData.append('category', this.categoriaSeleccionada);
+                        questionsFormData.append('difficulty', this.dificultadSeleccionada);
+                        questionsFormData.append('JSONQuestions', JSON.stringify(questions));
+
                         let length = this.questions.length;
                         let cont = 0;
 
@@ -202,19 +227,15 @@ const difficulty = Vue.component('difficulty', {
                             }
                             cont = 0;
                             this.questions[j].answers = answers;
+
                         }
+
+                        fetch(`http://127.0.0.1:8000/api/store-game`, {
+                            method: 'POST',
+                            body: questionsFormData,
+                        })
                     });
-                console.log(questionsPost.table_name);
-                fetch(`http://127.0.0.1:8000/api/search-game`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: questionsPost.table_name,
-                }).then(response => response.json())
-                    .then(data => {
-                        console.log(data);
-                    })
+                this.setTimer();
             }
         },
         fetchDemo: function () {
@@ -247,9 +268,8 @@ const difficulty = Vue.component('difficulty', {
                             this.questions[j].answers = answers;
                         }
                     });
+                this.setTimer();
             }
-
-
         },
         verificate(indexQ, indexA) {
             if (this.questions[indexQ].correctIndex == indexA) {
@@ -285,28 +305,39 @@ const difficulty = Vue.component('difficulty', {
                 }
 
                 if (this.currentQuestion == 10) {
+                    let scoreUser = new FormData();
+                    scoreUser.append('id_user', this.a);
+                    scoreUser.append('id_game', this.a);
+                    scoreUser.append('score', JSON.stringify());
+
+                    fetch(`http://127.0.0.1:8000/api/store-user`, {
+                        method: 'POST',
+                        body: questionsFormData,
+                    })
                     this.$router.replace('/finishGame');
                 }
             }, 1500);
         },
-
-    }
-},
-);
+    },
+},);
 
 const finishGame = Vue.component('finishGame', {
     template: `<div>
-        <div class="countAnswers">Your score was</div>
+        <div class="countAnswers" @click="hola()">Your score was</div>
         <div class="countAnswers">Wanna try again? <router-link to="/difficulty" class="button-play">Play</router-link> </div>
     </div>`,
     data: function () {
         return {
             logged: userStore().logged,
-            username: userStore().loginInfo.username
+            username: userStore().loginInfo.username,
+            id_user: userStore().loginInfo.id_user
         }
     },
     methods: {
+        hola: function () {
 
+            console.log(this.id_user);
+        },
     }
 });
 
@@ -388,7 +419,6 @@ const login = Vue.component('login', {
                 })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data);
                         if (data == 0) {
                             this.processing = false;
                             this.incorrectLogin = true;
@@ -398,6 +428,7 @@ const login = Vue.component('login', {
                             this.logged = true;
                             userStore().logged = true;
                             userStore().loginInfo.username = data.username;
+                            userStore().loginInfo.id_user = data.id;
                         }
                     })
             } else {
