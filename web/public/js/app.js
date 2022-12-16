@@ -93,7 +93,8 @@ const difficulty = Vue.component('difficulty', {
     },
     template: `
     <div>
-        <div class="play" > 
+        <router-link to="/" class="button home-button">Home</router-link>   
+        <div class="play" >
             <div v-show="user.logged">
                 <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{user.username}}</p></router-link>   
             </div>
@@ -124,7 +125,7 @@ const difficulty = Vue.component('difficulty', {
                             </b-form-group>
                             <br>
                             <div v-show="error" style="color:red">
-                                Select the difficulty and category
+                                <p>Select the difficulty</p><p v-show="user.logged">and category</p>
                             </div>
                             <button v-if="user.logged" @click="fetchPreguntes" class="button">Play</button>
                             <button v-else @click="fetchDemo" class="button">Play Demo Game</button>
