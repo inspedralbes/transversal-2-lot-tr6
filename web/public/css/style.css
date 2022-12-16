@@ -402,17 +402,19 @@ Fin Carrousel
 }
 
 .nQuestionContainer {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: 1fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-  margin: auto;
-  border: 0;
-  padding: 0;
-  width: 10%;
-  height: 50%;
-  float: center;
+	display: grid;
+	grid-template-columns: repeat(10, 1fr);
+	grid-template-rows: 1fr;
+	grid-column-gap: 0px;
+	grid-row-gap: 0px;
+	margin: auto;
+	border: 0;
+	padding: 0;
+	width: 10%;
+	height: 50%;
+	float: center;
+	margin-left: 25%;
+	margin-bottom: 5px;
 }
 
 .nCurrQuestion {
@@ -420,9 +422,13 @@ Fin Carrousel
 }
 
 span {
-  background-color: #707070;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  display: fit-content;
+	background-color: #707070;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	display: fit-content;
+	width: 50px;
+	display: inline-block;
+	height: 50px;
+  padding: 15px;
 }
