@@ -89,7 +89,7 @@ const difficulty = Vue.component('difficulty', {
             error: false,
             failed: false,
             correction: '',
-            contador:''
+            contador: ''
         }
     },
     template: `
@@ -174,21 +174,21 @@ const difficulty = Vue.component('difficulty', {
 
     methods: {
         setTimer: function () {
-         
-            var timer=120;
-         
-            
-            setInterval( () =>  {
-        
+
+            var timer = 120;
+
+
+            setInterval(() => {
+
                 minutes = parseInt(timer / 60, 10);
                 seconds = parseInt(timer % 60, 10);
-        
+
                 minutes = minutes < 10 ? "0" + minutes : minutes;
                 seconds = seconds < 10 ? "0" + seconds : seconds;
-        
+
                 this.contador = minutes + ":" + seconds;
-               
-        
+
+
                 if (--timer < 0) {
                     timer = duration;
                 }
@@ -199,12 +199,19 @@ const difficulty = Vue.component('difficulty', {
                 this.error = true;
             } else {
                 this.error = false;
+                let questionsFormData = new FormData();
+
                 fetch(`https://the-trivia-api.com/api/questions?categories=${this.categoriaSeleccionada}&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
                     .then((response) => response.json())
                     .then((questions) => {
                         console.log(questions)
                         this.chosen = true;
                         this.questions = questions;
+
+                        questionsFormData.append("category", this.categoriaSeleccionada);
+                        questionsFormData.append("difficulty", this.dificultadSeleccionada);
+                        questionsFormData.append("JSONQuestions", JSON.stringify(questions));
+
                         let length = this.questions.length;
                         let cont = 0;
                         this.setTimer();
@@ -224,112 +231,92 @@ const difficulty = Vue.component('difficulty', {
                             this.questions[j].answers = answers;
                            
                         }
-                        
+
+                        fetch(`http://127.0.0.1:8000/api/store`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(questionsFormData),
+                        })
                     });
-
-                let questionsFormData = new FormData();
-                questionsFormData.append("table_name", questionsPost.table_name);
-
-                fetch(`http://127.0.0.1:8000/api/search-game`, {
-                    body: JSON.stringify(questionsFormData),
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                }).then(response => response.json())
-                    .then(data => {
-                        console.log(data);
-                        questionsFormData.append('category', questionsPost.category);
-                        questionsFormData.append('difficulty', questionsPost.difficulty);
-
-                        if (data == "EMPTY") {
-                            fetch(`http://127.0.0.1:8000/api/store`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: questionsFormData,
-                            })
-                        }
-                    })
             }
-            
-        },
-        fetchDemo: function () {
-            if (this.dificultadSeleccionada == '') {
-                this.error = true;
-            } else {
-                this.error = false;
-                fetch(`https://the-trivia-api.com/api/questions?categories=music&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
-                    .then((response) => response.json())
-                    .then((questions) => {
-                        console.log(questions)
-                        this.chosen = true;
-                        this.questions = questions;
-                        let length = this.questions.length;
-                        let cont = 0;
+        }
+    },
+    fetchDemo: function () {
+        if (this.dificultadSeleccionada == '') {
+            this.error = true;
+        } else {
+            this.error = false;
+            fetch(`https://the-trivia-api.com/api/questions?categories=music&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
+                .then((response) => response.json())
+                .then((questions) => {
+                    console.log(questions)
+                    this.chosen = true;
+                    this.questions = questions;
+                    let length = this.questions.length;
+                    let cont = 0;
 
-                        for (let j = 0; j < length; j++) {
-                            let pos = Math.floor(Math.random() * 4);
-                            let answers = [];
-                            for (let i = 0; i < 4; i++) {
-                                if (i == pos) {
-                                    answers.push(this.questions[j].correctAnswer);
-                                    this.questions[j].correctIndex = i;
-                                } else {
-                                    answers.push(this.questions[j].incorrectAnswers[cont]);
-                                    cont++;
-                                }
+                    for (let j = 0; j < length; j++) {
+                        let pos = Math.floor(Math.random() * 4);
+                        let answers = [];
+                        for (let i = 0; i < 4; i++) {
+                            if (i == pos) {
+                                answers.push(this.questions[j].correctAnswer);
+                                this.questions[j].correctIndex = i;
+                            } else {
+                                answers.push(this.questions[j].incorrectAnswers[cont]);
+                                cont++;
                             }
-                            cont = 0;
-                            this.questions[j].answers = answers;
                         }
-                    });
-                    this.setTimer();
-            }
-
-
-        },
-        verificate(indexQ, indexA) {
-            if (this.questions[indexQ].correctIndex == indexA) {
-                this.failed = false;
-                for (let i = 0; i < 4; i++) {
-                    if (this.questions[indexQ].correctIndex == i) {
-                        this.colorButtons[i] = "correct";
-                    } else {
-                        this.colorButtons[i] = "simple-incorrect";
+                        cont = 0;
+                        this.questions[j].answers = answers;
                     }
-                }
-                this.correctAnswers += 1;
-            } else {
-                this.failed = true;
-                for (let index = 0; index < 4; index++) {
-                    this.colorButtons[index] = "incorrect";
-                    this.correction = this.questions[indexQ].correctAnswer
+                });
+            this.setTimer();
+        }
+
+
+    },
+    verificate(indexQ, indexA) {
+        if (this.questions[indexQ].correctIndex == indexA) {
+            this.failed = false;
+            for (let i = 0; i < 4; i++) {
+                if (this.questions[indexQ].correctIndex == i) {
+                    this.colorButtons[i] = "correct";
+                } else {
+                    this.colorButtons[i] = "simple-incorrect";
                 }
             }
-
+            this.correctAnswers += 1;
+        } else {
+            this.failed = true;
             for (let index = 0; index < 4; index++) {
-                this.statusButtons[index] = true;
+                this.colorButtons[index] = "incorrect";
+                this.correction = this.questions[indexQ].correctAnswer
+            }
+        }
+
+        for (let index = 0; index < 4; index++) {
+            this.statusButtons[index] = true;
+        }
+
+        this.$forceUpdate();
+
+        setTimeout(() => {
+            if (this.currentQuestion < this.questions.length) {
+                this.currentQuestion++;
+                this.colorButtons = ["default", "default", "default", "default"];
+                this.statusButtons = [false, false, false, false];
+                this.failed = false;
             }
 
-            this.$forceUpdate();
+            if (this.currentQuestion == 10) {
+                this.$router.replace('/finishGame');
+            }
+        }, 1500);
+    },
 
-            setTimeout(() => {
-                if (this.currentQuestion < this.questions.length) {
-                    this.currentQuestion++;
-                    this.colorButtons = ["default", "default", "default", "default"];
-                    this.statusButtons = [false, false, false, false];
-                    this.failed = false;
-                }
-
-                if (this.currentQuestion == 10) {
-                    this.$router.replace('/finishGame');
-                }
-            }, 1500);
-        },
-
-    }
 },
 );
 
