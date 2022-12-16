@@ -4,7 +4,8 @@ const userStore = Pinia.defineStore('usuario', {
             logged: false,
             loginInfo: {
                 username: '',
-                id_user: null
+                id_user: null,
+                id_game: null
             },
         }
     },
@@ -179,7 +180,8 @@ const difficulty = Vue.component('difficulty', {
 
     methods: {
         setTimer: function () {
-            var timer = 60;
+            let noTime = false;
+            var timer = 120;
 
 
             let idTimer = setInterval(() => {
@@ -199,7 +201,6 @@ const difficulty = Vue.component('difficulty', {
                 this.error = true;
             } else {
                 this.error = false;
-
 
                 fetch(`https://the-trivia-api.com/api/questions?categories=${this.categoriaSeleccionada}&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
                     .then((response) => response.json())
@@ -236,7 +237,10 @@ const difficulty = Vue.component('difficulty', {
                         fetch(`http://127.0.0.1:8000/api/store-game`, {
                             method: 'POST',
                             body: questionsFormData,
-                        })
+                        }).then((response) => response.json())
+                            .then((data) => {
+                                userStore().loginInfo.id_game = data.id;
+                            });
                     });
                 this.setTimer();
             }
@@ -309,13 +313,13 @@ const difficulty = Vue.component('difficulty', {
 
                 if (this.currentQuestion == 10) {
                     let scoreUser = new FormData();
-                    scoreUser.append('id_user', this.a);
-                    scoreUser.append('id_game', this.a);
-                    scoreUser.append('score', JSON.stringify());
+                    scoreUser.append('id_user', userStore().loginInfo.id_user);
+                    scoreUser.append('id_game', userStore().loginInfo.id_game);
+                    scoreUser.append('score', this.correctAnswers);
 
                     fetch(`http://127.0.0.1:8000/api/store-user`, {
                         method: 'POST',
-                        body: questionsFormData,
+                        body: scoreUser,
                     })
                     this.$router.replace('/finishGame');
                 }
@@ -338,7 +342,6 @@ const finishGame = Vue.component('finishGame', {
     },
     methods: {
         hola: function () {
-
             console.log(this.id_user);
         },
     }
