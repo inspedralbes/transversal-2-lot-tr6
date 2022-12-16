@@ -139,7 +139,7 @@ const difficulty = Vue.component('difficulty', {
                         </label>
                     </div>
                 </div>
-                <div v-else-if="!noTime>
+                <div v-else-if="!noTime">
                     <div class="nQuestionContainer">
                         <div v-for="(question, indexQ) in questions">
                             <span v-if="currentQuestion!=indexQ" class="nQuestion">{{indexQ+1}}</span>
@@ -171,7 +171,7 @@ const difficulty = Vue.component('difficulty', {
                     </section>
                 </div>
                 <div v-else>
-                    <h2 v-show="noTime" style="color: white;">You ran out of time Retarded!!</h2>
+                    <h2 v-show="noTime" style="color: white;">You ran out of time!!</h2>
                 </div>
             </div>
         </div>
@@ -350,6 +350,23 @@ const finishGame = Vue.component('finishGame', {
 
 
 const login = Vue.component('login', {
+    data: function () {
+        return {
+            processing: false,
+            form: {
+                email: "",
+                password: ""
+            },
+            infoLogin: {
+                name: "",
+                idUser: "",
+            },
+            logged: userStore().logged,
+            incorrectLogin: false,
+            statusLogin: null,
+            type: "password"
+        }
+    },
     template: `<div>
         <router-link to="/" class="button">Home</router-link>
         <div class="login-page">
@@ -393,29 +410,12 @@ const login = Vue.component('login', {
         </div>
         </div>
         `,
-    data: function () {
-        return {
-            processing: false,
-            form: {
-                email: "",
-                password: ""
-            },
-            infoLogin: {
-                name: "",
-                idUser: "",
-            },
-            logged: userStore().logged,
-            incorrectLogin: false,
-            statusLogin: "null",
-            type: "password"
-        }
-    },
     methods: {
         submitLogin() {
             if (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(this.form.email)) {
                 this.processing = true;
                 this.incorrectLogin = false;
-                this.statusLogin = "null";
+                this.statusLogin = null;
                 fetch(`http://127.0.0.1:8000/api/login`, {
                     method: 'POST',
                     headers: {
@@ -438,7 +438,6 @@ const login = Vue.component('login', {
                         }
                     })
             } else {
-                console.log(9);
                 this.statusLogin = false;
             }
         },
