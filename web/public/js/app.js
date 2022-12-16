@@ -90,6 +90,7 @@ const difficulty = Vue.component('difficulty', {
             error: false,
             failed: false,
             correction: '',
+            noTime: false,
             contador: ''
         }
     },
@@ -103,7 +104,7 @@ const difficulty = Vue.component('difficulty', {
             <div v-show="user.logged">
                 <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{user.username}}</p></router-link>   
             </div>
-            <div v-if="$route.params.type!="demo">
+            <div>
                 <div v-if="!chosen" class="setParameters">
                     <div v-show="user.logged"class="categories">
                         <label> Category: 
@@ -137,7 +138,7 @@ const difficulty = Vue.component('difficulty', {
                         </label>
                     </div>
                 </div>
-                <div v-else>
+                <div v-else-if="!noTime>
                     <div class="nQuestionContainer">
                         <div v-for="(question, indexQ) in questions">
                             <span v-if="currentQuestion!=indexQ" class="nQuestion">{{indexQ+1}}</span>
@@ -168,6 +169,9 @@ const difficulty = Vue.component('difficulty', {
                         </div>
                     </section>
                 </div>
+                <div v-else>
+                    <h2 v-show="noTime" style="color: white;">You ran out of time Retarded!!</h2>
+                </div>
             </div>
         </div>
     </div>
@@ -175,8 +179,7 @@ const difficulty = Vue.component('difficulty', {
 
     methods: {
         setTimer: function () {
-            let noTime = false;
-            var timer = 3;
+            var timer = 60;
 
 
             let idTimer = setInterval(() => {
@@ -185,7 +188,7 @@ const difficulty = Vue.component('difficulty', {
                 this.contador = seconds;
 
                 if (--timer < 0) {
-                    noTime = true;
+                    this.noTime = true;
                     clearInterval(idTimer);
 
                 }
