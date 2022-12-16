@@ -195,7 +195,7 @@ const difficulty = Vue.component('difficulty', {
                 this.error = true;
             } else {
                 this.error = false;
-                let questionsFormData = new FormData();
+
 
                 fetch(`https://the-trivia-api.com/api/questions?categories=${this.categoriaSeleccionada}&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
                     .then((response) => response.json())
@@ -204,9 +204,10 @@ const difficulty = Vue.component('difficulty', {
                         this.chosen = true;
                         this.questions = questions;
 
-                        questionsFormData.append("category", this.categoriaSeleccionada);
-                        questionsFormData.append("difficulty", this.dificultadSeleccionada);
-                        questionsFormData.append("JSONQuestions", JSON.stringify(questions));
+                        let questionsFormData = new FormData();
+                        questionsFormData.append('category', this.categoriaSeleccionada);
+                        questionsFormData.append('difficulty', this.dificultadSeleccionada);
+                        questionsFormData.append('JSONQuestions', JSON.stringify(questions));
 
                         let length = this.questions.length;
                         let cont = 0;
@@ -225,15 +226,13 @@ const difficulty = Vue.component('difficulty', {
                             }
                             cont = 0;
                             this.questions[j].answers = answers;
-                           
+
                         }
 
                         fetch(`http://127.0.0.1:8000/api/store`, {
                             method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(questionsFormData),
+
+                            body: questionsFormData,
                         })
                     });
                 this.setTimer();
