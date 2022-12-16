@@ -5,8 +5,11 @@ const userStore = Pinia.defineStore('usuario', {
             loginInfo: {
                 username: '',
                 id_user: null,
-                id_game: null
             },
+            currentGame: {
+                id_game: null,
+                correctAnswers: -1
+            }
         }
     },
     actions: {
@@ -177,12 +180,10 @@ const difficulty = Vue.component('difficulty', {
         </div>
     </div>
         `,
-
     methods: {
         setTimer: function () {
             let noTime = false;
             var timer = 120;
-
 
             let idTimer = setInterval(() => {
                 seconds = timer;
@@ -239,7 +240,7 @@ const difficulty = Vue.component('difficulty', {
                             body: questionsFormData,
                         }).then((response) => response.json())
                             .then((data) => {
-                                userStore().loginInfo.id_game = data.id;
+                                userStore().currentGame.id_game = data.id;
                             });
                     });
                 this.setTimer();
@@ -312,15 +313,19 @@ const difficulty = Vue.component('difficulty', {
                 }
 
                 if (this.currentQuestion == 10) {
+                    console.log(this.correctAnswers);
                     let scoreUser = new FormData();
                     scoreUser.append('id_user', userStore().loginInfo.id_user);
-                    scoreUser.append('id_game', userStore().loginInfo.id_game);
+                    scoreUser.append('id_game', userStore().currentGame.id_game);
                     scoreUser.append('score', this.correctAnswers);
 
                     fetch(`http://127.0.0.1:8000/api/store-user`, {
                         method: 'POST',
                         body: scoreUser,
                     })
+                    userStore().currentGame.correctAnswers = this.correctAnswers;
+                    console.log(userStore().currentGame.correctAnswers);
+
                     this.$router.replace('/finishGame');
                 }
             }, 1500);
@@ -330,14 +335,15 @@ const difficulty = Vue.component('difficulty', {
 
 const finishGame = Vue.component('finishGame', {
     template: `<div>
-        <div class="countAnswers" @click="hola()">Your score was</div>
+        <div class="countAnswers" @click="hola()">Your score was {{correctAnswers}}</div>
         <div class="countAnswers">Wanna try again? <router-link to="/difficulty" class="button-play">Play</router-link> </div>
     </div>`,
     data: function () {
         return {
             logged: userStore().logged,
             username: userStore().loginInfo.username,
-            id_user: userStore().loginInfo.id_user
+            id_user: userStore().loginInfo.id_user,
+            correctAnswers: userStore().currentGame.correctAnswers
         }
     },
     methods: {
@@ -622,7 +628,7 @@ let app = new Vue({
     pinia,
     data: {},
     computed: {
-        ...Pinia.mapState(userStore, ['loginInfo', 'logged'])
+        ...Pinia.mapState(userStore, ['loginInfo', 'logged', 'currentGame'])
     },
     methods: {},
 });
