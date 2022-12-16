@@ -131,8 +131,8 @@ const difficulty = Vue.component('difficulty', {
                             <div v-show="error" style="color:red">
                                 <p>Select the difficulty</p><p v-show="user.logged">and category</p>
                             </div>
-                            <button v-if="user.logged" @click="setTimer();fetchPreguntes()" class="button">Play</button>
-                            <button v-else @click="setTimer(); fetchDemo()" class="button">Play Demo Game</button>
+                            <button v-if="user.logged" @click="fetchPreguntes" class="button">Play</button>
+                            <button v-else @click="fetchDemo" class="button">Play Demo Game</button>
                         </label>
                     </div>
                 </div>
