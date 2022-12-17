@@ -23,7 +23,7 @@ body {
 
 .login-form-form {
   width: 35%;
-  height: 40%;
+  height: 50%;
   padding: 10px;
   background-color: #003052;
   border-radius: 0 4px 4px 0;
@@ -39,7 +39,7 @@ body {
 
 .login-form-text {
   width: 35%;
-  height: 40%;
+  height: 50%;
   padding: 25px;
   border-radius: 4px 0 0 4px;
   text-align: center;
@@ -52,22 +52,30 @@ body {
   color: #d6efff;
 }
 
+.error-text {
+  width: 100%;
+  text-align: center;
+  color: rgb(235, 89, 89);
+  margin-top: 5px;
+  height: 20px;
+}
+
 .signup-form-form {
-  width: 35%;
-  height: 50%;
+  width: 50%;
+  height: fit-content;
   padding: 10px;
+  padding-bottom: 40px;
   background-color: #003052;
   border-radius: 4px 0 0 4px;
 }
 
 .signup-form-text {
-  width: 35%;
-  height: 50%;
+  width: 50%;
+  height: 100%;
   padding: 25px;
   border-radius: 0 4px 4px 0;
   text-align: center;
   color: #d6efff;
-  background-color: #4A2966;
 }
 
 .signup-form-form h1{
@@ -86,12 +94,46 @@ body {
 }
 
 .signup-page {
-  width: 80%;
+  width: 100%;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 10%;
-  height: 95vh;
+}
+
+.signup-content {
+  width: 55%;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4A2966;
+}
+
+@media (max-width: 1050px) {
+  .signup-content {
+    width: 70%;
+  }
+}
+
+@media (max-width: 750px) {
+  .signup-content {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .signup-content {
+    display: block;
+  }
+
+  .signup-form-form {
+    width: 100%;
+  }
+
+  .signup-form-text {
+    width: 100%;
+  }
 }
 
 .button-router {
@@ -149,15 +191,16 @@ body {
   background-color: #3d3d3d;
 }
 
-@media (min-width: 750px) {
-  .title-landing {
-    font-size: 95px;
-  }
-}
-
 @media (max-width: 750px) {
   .title-landing {
     font-size: 75px;
+  }
+}
+
+@media (max-width: 500px) {
+  .title-landing {
+    font-size: 50px;
+    margin: 20px;
   }
 }
 
@@ -177,6 +220,7 @@ body {
   border-radius: 4px;
   text-decoration: none;
   font-size: 55px;
+  transition: box-shadow 0.1s;
 }
 
 .button-play:hover {
@@ -186,9 +230,8 @@ body {
 }
 
 .button {
-  background-color: #3660a0;
-  border: none;
-  color: white;
+  border: 1px solid rgb(207, 207, 207);
+  color: rgb(226, 226, 226);
   padding: 10px 25px;
   text-align: center;
   text-decoration: none;
@@ -197,23 +240,24 @@ body {
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 4px;
-}
-
-.demo-button {
-  background-color: grey;
-}
-
-.demo-button:hover{
-  text-decoration: none ;
+  transition: box-shadow 0.1s;
 }
 
 .button:hover {
-  background-color: #0e3875;
-  color: rgb(201, 201, 201);
+  color:white;
+  box-shadow: 0 0 20px rgba(83, 68, 182, 0.6);
+  background-color: rgb(80, 66, 175);
 }
 
-.demo-button:hover {
+.demo-button {
+  background-color: rgb(61, 61, 61);
+  transition: box-shadow 0.1s;
+}
+
+.demo-button:hover{
   background-color: rgb(51, 51, 51);
+  text-decoration: none ;
+  box-shadow: 0 0 20px rgba(180, 180, 180, 0.6);
 }
 
 .login-button {
@@ -488,7 +532,7 @@ span {
 }
 
 .home-button {
-  margin-top: 1%;
-  margin-left: 0.7%;
-  margin-bottom: 0;
+  position: absolute;
+  top: 20px;
+  left: 20px;
 }
