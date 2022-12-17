@@ -101,9 +101,6 @@ const difficulty = Vue.component('difficulty', {
     template: `
     <div>
         <router-link to="/" class="button home-button">Home</router-link>       
-            <div class="timer">
-                <span class="timer_part seconds">{{contador}}</span>
-            </div> 
         <div class="play" >
             <div v-show="user.logged">
                 <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{user.username}}</p></router-link>   
@@ -143,6 +140,9 @@ const difficulty = Vue.component('difficulty', {
                     </div>
                 </div>
                 <div v-else-if="!noTime">
+                    <div class="timer">
+                        <span class="timer_part seconds">{{contador}}</span>
+                    </div> 
                     <div class="nQuestionContainer">
                         <div v-for="(question, indexQ) in questions">
                             <span v-if="currentQuestion!=indexQ" class="nQuestion">{{indexQ+1}}</span>
@@ -206,6 +206,7 @@ const difficulty = Vue.component('difficulty', {
                 fetch(`https://the-trivia-api.com/api/questions?categories=${this.categoriaSeleccionada}&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
                     .then((response) => response.json())
                     .then((questions) => {
+                        this.setTimer();
                         console.log(questions)
                         this.chosen = true;
                         this.questions = questions;
@@ -243,7 +244,6 @@ const difficulty = Vue.component('difficulty', {
                                 userStore().currentGame.id_game = data.id;
                             });
                     });
-                this.setTimer();
             }
         },
         fetchDemo: function () {
