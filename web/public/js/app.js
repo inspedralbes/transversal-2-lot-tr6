@@ -470,12 +470,12 @@ const signup = Vue.component('signup', {
     template: `<div>
         <router-link to="/" class="button">Home</router-link>
         <div class="signup-page">
-            <div class="button" v-show="!registered" class="signup-form-form">
+            <div v-show="!registered" class="signup-form-form">
             <h1>Sign up</h1>
                 <b-input-group class="mb-2" size="sm"> 
                     <b-input-group-append is-text class="input">
                         <b-icon icon="person" shift-h="-4"></b-icon>
-                        <b-form-input class="font-input" id="input-2" v-model="form.username" placeholder="Username" required></b-form-input>                    
+                        <b-form-input class="font-input" id="input-1" v-model="form.username" placeholder="Username" required></b-form-input>                    
                     </b-input-group-append>
                 </b-input-group>
 
@@ -492,7 +492,7 @@ const signup = Vue.component('signup', {
                 <b-input-group class="mb-2" size="sm">
                     <b-input-group-append is-text class="input">
                         <b-icon icon="key" shift-h="-4"></b-icon>
-                        <b-form-input class="font-input" :type="typeFirst" id="input-2" v-model="form.password" placeholder="Password" required></b-form-input>
+                        <b-form-input class="font-input" :type="typeFirst" id="input-3" v-model="form.password" placeholder="Password" required></b-form-input>
                         <b-button @click="showPassFirst"><b-icon icon="eye-fill" shift-v="1" size="sm"></b-icon></b-button>
                     </b-input-group-append>
                 </b-input-group>
@@ -500,7 +500,7 @@ const signup = Vue.component('signup', {
                 <b-input-group class="mb-2" size="sm">
                     <b-input-group-append is-text class="input">
                         <b-icon icon="arrow-clockwise" shift-h="-4"></b-icon>
-                        <b-form-input class="font-input" :type="typeConfirm" id="input-2" :state="statusPassword" v-model="form.verifyPassword" placeholder="Repeat password" required></b-form-input>
+                        <b-form-input class="font-input" :type="typeConfirm" id="input-4" :state="statusPassword" v-model="form.verifyPassword" placeholder="Repeat password" required></b-form-input>
                         <b-button @click="showPassConfirm"><b-icon icon="eye-fill" shift-v="1" size="sm"></b-icon></b-button>
                         <div v-show="!statusPassword" id="input-live-feedback" style="color: #F04848">
                             The passwords don't match.
@@ -535,8 +535,8 @@ const signup = Vue.component('signup', {
                 verifyPassword: "",
                 email: "",
             },
-            statusEmail: "null",
-            statusPassword: "null",
+            statusEmail: null,
+            statusPassword: null,
             registered: false,
             typeFirst: "password",
             typeConfirm: "password"
