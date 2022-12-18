@@ -263,7 +263,14 @@ input[name='difficulty'] {
 
 
 .default {
+  border: 3px solid rgb(228, 159, 55);
+  background-color: #212529 !important;
+  color: rgb(228, 159, 55);
+}
+
+.default:hover {
   background-color: rgb(228, 159, 55) !important;
+  color: white;
 }
 
 .correct {
@@ -275,7 +282,7 @@ input[name='difficulty'] {
 
 @keyframes correct-animation {
   from {
-    background-color: rgb(228, 159, 55);
+    background-color: rgb(17, 17, 17);
   }
 
   to {
@@ -299,7 +306,7 @@ input[name='difficulty'] {
 
 @keyframes incorrect-translation-animation {
   0% {
-    background-color: rgb(228, 159, 55);
+    background-color: rgb(17, 17, 17);
   }
 
   15% {
@@ -333,7 +340,7 @@ input[name='difficulty'] {
 
 @keyframes incorrect-animation {
   0% {
-    background-color: rgb(228, 159, 55);
+    background-color: rgb(17, 17, 17);
   }
 
   100% {
@@ -418,7 +425,7 @@ input[name='difficulty'] {
     left: 0px;
     right: 0px;
     width: 100vw;
-    height: 35px;
+    height: 36px;
     padding: 0px 0px;
     border-radius: 18px 18px 0px 0px;
   }
@@ -472,12 +479,13 @@ input[name='difficulty'] {
   width: 100%;
   font-size: 150%;
   height: 25vh;
-  border: 0;
   border-radius: 10px;
+  transition: filter 0.3s;
 }
 
 .slide-1 {
-  background-color: rgb(92, 154, 206);
+  background: radial-gradient(circle, rgb(109, 164, 208) 0%, rgb(59, 135, 234) 100%);
+  /*background-color: rgb(92, 154, 206);*/
 }
 
 .btnAnswer {
@@ -491,6 +499,11 @@ input[name='difficulty'] {
   text-align: center;
   margin-bottom: 20px;
   padding: 0px 20px 0px 20px;
+  font-weight: bold;
+}
+
+.questionText h2{
+  font-weight: bold;
 }
 
 @media (max-width: 1300px) {
@@ -592,8 +605,6 @@ input[name='difficulty'] {
     text-align: center;
     padding: 0px;
     width: 100%;
-    color: white;
-    background-color: grey;
   }
 }
 
@@ -620,6 +631,10 @@ span {
 
 @media (max-width: 950px) {
   .home-button {
+    display: none;
+  }
+
+  .user {
     display: none;
   }
 }
