@@ -134,8 +134,8 @@ const difficulty = Vue.component('difficulty', {
                             <div v-show="error" style="color:red">
                                 <p>Select the difficulty</p><p v-show="user.logged">and category</p>
                             </div>
-                            <button v-if="user.logged" @click="fetchPreguntes" class="button">Play</button>
-                            <button v-else @click="fetchDemo" class="button">Play Demo Game</button>
+                            <button v-if="user.logged" @click="fetchPreguntes" class="button button-play">Play</button>
+                            <button v-else @click="fetchDemo" class="button button-play">Play Demo Game</button>
                         </label>
                     </div>
                 </div>
@@ -145,16 +145,18 @@ const difficulty = Vue.component('difficulty', {
                     </div> 
                     <div class="nQuestionContainer">
                         <div v-for="(question, indexQ) in questions">
-                            <span v-if="currentQuestion!=indexQ" class="nQuestion">{{indexQ+1}}</span>
-                            <span v-else class="nCurrQuestion">{{indexQ+1}}</span>
+                            <div v-if="currentQuestion!=indexQ" class="nQuestion">{{indexQ+1}}</div>
+                            <div v-else class="nCurrQuestion">{{indexQ+1}}</div>
                         </div>
                     </div>
                     <section class="carousel">    
                         <div>
                             <div class="slides">
                                 <div class="slides-item slide-1" id="slide-1">            
-                                    <div>
-                                        <h2 class="blanco questionText">{{ questions[currentQuestion].question }}</h2>
+                                    <div class="slide-container">
+                                        <div class="questionText">
+                                            <h2>{{ questions[currentQuestion].question }}</h2>
+                                        </div>
                                         <div class="btnAnswer">
                                             <div v-for="(answer, indexA) in questions[currentQuestion].answers">
                                                 <div>
@@ -374,24 +376,25 @@ const login = Vue.component('login', {
             type: "password"
         }
     },
-    template: `<div>
-        <router-link to="/" class="button">Home</router-link>
-        <div class="login-page">
-                <div v-show="!logged" class="login-form-text">
-                    <h1>Welcome back</h1>
+    template: `<div style="height:100vh">
+    <router-link to="/" class="button home-button">Home</router-link>
+        <div class="sign-page">
+            <div class="sign-content">
+                <div v-show="!logged" class="sign-form-text">
+                    <h1 class="sign-title">Welcome back</h1>
                     <p>Enter your details and sign in</p>
                     <BR></br>
                     <p>If you still don't have an account sign up here</p>
                     <router-link to="/signup" class="button-router">Sign up</router-link>
                 </div>
-                <div v-show="!logged" class="login-form-form">
+                <div v-show="!logged" class="sign-form-form">
                 <h1>Sign in</h1>
                     <b-input-group class="mb-2" size="sm"> 
                         <b-input-group-append is-text class="input">
                             <b-icon icon="person" shift-h="-4"></b-icon>
                             <b-form-input class="font-input" :state="statusLogin" type="email" id="input-1" v-model="form.email" placeholder="Email" required></b-form-input>
                         </b-input-group-append>
-                        <div v-show="!statusLogin" id="input-live-feedback" style="color: #F04848; margin-left: 18%;">
+                        <div v-if="statusLogin === false" id="input-live-feedback" style="color: #F04848; margin-left: 18%;">
                             Introduce un email correcto.
                         </div>
                     </b-input-group>
@@ -404,7 +407,7 @@ const login = Vue.component('login', {
                     </b-input-group>
                     <b-button @click="submitLogin" variant="primary" class="signin-button">Sign in
                         <div v-if="!processing" class="signin-icon"><b-icon icon="check"></b-icon></div>
-                        <div v-else="processing" class="signin-icon" ><b-spinner></b-spinner></div>
+                        <div v-else="processing" class="signin-icon"><b-spinner class="signin-icon sign-icon-spinner"></b-spinner></div>
                     </b-button>
                     <div v-show="incorrectLogin">
                         <p style="color: red; margin: 18%;">Usuario Inexistente!</p> 
@@ -414,6 +417,7 @@ const login = Vue.component('login', {
                     <p class="blanco">Bienvenido {{infoLogin.name}}</p>
                 <b-button @click="logOut" variant="primary">Logout</b-button>
                 </div>
+            </div>
         </div>
         </div>
         `,
@@ -468,65 +472,66 @@ const login = Vue.component('login', {
 });
 
 const signup = Vue.component('signup', {
-    template: `<div>
-        <router-link to="/" class="button">Home</router-link>
-        <div class="signup-page">
-            <div v-show="!registered" class="signup-form-form">
-            <h1>Sign up</h1>
-                <b-input-group class="mb-2" size="sm"> 
-                    <b-input-group-append is-text class="input">
-                        <b-icon icon="person" shift-h="-4"></b-icon>
-                        <b-form-input class="font-input" id="input-1" v-model="form.username" placeholder="Username" required></b-form-input>                    
-                    </b-input-group-append>
-                </b-input-group>
+    template: `<div style="height:100vh">
+        <router-link to="/" class="button home-button">Home</router-link>
+        <div class="sign-page">
+            <div class="sign-content">
+                <div v-show="!registered" class="sign-form-form">
+                <h1 class="sign-title">Sign up</h1>
+                    <b-input-group class="mb-2" size="sm"> 
+                        <b-input-group-append is-text class="input">
+                            <b-icon icon="person" shift-h="-4"></b-icon>
+                            <b-form-input class="font-input" id="input-1" v-model="form.username" placeholder="Username" required></b-form-input>                    
+                        </b-input-group-append>
+                    </b-input-group>
 
-                <b-input-group class="mb-2" size="sm">
-                    <b-input-group-append is-text class="input">
-                        <b-icon icon="envelope" shift-h="-4"></b-icon>
-                        <b-form-input class="font-input" id="input-2" :state="statusEmail" v-model="form.email" placeholder="email" required></b-form-input>
-                        <div v-show="!statusEmail" id="input-live-feedback" style="color: #F04848">
+                    <b-input-group class="mb-2" size="sm">
+                        <b-input-group-append is-text class="input">
+                            <b-icon icon="envelope" shift-h="-4"></b-icon>
+                            <b-form-input class="font-input" id="input-2" :state="statusEmail" v-model="form.email" placeholder="email" required></b-form-input>
+                        </b-input-group-append>
+                        <div v-if="statusEmail === false" id="input-live-feedback" class="error-text">
                             Enter a correct mail.
                         </div>
-                    </b-input-group-append>
-                </b-input-group>
-                
-                <b-input-group class="mb-2" size="sm">
-                    <b-input-group-append is-text class="input">
-                        <b-icon icon="key" shift-h="-4"></b-icon>
-                        <b-form-input class="font-input" :type="typeFirst" id="input-3" v-model="form.password" placeholder="Password" required></b-form-input>
-                        <b-button @click="showPassFirst"><b-icon icon="eye-fill" shift-v="1" size="sm"></b-icon></b-button>
-                    </b-input-group-append>
-                </b-input-group>
+                    </b-input-group>
+                    
+                    <b-input-group class="mb-2" size="sm">
+                        <b-input-group-append is-text class="input">
+                            <b-icon icon="key" shift-h="-4"></b-icon>
+                            <b-form-input class="font-input" :type="typeFirst" id="input-3" v-model="form.password" placeholder="Password" required></b-form-input>
+                            <b-button @click="showPassFirst"><b-icon icon="eye-fill" shift-v="1" size="sm"></b-icon></b-button>
+                        </b-input-group-append>
+                    </b-input-group>
 
-                <b-input-group class="mb-2" size="sm">
-                    <b-input-group-append is-text class="input">
-                        <b-icon icon="arrow-clockwise" shift-h="-4"></b-icon>
-                        <b-form-input class="font-input" :type="typeConfirm" id="input-4" :state="statusPassword" v-model="form.verifyPassword" placeholder="Repeat password" required></b-form-input>
-                        <b-button @click="showPassConfirm"><b-icon icon="eye-fill" shift-v="1" size="sm"></b-icon></b-button>
-                        <div v-show="!statusPassword" id="input-live-feedback" style="color: #F04848">
-                            The passwords don't match.
+                    <b-input-group class="mb-2" size="sm">
+                        <b-input-group-append is-text class="input">
+                            <b-icon icon="arrow-clockwise" shift-h="-4"></b-icon>
+                            <b-form-input class="font-input" :type="typeConfirm" id="input-4" :state="statusPassword" v-model="form.verifyPassword" placeholder="Repeat password" required></b-form-input>
+                            <b-button @click="showPassConfirm"><b-icon icon="eye-fill" shift-v="1" size="sm"></b-icon></b-button>
+                        </b-input-group-append>
+                        <div v-if="statusPassword === false" id="input-live-feedback" class="error-text">
+                            <p>The passwords don't match.</p>
                         </div>
-                    </b-input-group-append>
-                </b-input-group>
-                <b-button @click="submitSignup" variant="primary" class="signin-button">Signup
-                    <div v-if="!processing" class="signin-icon"><b-icon icon="check"></b-icon></div>
-                    <div v-else="processing" class="signin-icon" ><b-spinner></b-spinner></div>
-                </b-button>
+                    </b-input-group>
+                    <b-button @click="submitSignup" variant="primary" class="signin-button">Signup
+                        <div v-if="!processing" class="signin-icon"><b-icon icon="check"></b-icon></div>
+                        <div v-else="processing" class="signin-icon" ><b-spinner></b-spinner></div>
+                    </b-button>
+                </div>
+                <div v-show="!registered" class="sign-form-text">
+                    <h1>Welcome back</h1>
+                    <p>Create an account and start playing</p>
+                    <br></br>
+                    <p>If you already have an account sign in here</p>
+                    <router-link to="/login" class="button-router">Sign in</router-link>
+                </div>
             </div>
-            <div v-show="!registered" class="signup-form-text">
-                <h1>Welcome back</h1>
-                <p>Create an account and start playing</p>
-                <br></br>
-                <p>If you already have an account sign in here</p>
-                <router-link to="/login" class="button-router">Sign in</router-link>
+            <div class="button" v-show="registered">
+                <p>Te has registrado maquinote</p>
+                <router-link to="/login" class="signin-button">Login</router-link>
             </div>
         </div>
-        <div class="button" v-show="registered">
-            <p>Te has registrado maquinote</p>
-            <router-link to="/login" class="signin-button">Login</router-link>
-        </div>
-        </div>
-        </div>`,
+    </div>`,
     data: function () {
         return {
             processing: false,
