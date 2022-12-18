@@ -174,7 +174,8 @@ const difficulty = Vue.component('difficulty', {
                     </section>
                 </div>
                 <div v-else>
-                    <h2 v-show="noTime" style="color: white;">You ran out of time!!</h2>
+                    <h1 v-show="noTime" class="noTime" style="color: white;">Oh no! You ran out of time!!</h1>
+                    <router-link to="/difficulty" class="button-play button">Try again</router-link> 
                 </div>
             </div>
         </div>
@@ -182,8 +183,7 @@ const difficulty = Vue.component('difficulty', {
         `,
     methods: {
         setTimer: function () {
-            let noTime = false;
-            var timer = 120;
+            var timer = 1;
 
             let idTimer = setInterval(() => {
                 seconds = timer;
@@ -336,7 +336,8 @@ const difficulty = Vue.component('difficulty', {
 const finishGame = Vue.component('finishGame', {
     template: `<div>
         <div class="countAnswers" @click="hola()">Your score was {{correctAnswers}}</div>
-        <div class="countAnswers">Wanna try again? <router-link to="/difficulty" class="button-play">Play</router-link> </div>
+        <router-link to="/difficulty" class="button-play">Play Again</router-link> 
+        <router-link to="/" class="button">Home</router-link>
     </div>`,
     data: function () {
         return {
