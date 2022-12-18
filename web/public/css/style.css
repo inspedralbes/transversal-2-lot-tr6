@@ -11,47 +11,6 @@ body {
   background-color: #141414;
 }
 
-.login-page {
-  width: 80%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 10%;
-  height: 95vh;
-}
-
-
-.login-form-form {
-  width: 35%;
-  height: 50%;
-  padding: 10px;
-  background-color: #003052;
-  border-radius: 0 4px 4px 0;
-  float: left;
-}
-
-.login-form-form h1{
-  color: #d6efff;
-  text-align: center;
-  padding: 15px;
-  padding-bottom: 8%;
-}
-
-.login-form-text {
-  width: 35%;
-  height: 50%;
-  padding: 25px;
-  border-radius: 4px 0 0 4px;
-  text-align: center;
-  color: #d6efff;
-  background-color: #4A2966;
-  float: right;
-}
-
-.login-form-text h1 {
-  color: #d6efff;
-}
-
 .error-text {
   width: 100%;
   text-align: center;
@@ -60,16 +19,17 @@ body {
   height: 20px;
 }
 
-.signup-form-form {
+.sign-form-form {
   width: 50%;
   height: fit-content;
   padding: 10px;
   padding-bottom: 40px;
   background-color: #003052;
   border-radius: 4px 0 0 4px;
+  border-radius: 5px;
 }
 
-.signup-form-text {
+.sign-form-text {
   width: 50%;
   height: 100%;
   padding: 25px;
@@ -78,22 +38,18 @@ body {
   color: #d6efff;
 }
 
-.signup-form-form h1{
+.sign-form-form h1{
   color: #d6efff;
   text-align: center;
   padding: 15px;
   padding-bottom: 8%;
 }
 
-.signup-form-text h1 {
+.sign-form-text h1 {
   color: #d6efff;
 }
 
-.login-form-text h1 {
-  color: #d6efff;
-}
-
-.signup-page {
+.sign-page {
   width: 100%;
   height: 100vh;
   display: flex;
@@ -101,38 +57,47 @@ body {
   justify-content: center;
 }
 
-.signup-content {
+.sign-content {
   width: 55%;
   height: fit-content;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #4A2966;
+  border-radius: 5px;
 }
 
 @media (max-width: 1050px) {
-  .signup-content {
+  .sign-content {
     width: 70%;
   }
 }
 
 @media (max-width: 750px) {
-  .signup-content {
+  .sign-content {
     width: 100%;
   }
 }
 
 @media (max-width: 500px) {
-  .signup-content {
+  .sign-content {
     display: block;
   }
+  
+  .sign-title {
+    margin-top: 70px;
+  }
 
-  .signup-form-form {
+  .sign-form-form {
     width: 100%;
   }
 
-  .signup-form-text {
+  .sign-form-text {
     width: 100%;
+  }
+
+  .sign-page {
+    display: block;
   }
 }
 
@@ -173,6 +138,10 @@ body {
   margin-left: 5px;
 }
 
+.signin-icon-spinner {
+  background-color: #0a53be !important; 
+}
+
 .signin-button {
   width: 65% !important;
   margin-left: 18%;
@@ -191,21 +160,22 @@ body {
   background-color: #3d3d3d;
 }
 
+.title-landing {
+  color: #d6efff;
+  font-size: 92px;
+}
+
 @media (max-width: 750px) {
   .title-landing {
-    font-size: 75px;
+    font-size: 75px !important;
   }
 }
 
 @media (max-width: 500px) {
   .title-landing {
-    font-size: 50px;
+    font-size: 50px !important;
     margin: 20px;
   }
-}
-
-.title-landing {
-  color: #d6efff;
 }
 
 .button-play {
