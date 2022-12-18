@@ -134,8 +134,8 @@ const difficulty = Vue.component('difficulty', {
                             <div v-show="error" style="color:red">
                                 <p>Select the difficulty</p><p v-show="user.logged">and category</p>
                             </div>
-                            <button v-if="user.logged" @click="fetchPreguntes" class="button">Play</button>
-                            <button v-else @click="fetchDemo" class="button">Play Demo Game</button>
+                            <button v-if="user.logged" @click="fetchPreguntes" class="button button-play">Play</button>
+                            <button v-else @click="fetchDemo" class="button button-play">Play Demo Game</button>
                         </label>
                     </div>
                 </div>
@@ -145,16 +145,18 @@ const difficulty = Vue.component('difficulty', {
                     </div> 
                     <div class="nQuestionContainer">
                         <div v-for="(question, indexQ) in questions">
-                            <span v-if="currentQuestion!=indexQ" class="nQuestion">{{indexQ+1}}</span>
-                            <span v-else class="nCurrQuestion">{{indexQ+1}}</span>
+                            <div v-if="currentQuestion!=indexQ" class="nQuestion">{{indexQ+1}}</div>
+                            <div v-else class="nCurrQuestion">{{indexQ+1}}</div>
                         </div>
                     </div>
                     <section class="carousel">    
                         <div>
                             <div class="slides">
                                 <div class="slides-item slide-1" id="slide-1">            
-                                    <div>
-                                        <h2 class="blanco questionText">{{ questions[currentQuestion].question }}</h2>
+                                    <div class="slide-container">
+                                        <div class="questionText">
+                                            <h2>{{ questions[currentQuestion].question }}</h2>
+                                        </div>
                                         <div class="btnAnswer">
                                             <div v-for="(answer, indexA) in questions[currentQuestion].answers">
                                                 <div>

@@ -120,6 +120,10 @@ body {
   box-shadow: 0px 0px 8px 2px #d6efff
 }
 
+.button-play {
+  background-color: #3d3d3d;
+}
+
 .input{
   width: 65%;
   margin-left: 18%;
@@ -371,6 +375,60 @@ input[name='difficulty'] {
 }
 
 /*
+* Timer
+*/
+
+.timer {
+  width: 100px;
+  height: 100px;
+  padding: 12px 16px;
+  border-radius: 18px;
+  background-image: linear-gradient(#3660a0,#4A2966 );
+  position: absolute;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer_part {
+  font-weight: bold;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer span {
+  background-color: transparent !important;
+  width: 20px;
+  height: 12px;
+  padding: 0px;
+}
+
+@media (min-width: 950px) {
+  .timer {
+    top: 50%;
+    left: 20px;
+  }
+}
+
+@media (max-width: 950px) {
+  .timer {
+    z-index: 1;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    width: 100vw;
+    height: 35px;
+    padding: 0px 0px;
+    border-radius: 18px 18px 0px 0px;
+  }
+}
+
+/*
+* Fin Timer
+*/
+
+/*
 * Carrousel
 */
 
@@ -378,13 +436,20 @@ input[name='difficulty'] {
   margin: 0 auto;
   overflow: hidden;
   text-align: center;
-  width: 1000px;
-  height: 650px;
+}
+
+.slides, .slides-item, .carousel{
+  width: 70vw;
+  height: 80vh;
+}
+
+.slide-container {
+  width: 65vw;
+  height: fit-content;
 }
 
 .slides {
   display: flex;
-
 }
 
 .slides-item {
@@ -392,7 +457,7 @@ input[name='difficulty'] {
   border-radius: 10px;
   display: flex;
   flex-shrink: 0;
-  min-height: 600px;
+  min-height: 590px;
   max-height: fit-content;
   justify-content: center;
   margin: none;
@@ -400,43 +465,82 @@ input[name='difficulty'] {
   transform: scale(1);
   transform-origin: center center;
   transition: transform .5s;
-  width: 100%;
   padding: 30px;
+}
+
+.answer {
+  width: 100%;
+  font-size: 150%;
+  height: 25vh;
+  border: 0;
+  border-radius: 10px;
 }
 
 .slide-1 {
   background-color: rgb(92, 154, 206);
 }
 
-.slide-2 {
-  background-color: #bfd;
-}
-
-/*
-Fin Carrousel
-*/
-
-.questionText {
-  display: flex;
-  align-items: center;
-  text-align: center;
-}
-
 .btnAnswer {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 10px;
-  grid-auto-rows: minmax(100px, auto);
+  grid-auto-rows: minmax(50px, auto);
 }
 
-.answer {
-  width: 440px;
-  height: 100%;
-  font-size: 150%;
-  height: 200px;
-  border: 0;
-  border-radius: 10px;
+.questionText {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 0px 20px 0px 20px;
 }
+
+@media (max-width: 1300px) {
+ .slides, .slides-item, .carousel{
+    width: 70vw;
+    min-height: 90vh;
+  }
+}
+
+@media (max-width: 950px) {
+  .carousel{
+    height: 90vh;
+    margin-bottom: 12px;  
+  }
+
+  .slides, .slides-item, .carousel, .slides-item div, .slide-1{
+    width: 100vw;
+   }
+
+   .slides-item {
+    margin-top: 0;
+    padding: 0;
+   }
+
+   .questionText{
+    font-size: 30px;
+    text-align: center;
+   }
+
+   .questionText h2 {
+    text-align: center;
+   }
+
+   .btnAnswer{
+    grid-template-columns: repeat(1, 1fr);
+   }
+
+   .answer {
+    width: 95vw;
+    height: 12vh;
+   }
+ }
+
+/*
+* Fin Carrousel
+*/
+
+/*
+* Contador de preguntas
+*/
 
 .countAnswers {
   width: fit-content;
@@ -456,53 +560,66 @@ Fin Carrousel
 	margin: auto;
 	border: 0;
 	padding: 0;
-	width: 10%;
-	height: 50%;
 	float: center;
-	margin-left: 25%;
 	margin-bottom: 5px;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.nQuestionContainer div div{
+    color: white;
+    background-color: rgb(80, 80, 80);
 }
 
 .nCurrQuestion {
-  background-color: green;
+  background-color: green !important;
 }
+
+@media (max-width: 950px) {
+  .nQuestionContainer {
+    position: absolute;
+    top: 0;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .nQuestionContainer div{
+    width: 100%;
+  }
+
+  .nQuestionContainer div div{
+    text-align: center;
+    padding: 0px;
+    width: 100%;
+    color: white;
+    background-color: grey;
+  }
+}
+
+/*
+* Fin Contador de preguntas
+*/
 
 span {
 	background-color: #707070;
 	color: white;
 	text-align: center;
 	text-decoration: none;
-	display: fit-content;
 	width: 50px;
-	display: inline-block;
 	height: 50px;
   padding: 15px;
 }
 
-.timer {
-  width: 100px;
-  height: 100px;
-  padding: 12px 16px;
-  border-radius: 18px;
-  background-image: linear-gradient(#3660a0,#4A2966 );
-  position: absolute;
-  top: 20px;
-  left: 0;
-  right: 0;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.timer_part {
-  font-weight: bold;
-  align-items: center;
-  justify-content: center;
-}
-
 .home-button {
   position: absolute;
+  z-index: 0;
   top: 20px;
   left: 20px;
+}
+
+@media (max-width: 950px) {
+  .home-button {
+    display: none;
+  }
 }
