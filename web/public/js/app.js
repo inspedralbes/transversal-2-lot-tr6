@@ -8,7 +8,7 @@ const userStore = Pinia.defineStore('usuario', {
             },
             currentGame: {
                 id_game: null,
-                correctAnswers: -1
+                currentScore: -1
             }
         }
     },
@@ -100,10 +100,10 @@ const difficulty = Vue.component('difficulty', {
     },
     template: `
     <div>
-        <router-link to="/" class="button home-button">Home</router-link>       
+        <router-link to="/" class="button home-button home-button-play">Home</router-link>       
         <div class="play" >
             <div v-show="user.logged">
-                <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{user.username}}</p></router-link>   
+                <router-link to="/login" class="user user-play"><b-icon icon="person-fill" class="h1"></b-icon><p>{{user.username}}</p></router-link>   
             </div>
             <div>
                 <div v-if="!chosen" class="setParameters">
@@ -177,7 +177,7 @@ const difficulty = Vue.component('difficulty', {
                 </div>
                 <div v-else>
                     <h1 v-show="noTime" class="noTime" style="color: white;">Oh no! You ran out of time!!</h1>
-                    <router-link to="/difficulty" class="button-play button">Try again</router-link> 
+                    <router-link to="/" class="button-play button">Try again</router-link> 
                 </div>
             </div>
         </div>
@@ -185,7 +185,7 @@ const difficulty = Vue.component('difficulty', {
         `,
     methods: {
         setTimer: function () {
-            var timer = 1;
+            var timer = 120;
 
             let idTimer = setInterval(() => {
                 seconds = timer;
@@ -195,7 +195,6 @@ const difficulty = Vue.component('difficulty', {
                 if (--timer < 0) {
                     this.noTime = true;
                     clearInterval(idTimer);
-
                 }
             }, 1000);
         },
@@ -315,19 +314,21 @@ const difficulty = Vue.component('difficulty', {
                 }
 
                 if (this.currentQuestion == 10) {
-                    console.log(this.correctAnswers);
-                    let scoreUser = new FormData();
-                    scoreUser.append('id_user', userStore().loginInfo.id_user);
-                    scoreUser.append('id_game', userStore().currentGame.id_game);
-                    scoreUser.append('score', this.correctAnswers);
+                    let score = parseInt((this.correctAnswers * 10) + this.contador);
 
-                    fetch(`http://127.0.0.1:8000/api/store-user`, {
-                        method: 'POST',
-                        body: scoreUser,
-                    })
-                    userStore().currentGame.correctAnswers = this.correctAnswers;
-                    console.log(userStore().currentGame.correctAnswers);
+                    if (userStore().loginInfo.id_user != null) {
+                        let scoreUser = new FormData();
+                        scoreUser.append('id_user', userStore().loginInfo.id_user);
+                        scoreUser.append('id_game', userStore().currentGame.id_game);
+                        scoreUser.append('score', score);
 
+                        fetch(`http://127.0.0.1:8000/api/store-user`, {
+                            method: 'POST',
+                            body: scoreUser,
+                        })
+                    }
+
+                    userStore().currentGame.currentScore = score;
                     this.$router.replace('/finishGame');
                 }
             }, 1500);
@@ -346,7 +347,7 @@ const finishGame = Vue.component('finishGame', {
             logged: userStore().logged,
             username: userStore().loginInfo.username,
             id_user: userStore().loginInfo.id_user,
-            correctAnswers: userStore().currentGame.correctAnswers
+            correctAnswers: userStore().currentGame.currentScore
         }
     },
     methods: {
