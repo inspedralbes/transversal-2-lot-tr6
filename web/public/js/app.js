@@ -40,14 +40,16 @@ const quiz = Vue.component('quiz', {
             <div class="play">
                 <div v-if="logged">
                         <h1 class="title-landing"> Wanna test your knowledge? </h1>
-                        <router-link to="/difficulty" class="button-play button-router">Play</router-link>
+                        <button  class="button-play" @click="btn_play(); $router.push('/login')">Play
+                        </button>
                         <br>
                 </div>
                 <div v-else>
-                        <h1 class="title-landing"> Wanna test your knowledge? </h1>
-                        <router-link to="/login" class="button-play">Play</router-link>
+                        <h1 class="title-landing" > Wanna test your knowledge? </h1>
+                        <router-link to="/login" class="button-play" >Play</router-link>
                         <br>
-                        <router-link to="/difficulty" class="button demo-button">Play as guest</router-link>
+                        <button  class="button demo-button" @click="btn_play(); $router.push('/difficulty')">Play as guest
+                        </button>
                 </div>
             </div>
             <canvas id="topScore"></canvas>
@@ -115,7 +117,12 @@ const quiz = Vue.component('quiz', {
                 console.log(data);
             })
 
-    }
+    },
+    methods : {
+        btn_play: function(){
+            audioStart();
+        },
+    },
 });
 
 const difficulty = Vue.component('difficulty', {
@@ -294,11 +301,11 @@ const difficulty = Vue.component('difficulty', {
             } else {
                 let diff;
                 switch (this.dificultadSeleccionada) {
-                    case 'easy': diff = 0;
+                    case 'easy': diff = 1;
                         break;
-                    case 'medium': diff = 1;
+                    case 'medium': diff = 2;
                         break;
-                    case 'hard': diff = 2;
+                    case 'hard': diff = 3;
                         break;
                     default: this.error = true;
                         break;

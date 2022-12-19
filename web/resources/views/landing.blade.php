@@ -50,11 +50,25 @@
 </head>
 
 <body class="background">
+  
     <div id="app">
         <router-view></router-view>
     </div>
-
+    <audio id="au"
+    controls autoplay="autoplay"
+    loop="loop"
+>
+    <source src="/css/F1.mp3" />
+</audio>
     <script src="/js/app.js"></script>
+
+    <script>
+        function audioStart(){
+            audio = document.querySelector("audio");
+            audio.volume = 0.2;
+            audio.play();
+        }
+    </script>
 </body>
 
 </html>
