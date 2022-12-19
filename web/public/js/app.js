@@ -74,13 +74,9 @@ const quiz = Vue.component('quiz', {
             }
         });
 
-        fetch(`http://127.0.0.1:8000/api/select-demo`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-        })
 
-    }
+
+    },
 });
 
 const difficulty = Vue.component('difficulty', {
@@ -157,6 +153,7 @@ const difficulty = Vue.component('difficulty', {
                         </div>
                     </div>
                     <section class="carousel">    
+                        <h1 v-show="!user.logged">You are playing a demo version, <router-link to="/login">sign in</router-link> if you want to play the full version</h1>
                         <div>
                             <div class="slides">
                                 <div class="slides-item slide-1" id="slide-1">            
@@ -256,34 +253,62 @@ const difficulty = Vue.component('difficulty', {
             if (this.dificultadSeleccionada == '') {
                 this.error = true;
             } else {
+                let diff;
+                switch(this.dificultadSeleccionada){
+                    case 'easy': diff=0;
+                        break;
+                    case 'medium': diff=1;
+                        break;
+                    case 'hard': diff=2;
+                        break;
+                    default: this.error=true;
+                        break;
+                }
                 this.error = false;
-                fetch(`https://the-trivia-api.com/api/questions?categories=music&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
-                    .then((response) => response.json())
-                    .then((questions) => {
-                        console.log(questions)
-                        this.chosen = true;
-                        this.questions = questions;
-                        let length = this.questions.length;
-                        let cont = 0;
+                let difficulty = new FormData();
+                difficulty.append('diff', diff)
+                fetch(`http://127.0.0.1:8000/api/select-demo`, {
+                    method: 'POST',
+                    body: difficulty,
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                    let incorrectAnswers2 = this.splitter(data);
+                    // console.log(incorrectAnswers2)
+                    // this.chosen = true;
+                    // this.questions = data;
+                    // let length = this.questions.length;
+                    // let cont = 0;
 
-                        for (let j = 0; j < length; j++) {
-                            let pos = Math.floor(Math.random() * 4);
-                            let answers = [];
-                            for (let i = 0; i < 4; i++) {
-                                if (i == pos) {
-                                    answers.push(this.questions[j].correctAnswer);
-                                    this.questions[j].correctIndex = i;
-                                } else {
-                                    answers.push(this.questions[j].incorrectAnswers[cont]);
-                                    cont++;
-                                }
-                            }
-                            cont = 0;
-                            this.questions[j].answers = answers;
-                        }
-                    });
-                this.setTimer();
+                    // for (let j = 0; j < length; j++) {
+                    //     let pos = Math.floor(Math.random() * 4);
+                    //     let answers = [];
+                    //     for (let i = 0; i < 4; i++) {
+                    //             if (i == pos) {
+                    //             answers.push(this.questions[j].correctAnswer);
+                    //             this.questions[j].correctIndex = i;
+                    //         } else {
+                    //             answers.push(incorrectAnswers2[j][cont]);
+                    //             cont++;
+                    //         }
+                    //     }
+                    //     cont = 0;
+                    //     this.questions[j].answers = answers;
+                        
+                    // }
+                });
+                console.log(this.questions);
+            this.setTimer();
             }
+        },
+        splitter: function (questions) {
+            let answerArray = [];
+            for (let i = 0; i < questions.length; i++) {
+                answerArray.push(questions[i].incorrectAnswers.split(","));
+                
+            }
+            return answerArray;
         },
         verificate(indexQ, indexA) {
             if (this.questions[indexQ].correctIndex == indexA) {

@@ -34,4 +34,4 @@ Route::post('store-user', [UserGameController::class, 'storeUserGame']);
 
 Route::post('search-game', [GameController::class, 'search']);
 
-Route::get('select-demo', [DemoGamesController::class, 'index']);
+Route::post('select-demo', [DemoGamesController::class, 'index']);
