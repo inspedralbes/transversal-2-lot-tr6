@@ -233,7 +233,6 @@ const difficulty = Vue.component('difficulty', {
                             }
                             cont = 0;
                             this.questions[j].answers = answers;
-
                         }
 
                         fetch(`http://127.0.0.1:8000/api/store-game`, {
