@@ -284,33 +284,13 @@ const difficulty = Vue.component('difficulty', {
                     .then((response) => response.json())
                     .then((questions) => {
                         this.setTimer();
-                        this.questions = questions;
-
                         let questionsFormData = new FormData();
                         questionsFormData.append('category', this.categoriaSeleccionada);
                         questionsFormData.append('difficulty', this.dificultadSeleccionada);
                         questionsFormData.append('JSONQuestions', JSON.stringify(questions));
                         questionsFormData.append('id_game', -1);
 
-                        let length = this.questions.length;
-                        let cont = 0;
-
-                        for (let j = 0; j < length; j++) {
-                            let pos = Math.floor(Math.random() * 4);
-                            let answers = [];
-                            for (let i = 0; i < 4; i++) {
-                                if (i == pos) {
-                                    answers.push(this.questions[j].correctAnswer);
-                                    this.questions[j].correctIndex = i;
-                                } else {
-                                    answers.push(this.questions[j].incorrectAnswers[cont]);
-                                    cont++;
-                                }
-                            }
-                            cont = 0;
-                            this.questions[j].answers = answers;
-                        }
-
+                        this.questions = mixAnswers(questions);
                         this.chosen = true;
 
                         fetch(`http://127.0.0.1:8000/api/store-game`, {
@@ -331,28 +311,10 @@ const difficulty = Vue.component('difficulty', {
                     })
                     .then((response) => response.json())
                     .then((questions) => {
-                        questions = JSON.parse(questions[0].JSONQuestions);
                         this.setTimer();
-                        this.questions = questions;
-                        let length = this.questions.length;
-                        let cont = 0;
-
-                        for (let j = 0; j < length; j++) {
-                            let pos = Math.floor(Math.random() * 4);
-                            let answers = [];
-                            for (let i = 0; i < 4; i++) {
-                                if (i == pos) {
-                                    answers.push(this.questions[j].correctAnswer);
-                                    this.questions[j].correctIndex = i;
-                                } else {
-                                    answers.push(this.questions[j].incorrectAnswers[cont]);
-                                    cont++;
-                                }
-                            }
-                            cont = 0;
-                            this.questions[j].answers = answers;
-                        }
-
+                        questions = JSON.parse(questions[0].JSONQuestions);
+                        
+                        this.questions = mixAnswers(questions);
                         this.chosen = true;
 
                         fetch(`http://127.0.0.1:8000/api/store-game`, {
@@ -361,6 +323,29 @@ const difficulty = Vue.component('difficulty', {
                         })
                     });
                 }
+            }
+
+            function mixAnswers(questions){
+                let length = questions.length;
+                let cont = 0;
+
+                for (let j = 0; j < length; j++) {
+                    let pos = Math.floor(Math.random() * 4);
+                    let answers = [];
+                    for (let i = 0; i < 4; i++) {
+                        if (i == pos) {
+                            answers.push(questions[j].correctAnswer);
+                            questions[j].correctIndex = i;
+                        } else {
+                            answers.push(questions[j].incorrectAnswers[cont]);
+                            cont++;
+                        }
+                    }
+                    cont = 0;
+                    questions[j].answers = answers;
+                }
+                
+                return questions;
             }
         },
         fetchDemo: function () {
