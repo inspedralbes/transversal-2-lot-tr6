@@ -8,7 +8,7 @@ const userStore = Pinia.defineStore('usuario', {
             },
             currentGame: {
                 id_game: null,
-                correctAnswers: -1
+                currentScore: -1
             }
         }
     },
@@ -50,29 +50,58 @@ const quiz = Vue.component('quiz', {
                         <router-link to="/difficulty" class="button demo-button">Play as guest</router-link>
                 </div>
             </div>
-            <canvas id="topScore"></canvas>
+            <canvas class="tablaScores" id="topScore"></canvas>
         </div>`,
     mounted() {
-        const ChartScore = document.getElementById('topScore');
+        let users;
+        let topScores = [];
 
-        new Chart(ChartScore, {
-            type: 'bar',
-            data: {
-                labels: ['Lydia', 'Peter', 'Ermel', 'Cesar', 'Julian', 'Maria'],
-                datasets: [{
-                    label: 'Top Scorer',
-                    data: [12, 19, 3, 5, 2, 3],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+        fetch(`http://127.0.0.1:8000/api/search-top-scores`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                users = [data[0].name];
+                topScores = [data[0].score];
+
+                for (let i = 0; i < data.length; i++) {
+                    let error = false;
+                    for (let y = 0; y < users.length; y++) {
+                        if (data[i].name == users[y]) {
+                            error = true;
+                            topScores[y] += data[i].score;
+                        }
+                    }
+
+                    if (!error) {
+                        users.push(data[i].name);
+                        topScores.push(data[i].score);
                     }
                 }
-            }
-        });
+                console.log(users);
+                console.log(topScores);
+
+                const ChartScore = document.getElementById('topScore');
+
+                new Chart(ChartScore, {
+                    type: 'bar',
+                    data: {
+                        labels: users,
+                        datasets: [{
+                            label: 'Top Scorer',
+                            data: topScores,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
     }
 });
 
@@ -100,10 +129,10 @@ const difficulty = Vue.component('difficulty', {
     },
     template: `
     <div>
-        <router-link to="/" class="button home-button">Home</router-link>       
+        <router-link to="/" class="button home-button home-button-play">Home</router-link>       
         <div class="play" >
             <div v-show="user.logged">
-                <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{user.username}}</p></router-link>   
+                <router-link to="/login" class="user user-play"><b-icon icon="person-fill" class="h1"></b-icon><p>{{user.username}}</p></router-link>   
             </div>
             <div>
                 <div v-if="!chosen" class="setParameters">
@@ -150,6 +179,7 @@ const difficulty = Vue.component('difficulty', {
                         </div>
                     </div>
                     <section class="carousel">    
+                        <h1 v-show="!user.logged">You are playing a demo version, <router-link to="/login">sign in</router-link> if you want to play the full version</h1>
                         <div>
                             <div class="slides">
                                 <div class="slides-item slide-1" id="slide-1">            
@@ -177,7 +207,7 @@ const difficulty = Vue.component('difficulty', {
                 </div>
                 <div v-else>
                     <h1 v-show="noTime" class="noTime" style="color: white;">Oh no! You ran out of time!!</h1>
-                    <router-link to="/difficulty" class="button-play button">Try again</router-link> 
+                    <router-link to="/" class="button-play button">Try again</router-link> 
                 </div>
             </div>
         </div>
@@ -189,13 +219,11 @@ const difficulty = Vue.component('difficulty', {
 
             let idTimer = setInterval(() => {
                 seconds = timer;
-
                 this.contador = seconds;
 
                 if (--timer < 0) {
                     this.noTime = true;
                     clearInterval(idTimer);
-
                 }
             }, 1000);
         },
@@ -235,7 +263,6 @@ const difficulty = Vue.component('difficulty', {
                             }
                             cont = 0;
                             this.questions[j].answers = answers;
-
                         }
 
                         fetch(`http://127.0.0.1:8000/api/store-game`, {
@@ -252,13 +279,31 @@ const difficulty = Vue.component('difficulty', {
             if (this.dificultadSeleccionada == '') {
                 this.error = true;
             } else {
+                let diff;
+                switch (this.dificultadSeleccionada) {
+                    case 'easy': diff = 0;
+                        break;
+                    case 'medium': diff = 1;
+                        break;
+                    case 'hard': diff = 2;
+                        break;
+                    default: this.error = true;
+                        break;
+                }
                 this.error = false;
-                fetch(`https://the-trivia-api.com/api/questions?categories=music&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
-                    .then((response) => response.json())
-                    .then((questions) => {
-                        console.log(questions)
+                let difficulty = new FormData();
+                difficulty.append('diff', diff);
+                fetch(`http://127.0.0.1:8000/api/select-demo`, {
+                    method: 'POST',
+                    body: difficulty,
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        let incorrectAnswers2 = this.splitter(data);
+                        console.log(incorrectAnswers2)
                         this.chosen = true;
-                        this.questions = questions;
+                        this.questions = data;
                         let length = this.questions.length;
                         let cont = 0;
 
@@ -270,16 +315,26 @@ const difficulty = Vue.component('difficulty', {
                                     answers.push(this.questions[j].correctAnswer);
                                     this.questions[j].correctIndex = i;
                                 } else {
-                                    answers.push(this.questions[j].incorrectAnswers[cont]);
+                                    answers.push(incorrectAnswers2[j][cont]);
                                     cont++;
                                 }
                             }
                             cont = 0;
                             this.questions[j].answers = answers;
+
                         }
                     });
+                console.log(this.questions);
                 this.setTimer();
             }
+        },
+        splitter: function (questions) {
+            let answerArray = [];
+            for (let i = 0; i < questions.length; i++) {
+                answerArray.push(questions[i].incorrectAnswers.split(","));
+
+            }
+            return answerArray;
         },
         verificate(indexQ, indexA) {
             if (this.questions[indexQ].correctIndex == indexA) {
@@ -315,19 +370,21 @@ const difficulty = Vue.component('difficulty', {
                 }
 
                 if (this.currentQuestion == 10) {
-                    console.log(this.correctAnswers);
-                    let scoreUser = new FormData();
-                    scoreUser.append('id_user', userStore().loginInfo.id_user);
-                    scoreUser.append('id_game', userStore().currentGame.id_game);
-                    scoreUser.append('score', this.correctAnswers);
+                    let score = parseInt((this.correctAnswers * 10) + this.contador);
 
-                    fetch(`http://127.0.0.1:8000/api/store-user`, {
-                        method: 'POST',
-                        body: scoreUser,
-                    })
-                    userStore().currentGame.correctAnswers = this.correctAnswers;
-                    console.log(userStore().currentGame.correctAnswers);
+                    if (userStore().loginInfo.id_user != null) {
+                        let scoreUser = new FormData();
+                        scoreUser.append('id_user', userStore().loginInfo.id_user);
+                        scoreUser.append('id_game', userStore().currentGame.id_game);
+                        scoreUser.append('score', score);
 
+                        fetch(`http://127.0.0.1:8000/api/store-user`, {
+                            method: 'POST',
+                            body: scoreUser,
+                        })
+                    }
+
+                    userStore().currentGame.currentScore = score;
                     this.$router.replace('/finishGame');
                 }
             }, 1500);
@@ -346,7 +403,7 @@ const finishGame = Vue.component('finishGame', {
             logged: userStore().logged,
             username: userStore().loginInfo.username,
             id_user: userStore().loginInfo.id_user,
-            correctAnswers: userStore().currentGame.correctAnswers
+            correctAnswers: userStore().currentGame.currentScore
         }
     },
     methods: {

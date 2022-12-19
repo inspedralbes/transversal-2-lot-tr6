@@ -38,7 +38,7 @@ body {
   color: #d6efff;
 }
 
-.sign-form-form h1{
+.sign-form-form h1 {
   color: #d6efff;
   text-align: center;
   padding: 15px;
@@ -83,7 +83,7 @@ body {
   .sign-content {
     display: block;
   }
-  
+
   .sign-title {
     margin-top: 70px;
   }
@@ -124,7 +124,7 @@ body {
   background-color: #3d3d3d;
 }
 
-.input{
+.input {
   width: 65%;
   margin-left: 18%;
 }
@@ -133,7 +133,7 @@ body {
   background-color: #d6efff;
 }
 
-.font-input{
+.font-input {
   font-family: Arial, Helvetica, sans-serif !important;
 }
 
@@ -143,7 +143,7 @@ body {
 }
 
 .signin-icon-spinner {
-  background-color: #0a53be !important; 
+  background-color: #0a53be !important;
 }
 
 .signin-button {
@@ -218,7 +218,7 @@ body {
 }
 
 .button:hover {
-  color:white;
+  color: white;
   box-shadow: 0 0 20px rgba(83, 68, 182, 0.6);
   background-color: rgb(80, 66, 175);
 }
@@ -228,9 +228,9 @@ body {
   transition: box-shadow 0.1s;
 }
 
-.demo-button:hover{
+.demo-button:hover {
   background-color: rgb(51, 51, 51);
-  text-decoration: none ;
+  text-decoration: none;
   box-shadow: 0 0 20px rgba(180, 180, 180, 0.6);
 }
 
@@ -257,7 +257,7 @@ input[name='difficulty'] {
   display: none;
 }
 
-.btn-catdiff{
+.btn-catdiff {
   padding: 25px !important;
 }
 
@@ -390,7 +390,7 @@ input[name='difficulty'] {
   height: 100px;
   padding: 12px 16px;
   border-radius: 18px;
-  background-image: linear-gradient(#3660a0,#4A2966 );
+  background-image: linear-gradient(#3660a0, #4A2966);
   position: absolute;
   margin: auto;
   display: flex;
@@ -445,7 +445,9 @@ input[name='difficulty'] {
   text-align: center;
 }
 
-.slides, .slides-item, .carousel{
+.slides,
+.slides-item,
+.carousel {
   width: 70vw;
   height: 80vh;
 }
@@ -502,50 +504,57 @@ input[name='difficulty'] {
   font-weight: bold;
 }
 
-.questionText h2{
+.questionText h2 {
   font-weight: bold;
 }
 
 @media (max-width: 1300px) {
- .slides, .slides-item, .carousel{
+
+  .slides,
+  .slides-item,
+  .carousel {
     width: 70vw;
     min-height: 90vh;
   }
 }
 
 @media (max-width: 950px) {
-  .carousel{
+  .carousel {
     height: 90vh;
-    margin-bottom: 12px;  
+    margin-bottom: 12px;
   }
 
-  .slides, .slides-item, .carousel, .slides-item div, .slide-1{
+  .slides,
+  .slides-item,
+  .carousel,
+  .slides-item div,
+  .slide-1 {
     width: 100vw;
-   }
+  }
 
-   .slides-item {
+  .slides-item {
     margin-top: 0;
     padding: 0;
-   }
+  }
 
-   .questionText{
+  .questionText {
     font-size: 30px;
     text-align: center;
-   }
+  }
 
-   .questionText h2 {
+  .questionText h2 {
     text-align: center;
-   }
+  }
 
-   .btnAnswer{
+  .btnAnswer {
     grid-template-columns: repeat(1, 1fr);
-   }
+  }
 
-   .answer {
+  .answer {
     width: 95vw;
     height: 12vh;
-   }
- }
+  }
+}
 
 /*
 * Fin Carrousel
@@ -565,24 +574,24 @@ input[name='difficulty'] {
 }
 
 .nQuestionContainer {
-	display: grid;
-	grid-template-columns: repeat(10, 1fr);
-	grid-template-rows: 1fr;
-	grid-column-gap: 0px;
-	grid-row-gap: 0px;
-	margin: auto;
-	border: 0;
-	padding: 0;
-	float: center;
-	margin-bottom: 5px;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  margin: auto;
+  border: 0;
+  padding: 0;
+  float: center;
+  margin-bottom: 5px;
   z-index: 1;
   overflow: hidden;
   border-radius: 18px;
 }
 
-.nQuestionContainer div div{
-    color: white;
-    background-color: rgb(80, 80, 80);
+.nQuestionContainer div div {
+  color: white;
+  background-color: rgb(80, 80, 80);
 }
 
 .nCurrQuestion {
@@ -597,11 +606,11 @@ input[name='difficulty'] {
     width: 100%;
   }
 
-  .nQuestionContainer div{
+  .nQuestionContainer div {
     width: 100%;
   }
 
-  .nQuestionContainer div div{
+  .nQuestionContainer div div {
     text-align: center;
     padding: 0px;
     width: 100%;
@@ -613,12 +622,12 @@ input[name='difficulty'] {
 */
 
 span {
-	background-color: #707070;
-	color: white;
-	text-align: center;
-	text-decoration: none;
-	width: 50px;
-	height: 50px;
+  background-color: #707070;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  width: 50px;
+  height: 50px;
   padding: 15px;
 }
 
@@ -628,18 +637,51 @@ span {
   top: 20px;
   left: 20px;
 }
+
 @keyframes shake {
-  0% { transform: translate(1px, 1px) rotate(0deg); }
-  10% { transform: translate(-1px, -2px) rotate(-1deg); }
-  20% { transform: translate(-3px, 0px) rotate(1deg); }
-  30% { transform: translate(3px, 2px) rotate(0deg); }
-  40% { transform: translate(1px, -1px) rotate(1deg); }
-  50% { transform: translate(-1px, 2px) rotate(-1deg); }
-  60% { transform: translate(-3px, 1px) rotate(0deg); }
-  70% { transform: translate(3px, 1px) rotate(-1deg); }
-  80% { transform: translate(-1px, -1px) rotate(1deg); }
-  90% { transform: translate(1px, 2px) rotate(0deg); }
-  100% { transform: translate(1px, -2px) rotate(-1deg); }
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
+  }
+
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
+
+  30% {
+    transform: translate(3px, 2px) rotate(0deg);
+  }
+
+  40% {
+    transform: translate(1px, -1px) rotate(1deg);
+  }
+
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
+
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
+
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
+  }
+
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
+  }
 }
 
 .noTime {
@@ -647,12 +689,17 @@ span {
   animation-iteration-count: infinite;
 }
 
+.tablaScores {
+  width: 90vw;
+  margin: auto;
+}
+
 @media (max-width: 950px) {
-  .home-button {
+  .home-button-play {
     display: none;
   }
 
-  .user {
+  .user-play {
     display: none;
   }
 }

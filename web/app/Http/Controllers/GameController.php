@@ -36,4 +36,18 @@ class GameController extends Controller
             return response(1);
         }
     }
+
+    public function topScores()
+    {
+        $result = DB::table('user_games')->select('*')->get();
+        $i = 0;
+
+        foreach ($result as $game) {
+            $resultName = DB::table('users')->select('username')->where('id', $game->id_user)->get();
+            $result[$i]->name = $resultName[0]->username;
+            $i++;
+        }
+
+        return $result;
+    }
 }

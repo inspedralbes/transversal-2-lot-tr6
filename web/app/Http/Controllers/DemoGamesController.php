@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\demo_games;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DemoGamesController extends Controller
 {
@@ -13,13 +14,11 @@ class DemoGamesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        // $demo_games = DB::table('demo_games')
-        //     ->where('difficulty', '=', 1)
-        //     ->get();
- 
-        // return view('user.index', ['users' => $users]);
+        $demo_games = DB::select('SELECT * FROM `demo_games` WHERE difficulty=' . $request->diff);
+
+        return $demo_games;
     }
 
     /**

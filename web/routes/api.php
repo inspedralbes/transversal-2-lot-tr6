@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserGameController;
 use App\Http\Controllers\UserDataController;
+use App\Http\Controllers\DemoGamesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,3 +36,6 @@ Route::post('store-user', [UserGameController::class, 'storeUserGame']);
 Route::post('search-game', [GameController::class, 'search']);
 
 Route::post('user-data', [UserDataController::class, 'fetchUserGames']);
+Route::get('search-top-scores', [GameController::class, 'topScores']);
+
+Route::post('select-demo', [DemoGamesController::class, 'index']);
