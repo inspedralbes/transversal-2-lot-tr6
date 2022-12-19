@@ -689,6 +689,11 @@ span {
   animation-iteration-count: infinite;
 }
 
+.tablaScores {
+  width: 90vw;
+  margin: auto;
+}
+
 @media (max-width: 950px) {
   .home-button-play {
     display: none;
