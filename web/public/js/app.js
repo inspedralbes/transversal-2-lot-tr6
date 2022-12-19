@@ -35,7 +35,7 @@ const quiz = Vue.component('quiz', {
                 <router-link to="/login" class="button login-button button-router">Login</router-link>   
             </div>
             <div v-else>
-                <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{username}}</p></router-link>   
+                <router-link to="/profile" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{username}}</p></router-link>   
             </div>
             <div class="play">
                 <div v-if="logged">
@@ -135,7 +135,7 @@ const difficulty = Vue.component('difficulty', {
         <router-link to="/" class="button home-button home-button-play">Home</router-link>       
         <div class="play" >
             <div v-show="user.logged">
-                <router-link to="/login" class="user user-play"><b-icon icon="person-fill" class="h1"></b-icon><p>{{user.username}}</p></router-link>   
+                <router-link to="/profile" class="user user-play"><b-icon icon="person-fill" class="h1"></b-icon><p>{{user.username}}</p></router-link>   
             </div>
             <div>
                 <div v-if="!chosen" class="setParameters">
@@ -506,6 +506,8 @@ const login = Vue.component('login', {
                             userStore().logged = true;
                             userStore().loginInfo.username = data.username;
                             userStore().loginInfo.id_user = data.id;
+
+                            this.$router.replace('/profile');
                         }
                     })
             } else {
@@ -527,7 +529,6 @@ const login = Vue.component('login', {
         }
     },
     mounted() {
-        console.log("login");
     }
 });
 
@@ -659,19 +660,46 @@ const signup = Vue.component('signup', {
 
 const profile = Vue.component('profile', {
     template: `<div>
-    <p>Perfil d'usuari</p>
+    <router-link to="/" class="button home-button">Home</router-link>       
+    <div class="profile-page">
+        <div class="profile-content">
+            <div class="profile-data">
+                <b-icon icon="person-fill" class="h1"></b-icon>
+                <h1><strong>{{username}}</strong></h1>
+            </div>
+        </div>
+        <b-button @click="logOut" variant="primary">Logout</b-button>
+    </div>
     </div>`,
     data: function () {
         return {
             logged: userStore().logged,
-            username: userStore().loginInfo.username
+            username: userStore().loginInfo.username,
+            id_user: userStore().loginInfo.id_user
         }
     },
     methods: {
+        logOut: function() {
+            userStore().logged = false;
+            userStore().loginInfo.username = '';
+            this.logged = false;
+            this.processing = false;
 
+            this.$router.replace('/login');
+        },
     },
     mounted() {
+        let id_userFormdata = new FormData();
+        id_userFormdata.append('id_user',this.id_user);
 
+        fetch(`http://127.0.0.1:8000/api/user-data`,{
+            method: 'post',
+            body: id_userFormdata
+        })
+        .then((response) => response.json())
+            .then((data) => {
+            console.log(data);
+        });
     }
 })
 
