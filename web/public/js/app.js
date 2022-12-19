@@ -35,7 +35,7 @@ const quiz = Vue.component('quiz', {
                 <router-link to="/login" class="button login-button button-router">Login</router-link>   
             </div>
             <div v-else>
-                <router-link to="/login" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{username}}</p></router-link>   
+                <router-link to="/profile" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{username}}</p></router-link>   
             </div>
             <div class="play">
                 <div v-if="logged">
@@ -185,7 +185,7 @@ const difficulty = Vue.component('difficulty', {
         `,
     methods: {
         setTimer: function () {
-            var timer = 1;
+            var timer = 60;
 
             let idTimer = setInterval(() => {
                 seconds = timer;
@@ -388,7 +388,7 @@ const login = Vue.component('login', {
                     <router-link to="/signup" class="button-router">Sign up</router-link>
                 </div>
                 <div v-show="!logged" class="sign-form-form">
-                <h1>Sign in</h1>
+                    <h1>Sign in</h1>
                     <b-input-group class="mb-2" size="sm"> 
                         <b-input-group-append is-text class="input">
                             <b-icon icon="person" shift-h="-4"></b-icon>
@@ -415,7 +415,7 @@ const login = Vue.component('login', {
                 </div>
                 <div v-show="logged">
                     <p class="blanco">Bienvenido {{infoLogin.name}}</p>
-                <b-button @click="logOut" variant="primary">Logout</b-button>
+                    <b-button @click="logOut" variant="primary">Logout</b-button>
                 </div>
             </div>
         </div>
@@ -446,6 +446,8 @@ const login = Vue.component('login', {
                             userStore().logged = true;
                             userStore().loginInfo.username = data.username;
                             userStore().loginInfo.id_user = data.id;
+
+                            this.$router.replace('/profile');
                         }
                     })
             } else {
@@ -467,7 +469,6 @@ const login = Vue.component('login', {
         }
     },
     mounted() {
-        console.log("login");
     }
 });
 
@@ -599,19 +600,38 @@ const signup = Vue.component('signup', {
 
 const profile = Vue.component('profile', {
     template: `<div>
-    <p>Perfil d'usuari</p>
+        <router-link to="/" class="button home-button">Home</router-link>       
+        <div class="profile-page">
+            <div class="profile-content">
+                <div class="profile-data">
+                    <b-icon icon="person-fill" class="h1"></b-icon>
+                    <h1><strong>{{username}}</strong></h1>
+                </div>
+            </div>
+        </div>
     </div>`,
     data: function () {
         return {
             logged: userStore().logged,
-            username: userStore().loginInfo.username
+            username: userStore().loginInfo.username,
+            id_user: userStore().loginInfo.id_user
         }
     },
     methods: {
 
     },
     mounted() {
+        let id_userFormdata = new FormData();
+        id_userFormdata.append('id_user',this.id_user);
 
+        fetch(`http://127.0.0.1:8000/api/user-data`,{
+            method: 'post',
+            body: id_userFormdata
+        })
+        .then((response) => response.json())
+            .then((data) => {
+            console.log(data);
+        });
     }
 })
 

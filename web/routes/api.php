@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserGameController;
+use App\Http\Controllers\UserDataController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,3 +33,5 @@ Route::post('store-game', [GameController::class, 'store']);
 Route::post('store-user', [UserGameController::class, 'storeUserGame']);
 
 Route::post('search-game', [GameController::class, 'search']);
+
+Route::post('user-data', [UserDataController::class, 'fetchUserGames']);

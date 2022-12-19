@@ -656,3 +656,39 @@ span {
     display: none;
   }
 }
+
+.profile-page{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-content{
+  width: 55%;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4A2966;
+  border-radius: 5px;
+  margin: auto; 
+  margin-top: 5%; 
+}
+
+.profile-data{
+  width: 50%;
+  padding: 25px;
+  border-radius: 4px;
+  text-align: center;
+  color: #d6efff;
+}
+
+.profile-data h1{
+  color: #d6efff;
+}
+
+.profile-data svg{
+  font-size: 100px;
+}
