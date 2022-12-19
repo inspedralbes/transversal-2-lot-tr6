@@ -189,7 +189,6 @@ const difficulty = Vue.component('difficulty', {
 
             let idTimer = setInterval(() => {
                 seconds = timer;
-
                 this.contador = seconds;
 
                 if (--timer < 0) {
