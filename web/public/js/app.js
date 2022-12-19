@@ -61,18 +61,12 @@ const quiz = Vue.component('quiz', {
         fetch(`http://127.0.0.1:8000/api/search-top-scores`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-
                 users = [data[0].name];
                 topScores = [data[0].score];
 
                 for (let i = 0; i < data.length; i++) {
                     let error = false;
                     for (let y = 0; y < users.length; y++) {
-                        if (y == 0) {
-                            topScores[y] = 0;
-                        }
-
                         if (data[i].name == users[y]) {
                             error = true;
                             topScores[y] += data[i].score;
@@ -81,42 +75,31 @@ const quiz = Vue.component('quiz', {
 
                     if (!error) {
                         users.push(data[i].name);
+                        topScores.push(data[i].score);
                     }
                 }
-                console.log(users);
-                console.log(topScores);
-                this.$forceUpdate();
+                
+                const ChartScore = document.getElementById('topScore');
+
+                new Chart(ChartScore, {
+                    type: 'bar',
+                    data: {
+                        labels: users,
+                        datasets: [{
+                            label: 'Top Scorer',
+                            data: topScores,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
             });
-
-
-
-        const ChartScore = document.getElementById('topScore');
-
-        new Chart(ChartScore, {
-            type: 'bar',
-            data: {
-                labels: users,
-                datasets: [{
-                    label: 'Top Scorer',
-                    data: topScores,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        fetch(`http://127.0.0.1:8000/api/select-demo`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-            })
-
     },
     methods : {
         btn_play: function(){
