@@ -663,6 +663,7 @@ const profile = Vue.component('profile', {
                 <div class="profile-data">
                     <b-icon icon="person-fill" class="h1"></b-icon>
                     <h1><strong>{{username}}</strong></h1>
+                    <b-button @click="logOut" variant="primary">Logout</b-button>
                 </div>
             </div>
         </div>
@@ -675,7 +676,14 @@ const profile = Vue.component('profile', {
         }
     },
     methods: {
+        logOut: function() {
+            userStore().logged = false;
+            userStore().loginInfo.username = '';
+            this.logged = false;
+            this.processing = false;
 
+            this.$router.replace('/');
+        }
     },
     mounted() {
         let id_userFormdata = new FormData();
