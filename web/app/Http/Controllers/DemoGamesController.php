@@ -14,11 +14,11 @@ class DemoGamesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         $demo_games = DB::select('SELECT * FROM `demo_games` WHERE difficulty=1;');
 
-        return $demo_games;
+        return "Hola que tal";
     }
 
     /**
