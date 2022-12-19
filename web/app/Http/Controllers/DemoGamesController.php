@@ -15,11 +15,9 @@ class DemoGamesController extends Controller
      */
     public function index()
     {
-        // $demo_games = DB::table('demo_games')
-        //     ->where('difficulty', '=', 1)
-        //     ->get();
+        $demo_games = DB::select('SELECT * FROM `demo_games` WHERE difficulty=1;');
  
-        // return view('user.index', ['users' => $users]);
+        return "Hola que tal";
     }
 
     /**

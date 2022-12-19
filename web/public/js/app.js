@@ -73,6 +73,13 @@ const quiz = Vue.component('quiz', {
                 }
             }
         });
+
+        fetch(`http://127.0.0.1:8000/api/select-demo`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+        })
+
     }
 });
 
