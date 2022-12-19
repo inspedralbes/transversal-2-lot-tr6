@@ -59,8 +59,6 @@ const quiz = Vue.component('quiz', {
         fetch(`http://127.0.0.1:8000/api/search-top-scores`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-
                 users = [data[0].name];
                 topScores = [data[0].score];
 
@@ -663,16 +661,18 @@ const profile = Vue.component('profile', {
                 <div class="profile-data">
                     <b-icon icon="person-fill" class="h1"></b-icon>
                     <h1><strong>{{username}}</strong></h1>
-                    <b-button @click="logOut" variant="primary">Logout</b-button>
-                </div>
+               </div>
+               <b-table stripped hover :items="this.userData"></b-table>
             </div>
+            <b-button @click="logOut" variant="primary">Logout</b-button>
         </div>
     </div>`,
     data: function () {
         return {
             logged: userStore().logged,
             username: userStore().loginInfo.username,
-            id_user: userStore().loginInfo.id_user
+            id_user: userStore().loginInfo.id_user,
+            userData:[]
         }
     },
     methods: {
@@ -696,6 +696,7 @@ const profile = Vue.component('profile', {
         .then((response) => response.json())
             .then((data) => {
             console.log(data);
+            userData=data;
         });
     }
 })
