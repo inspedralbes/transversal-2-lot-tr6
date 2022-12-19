@@ -12,13 +12,19 @@ class GameController extends Controller
 {
     public function store(Request $request)
     {
-        $game = new Game();
-        $game->category = $request->category;
-        $game->difficulty = $request->difficulty;
-        $game->JSONQuestions = $request->JSONQuestions;
-        $game->play_count = 1;
-        $game->save();
-        return response($game, Response::HTTP_CREATED);
+        
+        if($request -> id_game != -1){
+            $result = DB::update('UPDATE games SET play_count = play_count+1 WHERE id = '.$request->id_game);
+            return response($result, Response::HTTP_CREATED);
+        }else{
+            $game = new Game();
+            $game->category = $request->category;
+            $game->difficulty = $request->difficulty;
+            $game->JSONQuestions = $request->JSONQuestions;
+            $game->play_count = 1;
+            $game->save();
+            return response($game, Response::HTTP_CREATED);
+        }
     }
 
     public function search(Request $request)
@@ -47,6 +53,20 @@ class GameController extends Controller
             $result[$i]->name = $resultName[0]->username;
             $i++;
         }
+
+        return $result;
+    }
+
+    public function topGames()
+    {
+        $result = DB::select('SELECT * FROM games ORDER BY play_count DESC LIMIT 10');
+
+        return $result;
+    }
+
+    public function jsonGame(Request $request)
+    {
+        $result = DB::select('SELECT JSONQuestions FROM games WHERE id = '.$request -> id_game);
 
         return $result;
     }
