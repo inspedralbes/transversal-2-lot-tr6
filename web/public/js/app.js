@@ -40,7 +40,7 @@ const quiz = Vue.component('quiz', {
             <div class="play">
                 <div v-if="logged">
                         <h1 class="title-landing"> Wanna test your knowledge? </h1>
-                        <button  class="button-play" @click="btn_play(); $router.push('/login')">Play
+                        <button  class="button-play" @click="btn_play(); $router.push('/difficulty')">Play
                         </button>
                         <br>
                 </div>
@@ -666,6 +666,9 @@ const profile = Vue.component('profile', {
             <div class="profile-data">
                 <b-icon icon="person-fill" class="h1"></b-icon>
                 <h1><strong>{{username}}</strong></h1>
+                <div>
+                    <b-table striped hover :items="userData" class="table table-dark"></b-table>
+                </div>
             </div>
         </div>
         <b-button @click="logOut" variant="primary">Logout</b-button>
@@ -675,7 +678,8 @@ const profile = Vue.component('profile', {
         return {
             logged: userStore().logged,
             username: userStore().loginInfo.username,
-            id_user: userStore().loginInfo.id_user
+            id_user: userStore().loginInfo.id_user,
+            userData: []
         }
     },
     methods: {
@@ -698,7 +702,8 @@ const profile = Vue.component('profile', {
         })
         .then((response) => response.json())
             .then((data) => {
-            console.log(data);
+                this.userData=data
+                console.log(this.userData);
         });
     }
 })
