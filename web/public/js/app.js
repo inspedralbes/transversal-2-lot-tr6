@@ -305,7 +305,7 @@ const difficulty = Vue.component('difficulty', {
                 }
                 this.error = false;
                 let difficulty = new FormData();
-                difficulty.append('diff', diff)
+                difficulty.append('diff', diff);
                 fetch(`http://127.0.0.1:8000/api/select-demo`, {
                     method: 'POST',
                     body: difficulty,
@@ -314,28 +314,28 @@ const difficulty = Vue.component('difficulty', {
                     .then(data => {
                         console.log(data);
                         let incorrectAnswers2 = this.splitter(data);
-                        // console.log(incorrectAnswers2)
-                        // this.chosen = true;
-                        // this.questions = data;
-                        // let length = this.questions.length;
-                        // let cont = 0;
+                        console.log(incorrectAnswers2)
+                        this.chosen = true;
+                        this.questions = data;
+                        let length = this.questions.length;
+                        let cont = 0;
 
-                        // for (let j = 0; j < length; j++) {
-                        //     let pos = Math.floor(Math.random() * 4);
-                        //     let answers = [];
-                        //     for (let i = 0; i < 4; i++) {
-                        //             if (i == pos) {
-                        //             answers.push(this.questions[j].correctAnswer);
-                        //             this.questions[j].correctIndex = i;
-                        //         } else {
-                        //             answers.push(incorrectAnswers2[j][cont]);
-                        //             cont++;
-                        //         }
-                        //     }
-                        //     cont = 0;
-                        //     this.questions[j].answers = answers;
+                        for (let j = 0; j < length; j++) {
+                            let pos = Math.floor(Math.random() * 4);
+                            let answers = [];
+                            for (let i = 0; i < 4; i++) {
+                                if (i == pos) {
+                                    answers.push(this.questions[j].correctAnswer);
+                                    this.questions[j].correctIndex = i;
+                                } else {
+                                    answers.push(incorrectAnswers2[j][cont]);
+                                    cont++;
+                                }
+                            }
+                            cont = 0;
+                            this.questions[j].answers = answers;
 
-                        // }
+                        }
                     });
                 console.log(this.questions);
                 this.setTimer();
