@@ -695,7 +695,7 @@ span {
 }
 
 @media (max-width: 950px) {
-  .home-button-play, .user-play, .text-demo {
+  .home-button-play, .user-play, .text-demo, .audioControls{
     display: none;
   }
 }
@@ -808,4 +808,23 @@ table.ranking-table tfoot .links a{
   color: #398AA4;
   padding: 2px 8px;
   border-radius: 5px;
+}
+
+.text-demo {
+  color: #646262;
+}
+
+.audioControls{
+  margin-bottom: 2px;
+}
+
+.mute-btn{
+  width: 70px;
+  height: 70px;
+}
+.play-btn{
+  width: 70px;
+  height: 70px;
+  background-color: #707070;
+  border-radius: 60px;
 }

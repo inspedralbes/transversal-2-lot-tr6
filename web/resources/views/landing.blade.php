@@ -65,8 +65,12 @@
     <script>
         function audioStart(){
             audio = document.querySelector("audio");
-            audio.volume = 0.2;
+            audio.volume = 0.1;
             audio.play();
+        }
+        function audioStop(){
+            audio = document.querySelector("audio");
+            audio.pause();
         }
     </script>
 </body>
