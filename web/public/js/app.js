@@ -554,7 +554,7 @@ const difficulty = Vue.component('difficulty', {
 
                     // this.$router.replace('/finishGame');
                 }
-            }, 100);
+            }, 1500);
         },
     },
 },);
