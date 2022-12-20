@@ -88,12 +88,10 @@ const quiz = Vue.component('quiz', {
                     <table class="ranking-table">
                         <tr>
                             <th>Game Of The Day</th>
-                            <th>Play count</th>
                             <th></th>
                         </tr>
                         <tr v-for="game in dailyGame">
                             <td>{{game.id}}_{{game.category}}_{{game.difficulty}}</td>
-                            <td>{{game.play_count}}</td>
                             <td v-if="logged"><button @click="playGame(game.id)" class="button-table">Play</button></td>
                             <td v-else><button class="button-table" v-b-modal.my-modal>Play</button></td>
                         </tr>
