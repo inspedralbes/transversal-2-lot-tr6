@@ -884,3 +884,29 @@ table.ranking-table tfoot .links a {
 .footer p {
   margin: 0;
 }
+
+.arrow {
+  position: absolute;
+  color: white;
+  width: 3%;
+  top: 85vh;
+  animation-name: loop;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes loop {
+  from {
+    top: 85vh;
+  }
+
+  to {
+    top: 90vh;
+  }
+}
+
+@media (max-width: 750px) {
+  .arrow {
+    width: 8%;
+  }
+}

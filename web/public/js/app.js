@@ -53,6 +53,7 @@ const quiz = Vue.component('quiz', {
                         <button  class="button demo-button" @click="btn_play(); $router.push('/difficulty')">Play as guest
                         </button>
                 </div>
+                <b-icon icon="arrow-down" class="arrow"></b-icon>
             </div>
             <canvas class="ranking" id="topScore"></canvas>
             <p class="text-ranking">Slide the table to Play</p>
