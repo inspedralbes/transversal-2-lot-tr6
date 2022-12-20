@@ -761,7 +761,7 @@ audio {
 
 .profile-page {
   width: 100%;
-  height: fit-content ;
+  height: 100vh ;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -920,7 +920,7 @@ audio {
 
 .table-container{
   height: 400px;
-  overflow: scroll;
+  overflow-x: hidden;
 }
 
 @media (min-width: 900px) {
