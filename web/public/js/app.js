@@ -153,7 +153,7 @@ const quiz = Vue.component('quiz', {
             .then(data => {
                 this.ranking = data;
             });
-
+            
         fetch(`http://127.0.0.1:8000/api/daily-game-info`)
             .then(response => response.json())
             .then(data => {
@@ -205,10 +205,6 @@ const difficulty = Vue.component('difficulty', {
                 <router-link to="/profile" class="user user-play"><b-icon icon="person-fill" class="h1"></b-icon><p>{{user.username}}</p></router-link>   
             </div>
             <div>
-                <div class="audioControls">
-                    <img class="mute-btn" @click="btn_pause" src="/css/mute.png"></img>
-                    <img class="play-btn" @click="btn_play" src="/css/play.png"></img>
-                </div>
                 <div v-if="!chosen" class="setParameters">
                     <div v-if="id_game == null">
                         <div v-show="user.logged"class="categories">
@@ -787,7 +783,8 @@ const profile = Vue.component('profile', {
         <div class="profile-content">
             <div class="profile-data">
                 <b-icon icon="person-fill" class="h1"></b-icon>
-                <h1><strong>{{username}}</strong></h1>
+                <h1><strong>{{username}}  </strong></h1>
+                <br>
                 <h2>Max score: {{maxScore}}</h2>
             </div>
                 <div>
