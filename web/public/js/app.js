@@ -163,7 +163,9 @@ const difficulty = Vue.component('difficulty', {
             failed: false,
             correction: '',
             noTime: false,
-            contador: ''
+            contador: '',
+            verificationAnswers: [],
+            indexVAnswers: 0
         }
     },
     template: `
@@ -411,6 +413,8 @@ const difficulty = Vue.component('difficulty', {
             return answerArray;
         },
         verificate(indexQ, indexA) {
+            this.verificationAnswers[this.indexVAnswers] = indexA;
+            this.indexVAnswers++;
             if (this.questions[indexQ].correctIndex == indexA) {
                 this.failed = false;
                 for (let i = 0; i < 4; i++) {
@@ -459,9 +463,18 @@ const difficulty = Vue.component('difficulty', {
                     }
 
                     userStore().currentGame.currentScore = score;
+                    
+                    this.$router.push({
+                        name: "finishGame",
+                        params: {
+                            questions: JSON.stringify(this.questions),
+                            verificationAnswers: JSON.stringify(this.verificationAnswers)
+                        }
+                    })
+
                     this.$router.replace('/finishGame');
                 }
-            }, 1500);
+            }, 100);
         },
     },
 },);
@@ -482,6 +495,9 @@ const finishGame = Vue.component('finishGame', {
     },
     mounted() {
         userStore().currentGame.id_game = null;
+
+        let questions = JSON.parse(this.$route.params.questions);
+        let answers = JSON.parse(this.$route.params.verificationAnswers)
     }
 });
 
@@ -788,7 +804,7 @@ const routes = [
     { path: "/login", component: login },
     { path: "/signup", component: signup },
     { path: "/difficulty", component: difficulty },
-    { path: "/finishGame", component: finishGame },
+    { path: "/finishGame", component: finishGame, name: "finishGame" },
     { path: "/profile", component: profile }
 ];
 
