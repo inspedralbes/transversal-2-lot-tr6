@@ -205,7 +205,6 @@ body {
 }
 
 .button-play {
-  background-color: #3660a000;
   border: 1px solid;
   color: #d6efff;
   padding: 10px 25px;
@@ -222,7 +221,7 @@ body {
 .button-play:hover {
   text-decoration: none;
   color: #3660a0;
-  box-shadow: 0px 0px 20px 5px #d6efff
+  box-shadow: 0px 0px 20px 5px #d6efff;
 }
 
 .button {
@@ -874,6 +873,14 @@ audio {
   .div-ranking-table,
   .gameOfTheDay {
     overflow: scroll;
+  }
+
+  .gameOfTheDay {
+    margin-bottom: 0px;
+  }
+
+  .ranking-table{
+    margin-bottom: 20px;
   }
 }
 

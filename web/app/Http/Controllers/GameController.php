@@ -43,6 +43,12 @@ class GameController extends Controller
         }
     }
 
+    public function getGame(Request $request)
+    {
+        $result = DB::table('games')->select('difficulty', 'category')->where('id', $request->id_game)->get();
+        return $result;
+    }
+
     public function topScores()
     {
         $result = DB::table('user_games')->select('*')->get();
