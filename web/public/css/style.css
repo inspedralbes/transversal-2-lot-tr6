@@ -695,11 +695,7 @@ span {
 }
 
 @media (max-width: 950px) {
-  .home-button-play {
-    display: none;
-  }
-
-  .user-play {
+  .home-button-play, .user-play, .text-demo {
     display: none;
   }
 }
@@ -745,4 +741,71 @@ audio {
 
 .profile-data svg{
   font-size: 100px;
+}
+
+.ranking {
+  margin-left: 10vw;
+  margin-right: 10vw;
+  margin-bottom: 10vh;
+}
+
+.ranking-tables {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ranking-table {
+  margin-bottom: 40px;
+}
+
+
+table.ranking-table {
+  border: 4px solid #555555;
+  background-color: #555555;
+  width: 90vw;
+  max-width: 400px;
+  text-align: center;
+  border-collapse: collapse;
+  color: white;
+}
+table.ranking-table td, table.ranking-table th {
+  border: 2px solid #474747;
+  padding: 5px 10px;
+}
+table.ranking-table tbody td {
+  font-size: 12px;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+table.ranking-table td:nth-child(even) {
+  background: #004779;
+}
+table.ranking-table thead {
+  background: #003052;
+  border-bottom: 3px solid #204EA4;
+}
+table.ranking-table thead th {
+  font-size: 15px;
+  font-weight: bold;
+  color: #FFFFFF;
+  text-align: left;
+  border-left: 2px solid #398AA4;
+}
+table.ranking-table thead th:first-child {
+  border-left: none;
+}
+
+table.ranking-table tfoot td {
+  font-size: 13px;
+}
+table.ranking-table tfoot .links {
+  text-align: right;
+}
+table.ranking-table tfoot .links a{
+  display: inline-block;
+  background: #FFFFFF;
+  color: #398AA4;
+  padding: 2px 8px;
+  border-radius: 5px;
 }
