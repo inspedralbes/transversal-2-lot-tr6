@@ -12,11 +12,11 @@ class GameController extends Controller
 {
     public function store(Request $request)
     {
-        
-        if($request -> id_game != -1){
-            $result = DB::update('UPDATE games SET play_count = play_count+1 WHERE id = '.$request->id_game);
+
+        if ($request->id_game != -1) {
+            $result = DB::update('UPDATE games SET play_count = play_count+1 WHERE id = ' . $request->id_game);
             return response($result, Response::HTTP_CREATED);
-        }else{
+        } else {
             $game = new Game();
             $game->category = $request->category;
             $game->difficulty = $request->difficulty;
@@ -66,7 +66,7 @@ class GameController extends Controller
 
     public function jsonGame(Request $request)
     {
-        $result = DB::select('SELECT JSONQuestions FROM games WHERE id = '.$request -> id_game);
+        $result = DB::select('SELECT JSONQuestions FROM games WHERE id = ' . $request->id_game);
 
         return $result;
     }
