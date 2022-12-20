@@ -867,6 +867,8 @@ tbody td:hover:before {
   transition: box-shadow 0.1s;
 }
 
+/* FI TABLE */
+
 .text-demo {
   color: #646262;
 }
@@ -886,8 +888,6 @@ tbody td:hover:before {
   background-color: #707070;
   border-radius: 60px;
 }
-
-/* FI TABLE */
 
 .footer {
   text-align: center;
