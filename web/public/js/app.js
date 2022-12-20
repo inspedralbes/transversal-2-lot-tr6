@@ -706,6 +706,7 @@ const login = Vue.component('login', {
         </div>
         </div>
         </div>
+        </div>
         `,
     methods: {
         submitLogin() {
