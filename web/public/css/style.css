@@ -695,15 +695,19 @@ span {
 }
 
 @media (max-width: 950px) {
-  .home-button-play, .user-play, .text-demo {
+
+  .home-button-play,
+  .user-play,
+  .text-demo {
     display: none;
   }
 }
+
 audio {
   display: none;
-} 
+}
 
-.profile-page{
+.profile-page {
   width: 100%;
   height: 100vh;
   display: flex;
@@ -711,7 +715,7 @@ audio {
   justify-content: center;
 }
 
-.profile-content{
+.profile-content {
   width: 55%;
   height: fit-content;
   display: flex;
@@ -719,11 +723,11 @@ audio {
   justify-content: center;
   background-color: #4A2966;
   border-radius: 5px;
-  margin: auto; 
-  margin-top: 5%; 
+  margin: auto;
+  margin-top: 5%;
 }
 
-.profile-data{
+.profile-data {
   width: 50%;
   padding: 25px;
   border-radius: 4px;
@@ -734,7 +738,7 @@ audio {
   justify-content: center;
 }
 
-.profile-data h1{
+.profile-data h1 {
   color: #d6efff;
   display: block;
 }
@@ -743,7 +747,7 @@ audio {
   color: #d6efff;
 }
 
-.profile-data svg{
+.profile-data svg {
   font-size: 100px;
 }
 
@@ -759,10 +763,28 @@ audio {
   justify-content: center;
 }
 
-.ranking-table {
+.div-ranking-table {
+  width: 90vw;
+  max-width: fit-content;
   margin-bottom: 40px;
 }
 
+@media (max-width: 750px) {
+  .div-ranking-table {
+    overflow: scroll;
+  }
+}
+
+@media (min-width: 500px) {
+  .text-ranking {
+    display: none;
+  }
+}
+
+.text-ranking {
+  text-align: center;
+  color: white;
+}
 
 table.ranking-table {
   border: 4px solid #555555;
@@ -773,22 +795,28 @@ table.ranking-table {
   border-collapse: collapse;
   color: white;
 }
-table.ranking-table td, table.ranking-table th {
+
+table.ranking-table td,
+table.ranking-table th {
   border: 2px solid #474747;
   padding: 5px 10px;
 }
+
 table.ranking-table tbody td {
   font-size: 12px;
   font-weight: bold;
   color: #FFFFFF;
 }
+
 table.ranking-table td:nth-child(even) {
   background: #004779;
 }
+
 table.ranking-table thead {
   background: #003052;
   border-bottom: 3px solid #204EA4;
 }
+
 table.ranking-table thead th {
   font-size: 15px;
   font-weight: bold;
@@ -796,6 +824,7 @@ table.ranking-table thead th {
   text-align: left;
   border-left: 2px solid #398AA4;
 }
+
 table.ranking-table thead th:first-child {
   border-left: none;
 }
@@ -803,13 +832,30 @@ table.ranking-table thead th:first-child {
 table.ranking-table tfoot td {
   font-size: 13px;
 }
+
 table.ranking-table tfoot .links {
   text-align: right;
 }
-table.ranking-table tfoot .links a{
+
+table.ranking-table tfoot .links a {
   display: inline-block;
   background: #FFFFFF;
   color: #398AA4;
   padding: 2px 8px;
   border-radius: 5px;
+}
+
+.footer {
+  text-align: center;
+  height: 50px;
+  width: 100%;
+  color: white;
+  background-color: #353535;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer p {
+  margin: 0;
 }
