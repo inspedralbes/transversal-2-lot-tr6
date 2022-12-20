@@ -27,7 +27,8 @@ const quiz = Vue.component('quiz', {
         return {
             logged: userStore().logged,
             username: userStore().loginInfo.username,
-            ranking: []
+            ranking: [],
+            dailyGame: []
         }
     },
 
@@ -53,8 +54,10 @@ const quiz = Vue.component('quiz', {
                         <button  class="button demo-button" @click="btn_play(); $router.push('/difficulty')">Play as guest
                         </button>
                 </div>
+                <b-icon icon="arrow-down" class="arrow"></b-icon>
             </div>
             <canvas class="ranking" id="topScore"></canvas>
+            <p class="text-ranking">Slide the table to Play</p>
             <div class="ranking-tables">
                 <div class="div-ranking-table">
                     <table class="ranking-table">
@@ -75,6 +78,25 @@ const quiz = Vue.component('quiz', {
                         </tr>
                     </table>
                 </div>
+                <div class="gameOfTheDay">
+                <p class="text-ranking">Slide the table to Play</p>
+                    <table class="ranking-table">
+                        <tr>
+                            <th>Game Of The Day</th>
+                            <th>Play count</th>
+                            <th></th>
+                        </tr>
+                        <tr v-for="game in dailyGame">
+                            <td>{{game.id}}_{{game.category}}_{{game.difficulty}}</td>
+                            <td>{{game.play_count}}</td>
+                            <td v-if="logged"><button style="color:black" @click="playGame(game.id)">Play</button></td>
+                            <td v-else><button style="color:black, background-color: grey" disabled>Play</button></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="footer">
+                <p>This quiz was made using the <a href="https://the-trivia-api.com/">The Trivia API</a></p>
             </div>
         </div>`,
     mounted() {
@@ -103,7 +125,7 @@ const quiz = Vue.component('quiz', {
                         topScores.push(data[i].score);
                     }
                 }
-                
+
                 const ChartScore = document.getElementById('topScore');
 
                 new Chart(ChartScore, {
@@ -126,17 +148,24 @@ const quiz = Vue.component('quiz', {
                 });
             });
 
-            fetch(`http://127.0.0.1:8000/api/search-top-games`)
+        fetch(`http://127.0.0.1:8000/api/search-top-games`)
             .then(response => response.json())
             .then(data => {
                 this.ranking = data;
-            });        
+            });
+
+        fetch(`http://127.0.0.1:8000/api/daily-game-info`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                this.dailyGame = data;
+            });
     },
-    methods : {
-        btn_play: function(){
+    methods: {
+        btn_play: function () {
             audioStart();
         },
-        playGame (id_game){
+        playGame(id_game) {
             userStore().currentGame.id_game = id_game;
             this.$router.replace('/difficulty');
         }
@@ -163,7 +192,9 @@ const difficulty = Vue.component('difficulty', {
             failed: false,
             correction: '',
             noTime: false,
-            contador: ''
+            contador: '',
+            verificationAnswers: [],
+            indexVAnswers: 0
         }
     },
     template: `
@@ -262,12 +293,12 @@ const difficulty = Vue.component('difficulty', {
             </div>
         </div>
     </div>
-        `,mounted() {
-            if(userStore().currentGame.id_game != null){
-                this.categoriaSeleccionada = "a";
-                this.dificultadSeleccionada = "a";
-            }
-        },
+        `, mounted() {
+        if (userStore().currentGame.id_game != null) {
+            this.categoriaSeleccionada = "a";
+            this.dificultadSeleccionada = "a";
+        }
+    },
     methods: {
         btn_pause: function(){
             audioStop();
@@ -293,53 +324,53 @@ const difficulty = Vue.component('difficulty', {
                 this.error = true;
             } else {
                 this.error = false;
-                if(this.id_game == null){
+                if (this.id_game == null) {
                     fetch(`https://the-trivia-api.com/api/questions?categories=${this.categoriaSeleccionada}&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
-                    .then((response) => response.json())
-                    .then((questions) => {
-                        this.setTimer();
-                        let questionsFormData = new FormData();
-                        questionsFormData.append('category', this.categoriaSeleccionada);
-                        questionsFormData.append('difficulty', this.dificultadSeleccionada);
-                        questionsFormData.append('JSONQuestions', JSON.stringify(questions));
-                        questionsFormData.append('id_game', -1);
+                        .then((response) => response.json())
+                        .then((questions) => {
+                            let questionsFormData = new FormData();
+                            questionsFormData.append('category', this.categoriaSeleccionada);
+                            questionsFormData.append('difficulty', this.dificultadSeleccionada);
+                            questionsFormData.append('JSONQuestions', JSON.stringify(questions));
+                            questionsFormData.append('id_game', -1);
 
-                        this.questions = mixAnswers(questions);
-                        this.chosen = true;
+                            this.questions = mixAnswers(questions);
+                            this.setTimer();
+                            this.chosen = true;
 
-                        fetch(`http://127.0.0.1:8000/api/store-game`, {
-                            method: 'POST',
-                            body: questionsFormData,
-                        }).then((response) => response.json())
-                            .then((data) => {
-                                userStore().currentGame.id_game = data.id;
-                            });
-                    });
-                }else{
+                            fetch(`http://127.0.0.1:8000/api/store-game`, {
+                                method: 'POST',
+                                body: questionsFormData,
+                            }).then((response) => response.json())
+                                .then((data) => {
+                                    userStore().currentGame.id_game = data.id;
+                                });
+                        });
+                } else {
                     let idGame = new FormData();
                     idGame.append('id_game', this.id_game);
 
-                    fetch(`http://127.0.0.1:8000/api/json-game`,{
+                    fetch(`http://127.0.0.1:8000/api/json-game`, {
                         method: 'POST',
                         body: idGame,
                     })
-                    .then((response) => response.json())
-                    .then((questions) => {
-                        this.setTimer();
-                        questions = JSON.parse(questions[0].JSONQuestions);
-                        
-                        this.questions = mixAnswers(questions);
-                        this.chosen = true;
+                        .then((response) => response.json())
+                        .then((questions) => {
+                            questions = JSON.parse(questions[0].JSONQuestions);
 
-                        fetch(`http://127.0.0.1:8000/api/store-game`, {
-                            method: 'POST',
-                            body: idGame,
-                        })
-                    });
+                            this.questions = mixAnswers(questions);
+                            this.setTimer();
+                            this.chosen = true;
+
+                            fetch(`http://127.0.0.1:8000/api/store-game`, {
+                                method: 'POST',
+                                body: idGame,
+                            })
+                        });
                 }
             }
 
-            function mixAnswers(questions){
+            function mixAnswers(questions) {
                 let length = questions.length;
                 let cont = 0;
 
@@ -358,7 +389,7 @@ const difficulty = Vue.component('difficulty', {
                     cont = 0;
                     questions[j].answers = answers;
                 }
-                
+
                 return questions;
             }
         },
@@ -421,6 +452,8 @@ const difficulty = Vue.component('difficulty', {
             return answerArray;
         },
         verificate(indexQ, indexA) {
+            this.verificationAnswers[this.indexVAnswers] = indexA;
+            this.indexVAnswers++;
             if (this.questions[indexQ].correctIndex == indexA) {
                 this.failed = false;
                 for (let i = 0; i < 4; i++) {
@@ -469,9 +502,18 @@ const difficulty = Vue.component('difficulty', {
                     }
 
                     userStore().currentGame.currentScore = score;
+
+                    this.$router.push({
+                        name: "finishGame",
+                        params: {
+                            questions: JSON.stringify(this.questions),
+                            verificationAnswers: JSON.stringify(this.verificationAnswers)
+                        }
+                    })
+
                     this.$router.replace('/finishGame');
                 }
-            }, 1500);
+            }, 100);
         },
     },
 },);
@@ -492,6 +534,9 @@ const finishGame = Vue.component('finishGame', {
     },
     mounted() {
         userStore().currentGame.id_game = null;
+
+        let questions = JSON.parse(this.$route.params.questions);
+        let answers = JSON.parse(this.$route.params.verificationAnswers)
     }
 });
 
@@ -665,7 +710,7 @@ const signup = Vue.component('signup', {
                 </div>
             </div>
             <div class="button" v-show="registered">
-                <p>Te has registrado maquinote</p>
+                <p>You've signed up successfully</p>
                 <router-link to="/login" class="signin-button">Login</router-link>
             </div>
         </div>
@@ -742,13 +787,12 @@ const profile = Vue.component('profile', {
         <div class="profile-content">
             <div class="profile-data">
                 <b-icon icon="person-fill" class="h1"></b-icon>
-                <br/>
                 <h1><strong>{{username}}</strong></h1>
-                <br/>
+                <h2>Max score: {{maxScore}}</h2>
+            </div>
                 <div>
                     <b-table striped hover :items="userData" dark responsive outlined style="width: 50rem; margin: auto;"></b-table>
                 </div>
-            </div>
         </div>
         <b-button @click="logOut" variant="primary">Logout</b-button>
     </div>
@@ -758,11 +802,12 @@ const profile = Vue.component('profile', {
             logged: userStore().logged,
             username: userStore().loginInfo.username,
             id_user: userStore().loginInfo.id_user,
-            userData: []
+            userData: [],
+            maxScore: 0
         }
     },
     methods: {
-        logOut: function() {
+        logOut: function () {
             userStore().logged = false;
             userStore().loginInfo.username = '';
             this.logged = false;
@@ -773,17 +818,23 @@ const profile = Vue.component('profile', {
     },
     mounted() {
         let id_userFormdata = new FormData();
-        id_userFormdata.append('id_user',this.id_user);
+        id_userFormdata.append('id_user', this.id_user);
 
-        fetch(`http://127.0.0.1:8000/api/user-data`,{
+        fetch(`http://127.0.0.1:8000/api/user-data`, {
             method: 'post',
             body: id_userFormdata
         })
-        .then((response) => response.json())
+            .then((response) => response.json())
             .then((data) => {
-                this.userData=data
+                this.userData = data;
                 console.log(this.userData);
-        });
+
+                for (let i = 0; i < this.userData.length; i++) {
+                    this.maxScore += this.userData[i].score
+                }
+
+                console.log(this.maxScore);
+            });
     }
 })
 
@@ -792,7 +843,7 @@ const routes = [
     { path: "/login", component: login },
     { path: "/signup", component: signup },
     { path: "/difficulty", component: difficulty },
-    { path: "/finishGame", component: finishGame },
+    { path: "/finishGame", component: finishGame, name: "finishGame" },
     { path: "/profile", component: profile }
 ];
 
