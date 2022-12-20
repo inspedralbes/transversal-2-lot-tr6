@@ -622,7 +622,6 @@ input[name='difficulty'] {
 */
 
 span {
-  background-color: #707070;
   color: white;
   text-align: center;
   text-decoration: none;
@@ -695,7 +694,11 @@ span {
 }
 
 @media (max-width: 950px) {
-  .home-button-play, .user-play, .text-demo, .audioControls{
+
+  .home-button-play,
+  .user-play,
+  .text-demo,
+  .audioControls {
     display: none;
   }
 }
@@ -807,64 +810,63 @@ audio {
   color: white;
 }
 
-table.ranking-table {
-  border: 4px solid #555555;
-  background-color: #555555;
+/* TABLE */
+
+table {
   width: 90vw;
   max-width: 400px;
-  text-align: center;
   border-collapse: collapse;
-  color: white;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  text-align: center;
 }
 
-table.ranking-table td,
-table.ranking-table th {
-  border: 2px solid #474747;
-  padding: 5px 10px;
+th,
+td {
+  padding: 8px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
 }
 
-table.ranking-table tbody td {
-  font-size: 12px;
-  font-weight: bold;
-  color: #FFFFFF;
-}
-
-table.ranking-table td:nth-child(even) {
-  background: #004779;
-}
-
-table.ranking-table thead {
-  background: #003052;
-  border-bottom: 3px solid #204EA4;
-}
-
-table.ranking-table thead th {
-  font-size: 15px;
-  font-weight: bold;
-  color: #FFFFFF;
+th {
   text-align: left;
-  border-left: 2px solid #398AA4;
+  background-color: #536ddfa2;
 }
 
-table.ranking-table thead th:first-child {
-  border-left: none;
+tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
-table.ranking-table tfoot td {
-  font-size: 13px;
+tbody td {
+  position: relative;
 }
 
-table.ranking-table tfoot .links {
-  text-align: right;
+tbody td:hover:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -9999px;
+  bottom: -9999px;
+  background-color: rgba(255, 255, 255, 0.2);
+  z-index: -1;
 }
 
-table.ranking-table tfoot .links a {
+.button-table {
+  padding: 4px;
+  border: 1px solid rgb(224, 224, 224);
+  color: rgb(221, 221, 221);
+  background-color: rgba(124, 124, 124, 0.63);
+  text-align: center;
+  text-decoration: none;
   display: inline-block;
-  background: #FFFFFF;
-  color: #398AA4;
-  padding: 2px 8px;
-  border-radius: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: box-shadow 0.1s;
 }
+
+/* FI TABLE */
 
 .text-demo {
   color: #646262;

@@ -61,21 +61,25 @@ const quiz = Vue.component('quiz', {
             <div class="ranking-tables">
                 <div class="div-ranking-table">
                     <table class="ranking-table">
-                        <tr>
+                    <thead    
+                    <tr>
                             <th>Position</th>
                             <th>Game Name</th>
                             <th>Difficulty</th>
                             <th>Play count</th>
                             <th></th>
                         </tr>
+                        </thead>
+                        <tbody>
                         <tr v-for="(position, indexPos) in ranking">
                             <td>{{indexPos + 1}}º</td>
                             <td>{{position.id}} {{position.category}}</td>
                             <td>{{position.difficulty}}</td>
                             <td>{{position.play_count}}</td>
-                            <td v-if="logged"><button style="color:black" @click="playGame(position.id)">Play</button></td>
-                            <td v-else><button style="color:black, background-color: grey" disabled>Play</button></td>
+                            <td v-if="logged"><button class="button-table" @click="playGame(position.id)">Play</button></td>
+                            <td v-else><button class="button-table" v-b-modal.my-modal>Play</button></td>
                         </tr>
+                        </tbody>
                     </table>
                 </div>
                 <div class="gameOfTheDay">
@@ -89,8 +93,9 @@ const quiz = Vue.component('quiz', {
                         <tr v-for="game in dailyGame">
                             <td>{{game.id}}_{{game.category}}_{{game.difficulty}}</td>
                             <td>{{game.play_count}}</td>
-                            <td v-if="logged"><button style="color:black" @click="playGame(game.id)">Play</button></td>
-                            <td v-else><button style="color:black, background-color: grey" disabled>Play</button></td>
+                            <td v-if="logged"><button class="button-table">Play</button></td>
+                            <td v-else><button class="button-table" v-b-modal.my-modal>Play</button></td>
+                            <b-modal id="my-modal" ok-only>You must logged-in to play a normal Game!</b-modal>
                         </tr>
                     </table>
                 </div>
