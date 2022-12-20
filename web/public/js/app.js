@@ -72,6 +72,8 @@ const quiz = Vue.component('quiz', {
                             <td v-else><button style="color:black, background-color: grey" disabled>Play</button></td>
                         </tr>
                     </table>
+                    <div class="gameOfTheDay">
+                    </div>
                 </div>
             </div>
             <div class="footer">

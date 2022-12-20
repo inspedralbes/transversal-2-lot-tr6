@@ -4,6 +4,8 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\DB;
+use Mockery\Undefined;
 
 class Kernel extends ConsoleKernel
 {
@@ -15,7 +17,28 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->call(function () {
+            $result = DB::table('games')->select('id')->orderByDesc('id')->first();
+            $error = true;
+            while ($error) {
+                $error = false;
+                $randomGame = rand(0, $result->id);
+                $result = DB::table('games')->where('id', $randomGame)->first();
+                if ($result == null) {
+                    $error = true;
+                }
+            }
+
+            DB::table('daily_games')->insert(
+                array(
+                    'category' => $result->category,
+                    'difficulty' => $result->difficulty,
+                    'JSONQuestions' => $result->JSONQuestions,
+                    'play_count' => $result->play_count,
+                    'created_at' => date('Y-m-d H:i:s')
+                )
+            );
+        })->everyMinute();
     }
 
     /**
@@ -25,7 +48,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
