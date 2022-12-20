@@ -575,16 +575,19 @@ const login = Vue.component('login', {
     template: `<div style="height:100vh">
     <router-link to="/" class="button home-button">Home</router-link>
         <div class="sign-page">
-            <div class="sign-content">
-                <div v-show="!logged" class="sign-form-text">
+            <div class="sign-content signin-content">
+            <div v-show="!logged" class="sign-form-text signin">
+                <div class="signin-text-content">
                     <h1 class="sign-title">Welcome back</h1>
                     <p>Enter your details and sign in</p>
                     <BR></br>
                     <p>If you still don't have an account sign up here</p>
                     <router-link to="/signup" class="button-router">Sign up</router-link>
                 </div>
-                <div v-show="!logged" class="sign-form-form">
-                <h1>Sign in</h1>
+            </div>
+            <div v-show="!logged" class="sign-form-form signin">
+                <div class="signin-form-content">
+                    <h1>Sign in</h1>
                     <b-input-group class="mb-2" size="sm"> 
                         <b-input-group-append is-text class="input">
                             <b-icon icon="person" shift-h="-4"></b-icon>
@@ -605,8 +608,8 @@ const login = Vue.component('login', {
                         <div v-if="!processing" class="signin-icon"><b-icon icon="check"></b-icon></div>
                         <div v-else="processing" class="signin-icon"><b-spinner class="signin-icon sign-icon-spinner"></b-spinner></div>
                     </b-button>
-                    <div v-show="incorrectLogin">
-                        <p style="color: red; margin: 18%;">Usuario Inexistente!</p> 
+                    <div style="margin: 0; text-align:center" v-show="incorrectLogin">
+                        <p style="color: red; margin-top:10px">Usuario Inexistente!</p> 
                     </div>
                 </div>
                 <div v-show="logged">
@@ -670,9 +673,10 @@ const signup = Vue.component('signup', {
     template: `<div style="height:100vh">
         <router-link to="/" class="button home-button">Home</router-link>
         <div class="sign-page">
-            <div class="sign-content">
-                <div v-show="!registered" class="sign-form-form">
-                <h1 class="sign-title">Sign up</h1>
+            <div class="sign-content signup-content">
+            <div v-show="!registered" class="sign-form-form signup-form">
+                <div class="signup-form-form">
+                    <h1 class="sign-title">Sign up</h1>
                     <b-input-group class="mb-2" size="sm"> 
                         <b-input-group-append is-text class="input">
                             <b-icon icon="person" shift-h="-4"></b-icon>
@@ -713,7 +717,9 @@ const signup = Vue.component('signup', {
                         <div v-else="processing" class="signin-icon" ><b-spinner></b-spinner></div>
                     </b-button>
                 </div>
-                <div v-show="!registered" class="sign-form-text">
+            </div>
+            <div v-show="!registered" class="sign-form-text signup-text">
+                <div class="signup-text-content">
                     <h1>Welcome back</h1>
                     <p>Create an account and start playing</p>
                     <br></br>
