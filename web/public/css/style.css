@@ -622,7 +622,6 @@ input[name='difficulty'] {
 */
 
 span {
-  background-color: #707070;
   color: white;
   text-align: center;
   text-decoration: none;
@@ -698,7 +697,8 @@ span {
 
   .home-button-play,
   .user-play,
-  .text-demo {
+  .text-demo,
+  .audioControls {
     display: none;
   }
 }
@@ -716,9 +716,7 @@ audio {
 }
 
 .profile-content {
-  width: 55%;
   height: fit-content;
-  display: flex;
   align-items: center;
   justify-content: center;
   background-color: #4A2966;
@@ -733,7 +731,7 @@ audio {
   border-radius: 4px;
   text-align: center;
   color: #d6efff;
-  display: flex;
+  /* display: flex; */
   align-items: center;
   justify-content: center;
 }
@@ -743,8 +741,9 @@ audio {
   display: block;
 }
 
-.profile-data h2{
+.profile-data h2 {
   color: #d6efff;
+  width: fit-content;
 }
 
 .profile-data svg {
@@ -800,20 +799,45 @@ audio {
 }
 
 .ranking-tables {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-bottom: 10vh;
 }
 
-.div-ranking-table {
+.div-ranking-table,
+.gameOfTheDay {
   width: 90vw;
   max-width: fit-content;
   margin-bottom: 40px;
+  margin: auto;
+  height: fit-content;
+}
+
+.gameOfTheDay {
+  margin-top: 20px;
+  margin-bottom: 80px;
 }
 
 @media (max-width: 750px) {
-  .div-ranking-table {
+
+  .div-ranking-table,
+  .gameOfTheDay {
     overflow: scroll;
+  }
+}
+
+@media (min-width: 900px) {
+  .div-ranking-table {
+    float: left;
+  }
+
+  .gameOfTheDay {
+    margin-left: 20px;
+    float: right;
+  }
+
+  .ranking-tables {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
@@ -828,63 +852,66 @@ audio {
   color: white;
 }
 
-table.ranking-table {
-  border: 4px solid #555555;
-  background-color: #555555;
+/* TABLE */
+
+table {
   width: 90vw;
   max-width: 400px;
-  text-align: center;
   border-collapse: collapse;
-  color: white;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  text-align: center;
 }
 
-table.ranking-table td,
-table.ranking-table th {
-  border: 2px solid #474747;
-  padding: 5px 10px;
+th,
+td {
+  padding: 8px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
 }
 
-table.ranking-table tbody td {
-  font-size: 12px;
-  font-weight: bold;
-  color: #FFFFFF;
-}
-
-table.ranking-table td:nth-child(even) {
-  background: #004779;
-}
-
-table.ranking-table thead {
-  background: #003052;
-  border-bottom: 3px solid #204EA4;
-}
-
-table.ranking-table thead th {
-  font-size: 15px;
-  font-weight: bold;
-  color: #FFFFFF;
+th {
   text-align: left;
-  border-left: 2px solid #398AA4;
+  background-color: #536ddfa2;
 }
 
-table.ranking-table thead th:first-child {
-  border-left: none;
+tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
-table.ranking-table tfoot td {
-  font-size: 13px;
+tbody td {
+  position: relative;
 }
 
-table.ranking-table tfoot .links {
-  text-align: right;
+tbody td:hover:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -9999px;
+  bottom: -9999px;
+  background-color: rgba(255, 255, 255, 0.2);
+  z-index: -1;
 }
 
-table.ranking-table tfoot .links a {
+.button-table {
+  padding: 4px;
+  border: 1px solid rgb(224, 224, 224);
+  color: rgb(221, 221, 221);
+  background-color: rgba(124, 124, 124, 0.63);
+  text-align: center;
+  text-decoration: none;
   display: inline-block;
-  background: #FFFFFF;
-  color: #398AA4;
-  padding: 2px 8px;
-  border-radius: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: box-shadow 0.1s;
+}
+
+/* FI TABLE */
+
+.text-demo {
+  color: #646262;
 }
 
 .footer {
@@ -900,4 +927,30 @@ table.ranking-table tfoot .links a {
 
 .footer p {
   margin: 0;
+}
+
+.arrow {
+  position: absolute;
+  color: white;
+  width: 3%;
+  top: 85vh;
+  animation-name: loop;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes loop {
+  from {
+    top: 85vh;
+  }
+
+  to {
+    top: 90vh;
+  }
+}
+
+@media (max-width: 750px) {
+  .arrow {
+    width: 8%;
+  }
 }

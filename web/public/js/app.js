@@ -27,9 +27,11 @@ const quiz = Vue.component('quiz', {
         return {
             logged: userStore().logged,
             username: userStore().loginInfo.username,
-            ranking: []
+            ranking: [],
+            dailyGame: []
         }
     },
+
     template: `
         <div class="container-landing">
             <div v-if="!logged">
@@ -37,7 +39,7 @@ const quiz = Vue.component('quiz', {
             </div>
             <div v-else>
                 <router-link to="/profile" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{username}}</p></router-link>   
-            </div>
+            </div>            
             <div class="play">
                 <div v-if="logged">
                         <h1 class="title-landing"> Wanna test your knowledge? </h1>
@@ -52,28 +54,50 @@ const quiz = Vue.component('quiz', {
                         <button  class="button demo-button" @click="btn_play(); $router.push('/difficulty')">Play as guest
                         </button>
                 </div>
+                <b-icon icon="arrow-down" class="arrow"></b-icon>
             </div>
             <canvas class="ranking" id="topScore"></canvas>
             <p class="text-ranking">Slide the table to Play</p>
             <div class="ranking-tables">
                 <div class="div-ranking-table">
                     <table class="ranking-table">
-                        <tr>
+                    <thead    
+                    <tr>
                             <th>Position</th>
                             <th>Game Name</th>
+                            <th>Difficulty</th>
                             <th>Play count</th>
                             <th></th>
                         </tr>
+                        </thead>
+                        <tbody>
                         <tr v-for="(position, indexPos) in ranking">
                             <td>{{indexPos + 1}}º</td>
-                            <td>{{position.id}}_{{position.category}}_{{position.difficulty}}</td>
+                            <td>{{position.id}} {{position.category}}</td>
+                            <td>{{position.difficulty}}</td>
                             <td>{{position.play_count}}</td>
-                            <td v-if="logged"><button style="color:black" @click="playGame(position.id)">Play</button></td>
-                            <td v-else><button style="color:black, background-color: grey" disabled>Play</button></td>
+                            <td v-if="logged"><button class="button-table" @click="playGame(position.id)">Play</button></td>
+                            <td v-else><button class="button-table" v-b-modal.my-modal>Play</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="gameOfTheDay">
+                <p class="text-ranking">Slide the table to Play</p>
+                    <table class="ranking-table">
+                        <tr>
+                            <th>Game Of The Day</th>
+                            <th>Play count</th>
+                            <th></th>
+                        </tr>
+                        <tr v-for="game in dailyGame">
+                            <td>{{game.id}}_{{game.category}}_{{game.difficulty}}</td>
+                            <td>{{game.play_count}}</td>
+                            <td v-if="logged"><button class="button-table">Play</button></td>
+                            <td v-else><button class="button-table" v-b-modal.my-modal>Play</button></td>
+                            <b-modal id="my-modal" ok-only>You must logged-in to play a normal Game!</b-modal>
                         </tr>
                     </table>
-                    <div class="gameOfTheDay">
-                    </div>
                 </div>
             </div>
             <div class="footer">
@@ -81,6 +105,7 @@ const quiz = Vue.component('quiz', {
             </div>
         </div>`,
     mounted() {
+
         userStore().currentGame.id_game = null;
         let users;
         let topScores;
@@ -132,6 +157,13 @@ const quiz = Vue.component('quiz', {
             .then(response => response.json())
             .then(data => {
                 this.ranking = data;
+            });
+            
+        fetch(`http://127.0.0.1:8000/api/daily-game-info`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                this.dailyGame = data;
             });
     },
     methods: {
@@ -267,6 +299,12 @@ const difficulty = Vue.component('difficulty', {
         }
     },
     methods: {
+        btn_pause: function(){
+            audioStop();
+        },
+        btn_play: function(){
+            audioStart();
+        },
         setTimer: function () {
             var timer = 100;
 
@@ -289,7 +327,6 @@ const difficulty = Vue.component('difficulty', {
                     fetch(`https://the-trivia-api.com/api/questions?categories=${this.categoriaSeleccionada}&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
                         .then((response) => response.json())
                         .then((questions) => {
-                            this.setTimer();
                             let questionsFormData = new FormData();
                             questionsFormData.append('category', this.categoriaSeleccionada);
                             questionsFormData.append('difficulty', this.dificultadSeleccionada);
@@ -297,6 +334,7 @@ const difficulty = Vue.component('difficulty', {
                             questionsFormData.append('id_game', -1);
 
                             this.questions = mixAnswers(questions);
+                            this.setTimer();
                             this.chosen = true;
 
                             fetch(`http://127.0.0.1:8000/api/store-game`, {
@@ -317,10 +355,10 @@ const difficulty = Vue.component('difficulty', {
                     })
                         .then((response) => response.json())
                         .then((questions) => {
-                            this.setTimer();
                             questions = JSON.parse(questions[0].JSONQuestions);
 
                             this.questions = mixAnswers(questions);
+                            this.setTimer();
                             this.chosen = true;
 
                             fetch(`http://127.0.0.1:8000/api/store-game`, {
@@ -462,7 +500,7 @@ const difficulty = Vue.component('difficulty', {
                     }
 
                     userStore().currentGame.currentScore = score;
-                    
+
                     this.$router.push({
                         name: "finishGame",
                         params: {
@@ -684,7 +722,7 @@ const signup = Vue.component('signup', {
                 </div>
             </div>
             <div class="button" v-show="registered">
-                <p>Te has registrado maquinote</p>
+                <p>You've signed up successfully</p>
                 <router-link to="/login" class="signin-button">Login</router-link>
             </div>
         </div>
@@ -761,7 +799,8 @@ const profile = Vue.component('profile', {
         <div class="profile-content">
             <div class="profile-data">
                 <b-icon icon="person-fill" class="h1"></b-icon>
-                <h1><strong>{{username}}</strong></h1>
+                <h1><strong>{{username}}  </strong></h1>
+                <br>
                 <h2>Max score: {{maxScore}}</h2>
             </div>
                 <div>
@@ -800,7 +839,7 @@ const profile = Vue.component('profile', {
         })
             .then((response) => response.json())
             .then((data) => {
-                this.userData=data;
+                this.userData = data;
                 console.log(this.userData);
 
                 for (let i = 0; i < this.userData.length; i++) {
