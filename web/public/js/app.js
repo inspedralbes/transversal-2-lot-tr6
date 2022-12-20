@@ -74,6 +74,9 @@ const quiz = Vue.component('quiz', {
                     </table>
                 </div>
             </div>
+            <div class="footer">
+                <p>This quiz was made using the <a href="https://the-trivia-api.com/">The Trivia API</a></p>
+            </div>
         </div>`,
     mounted() {
         userStore().currentGame.id_game = null;
