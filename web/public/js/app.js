@@ -95,7 +95,7 @@ const quiz = Vue.component('quiz', {
                             <td>{{game.play_count}}</td>
                             <td v-if="logged"><button class="button-table">Play</button></td>
                             <td v-else><button class="button-table" v-b-modal.my-modal>Play</button></td>
-                            <b-modal id="my-modal" ok-only>You must logged-in to play a normal Game!</b-modal>
+                            <b-modal id="my-modal" ok-only>You must be logged-in to play a normal Game!</b-modal>
                         </tr>
                     </table>
                 </div>
@@ -801,10 +801,10 @@ const profile = Vue.component('profile', {
                 <b-icon icon="person-fill" class="h1"></b-icon>
                 <h1><strong>{{username}}  </strong></h1>
                 <br>
-                <h2>Max score: {{maxScore}}</h2>
+                <h2 class="maxScore">Max score: {{maxScore}}</h2>
             </div>
                 <div>
-                    <b-table striped hover :items="userData" dark responsive outlined style="width: 50rem; margin: auto;"></b-table>
+                    <b-table id="profile-table" striped hover :items="userData" dark responsive outlined style="width: 50rem; margin: auto;"></b-table>
                 </div>
         </div>
         <b-button @click="logOut" variant="primary">Logout</b-button>
