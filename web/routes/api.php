@@ -5,6 +5,7 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserGameController;
 use App\Http\Controllers\UserDataController;
 use App\Http\Controllers\DemoGamesController;
+use App\Http\Controllers\ChallengeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,10 @@ Route::get('search-top-scores', [GameController::class, 'topScores']);
 Route::get('search-top-games', [GameController::class, 'topGames']);
 
 Route::get('daily-game-info', [GameController::class, 'dailyGameInfo']);
+
+Route::post('challenge', [ChallengeController::class, 'store']);
+
+Route::post('get-challenges', [ChallengeController::class, 'get']);
 
 Route::post('json-game', [GameController::class, 'jsonGame']);
 

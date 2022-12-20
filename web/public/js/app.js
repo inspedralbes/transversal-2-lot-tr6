@@ -28,7 +28,8 @@ const quiz = Vue.component('quiz', {
             logged: userStore().logged,
             username: userStore().loginInfo.username,
             ranking: [],
-            dailyGame: []
+            dailyGame: [],
+            challenges: []
         }
     },
 
@@ -95,8 +96,22 @@ const quiz = Vue.component('quiz', {
                             <td>{{game.play_count}}</td>
                             <td v-if="logged"><button class="button-table">Play</button></td>
                             <td v-else><button class="button-table" v-b-modal.my-modal>Play</button></td>
-                            <b-modal id="my-modal" ok-only>You must be logged-in to play a normal Game!</b-modal>
                         </tr>
+                    </table>
+                </div>
+                <div class="gameOfTheDay">
+                <p class="text-ranking">Slide the table to Play</p>
+                    <table class="ranking-table">
+                        <tr>
+                            <th>Challenges</th>
+                            <th></th>
+                        </tr>
+                        <tr v-for="challenge in challenges">
+                            <td>{{challenge.username}}</td>
+                            <td v-if="logged"><button class="button-table">Play</button></td>
+                            <td v-else><button class="button-table" v-b-modal.my-modal>Play</button></td>
+                        </tr>
+                        <b-modal id="my-modal" ok-only>You must be logged-in to play a normal Game!</b-modal>
                     </table>
                 </div>
             </div>
@@ -162,8 +177,21 @@ const quiz = Vue.component('quiz', {
         fetch(`http://127.0.0.1:8000/api/daily-game-info`)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
+                console.log(data);
                 this.dailyGame = data;
+            });
+
+        let idUserFormData = new FormData();
+        idUserFormData.append('id_user_challenged', userStore().loginInfo.id_user);
+
+        fetch(`http://127.0.0.1:8000/api/get-challenges`, {
+            method: 'POST',
+            body: idUserFormData
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                this.challenges = data;
             });
     },
     methods: {
@@ -532,6 +560,21 @@ const finishGame = Vue.component('finishGame', {
                 <h2>Wanna try again?</h2>
                 <router-link to="/difficulty" class="button-play">Play</router-link>
             </div>    
+            <div>
+                <h1 style="color:white">Do you want to challenge another user?</h1>
+                <table class="ranking-table">
+                    <tr>
+                        <th>Users</th>
+                        <th></th>
+                    </tr>
+                    <tr v-for="user in users">
+                        <td>{{user.username}}</td>
+                        <td v-if="logged"><button class="button-table" @click="challengeGame(user.id)">Send Challenge</button></td>
+                        <td v-else><button class="button-table" v-b-modal.my-modal>Send Request</button></td>
+                    </tr>
+                    <b-modal id="my-modal" ok-only>You must be logged-in to challenge another user!</b-modal>
+                </table>
+            </div>
         </div>
     </div>
     </div>`,
@@ -541,7 +584,8 @@ const finishGame = Vue.component('finishGame', {
             username: userStore().loginInfo.username,
             id_user: userStore().loginInfo.id_user,
             score: userStore().currentGame.currentScore,
-            correctAnswers: 0
+            correctAnswers: 0,
+            users: []
         }
     },
     mounted() {
@@ -549,7 +593,27 @@ const finishGame = Vue.component('finishGame', {
 
         this.correctAnswers= this.$route.params.correctAnswers;
         console.log(this.correctAnswers);
-    }
+
+        fetch(`http://127.0.0.1:8000/api/users`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.users)
+                this.users = data.users;
+            });
+    },
+    methods: {
+        challengeGame(userChallenged){
+            let challengeUser = new FormData();
+            challengeUser.append('id_user', userStore().loginInfo.id_user);
+            challengeUser.append('id_user_challenged', userChallenged);
+            challengeUser.append('id_game', ususerStore().currentGame.id_game);
+            
+            fetch(`http://127.0.0.1:8000/api/challenge`, {
+                method: POST,
+                body: challengeUser
+            })
+        }
+    } 
 });
 
 
