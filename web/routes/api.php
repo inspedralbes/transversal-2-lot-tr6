@@ -41,7 +41,7 @@ Route::get('search-top-scores', [GameController::class, 'topScores']);
 
 Route::get('search-top-games', [GameController::class, 'topGames']);
 
-Route::get('prueba', [GameController::class, 'prueba']);
+Route::get('daily-game-info', [GameController::class, 'dailyGameInfo']);
 
 Route::post('json-game', [GameController::class, 'jsonGame']);
 

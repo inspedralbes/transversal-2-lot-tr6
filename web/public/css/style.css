@@ -743,7 +743,7 @@ audio {
   display: block;
 }
 
-.profile-data h2{
+.profile-data h2 {
   color: #d6efff;
 }
 
@@ -758,20 +758,45 @@ audio {
 }
 
 .ranking-tables {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-bottom: 10vh;
 }
 
-.div-ranking-table {
+.div-ranking-table,
+.gameOfTheDay {
   width: 90vw;
   max-width: fit-content;
   margin-bottom: 40px;
+  margin: auto;
+  height: fit-content;
+}
+
+.gameOfTheDay {
+  margin-top: 20px;
+  margin-bottom: 80px;
 }
 
 @media (max-width: 750px) {
-  .div-ranking-table {
+
+  .div-ranking-table,
+  .gameOfTheDay {
     overflow: scroll;
+  }
+}
+
+@media (min-width: 900px) {
+  .div-ranking-table {
+    float: left;
+  }
+
+  .gameOfTheDay {
+    margin-left: 20px;
+    float: right;
+  }
+
+  .ranking-tables {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 

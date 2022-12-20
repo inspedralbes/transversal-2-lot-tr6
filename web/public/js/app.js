@@ -27,7 +27,8 @@ const quiz = Vue.component('quiz', {
         return {
             logged: userStore().logged,
             username: userStore().loginInfo.username,
-            ranking: []
+            ranking: [],
+            dailyGame: []
         }
     },
     template: `
@@ -72,8 +73,22 @@ const quiz = Vue.component('quiz', {
                             <td v-else><button style="color:black, background-color: grey" disabled>Play</button></td>
                         </tr>
                     </table>
-                    <div class="gameOfTheDay">
-                    </div>
+                </div>
+                <div class="gameOfTheDay">
+                <p class="text-ranking">Slide the table to Play</p>
+                    <table class="ranking-table">
+                        <tr>
+                            <th>Game Of The Day</th>
+                            <th>Play count</th>
+                            <th></th>
+                        </tr>
+                        <tr v-for="game in dailyGame">
+                            <td>{{game.id}}_{{game.category}}_{{game.difficulty}}</td>
+                            <td>{{game.play_count}}</td>
+                            <td v-if="logged"><button style="color:black" @click="playGame(game.id)">Play</button></td>
+                            <td v-else><button style="color:black, background-color: grey" disabled>Play</button></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
             <div class="footer">
@@ -132,6 +147,13 @@ const quiz = Vue.component('quiz', {
             .then(response => response.json())
             .then(data => {
                 this.ranking = data;
+            });
+
+        fetch(`http://127.0.0.1:8000/api/daily-game-info`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                this.dailyGame = data;
             });
     },
     methods: {
@@ -289,7 +311,6 @@ const difficulty = Vue.component('difficulty', {
                     fetch(`https://the-trivia-api.com/api/questions?categories=${this.categoriaSeleccionada}&limit=10&region=ES&difficulty=${this.dificultadSeleccionada}`)
                         .then((response) => response.json())
                         .then((questions) => {
-                            this.setTimer();
                             let questionsFormData = new FormData();
                             questionsFormData.append('category', this.categoriaSeleccionada);
                             questionsFormData.append('difficulty', this.dificultadSeleccionada);
@@ -297,6 +318,7 @@ const difficulty = Vue.component('difficulty', {
                             questionsFormData.append('id_game', -1);
 
                             this.questions = mixAnswers(questions);
+                            this.setTimer();
                             this.chosen = true;
 
                             fetch(`http://127.0.0.1:8000/api/store-game`, {
@@ -317,10 +339,10 @@ const difficulty = Vue.component('difficulty', {
                     })
                         .then((response) => response.json())
                         .then((questions) => {
-                            this.setTimer();
                             questions = JSON.parse(questions[0].JSONQuestions);
 
                             this.questions = mixAnswers(questions);
+                            this.setTimer();
                             this.chosen = true;
 
                             fetch(`http://127.0.0.1:8000/api/store-game`, {
@@ -773,7 +795,7 @@ const profile = Vue.component('profile', {
         })
             .then((response) => response.json())
             .then((data) => {
-                this.userData=data;
+                this.userData = data;
                 console.log(this.userData);
 
                 for (let i = 0; i < this.userData.length; i++) {
@@ -781,7 +803,7 @@ const profile = Vue.component('profile', {
                 }
 
                 console.log(this.maxScore);
-        });
+            });
     }
 })
 

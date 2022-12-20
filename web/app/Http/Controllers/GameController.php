@@ -70,4 +70,11 @@ class GameController extends Controller
 
         return $result;
     }
+
+    public function dailyGameInfo()
+    {
+        $result = DB::select('SELECT id, category, difficulty, play_count FROM daily_games ORDER BY id DESC LIMIT 1');
+
+        return $result;
+    }
 }
