@@ -62,7 +62,7 @@ const quiz = Vue.component('quiz', {
             <div class="ranking-tables">
                 <div class="div-ranking-table">
                     <table class="ranking-table">
-                    <thead    
+                    <thead>  
                     <tr>
                             <th>Position</th>
                             <th>Game Name</th>
