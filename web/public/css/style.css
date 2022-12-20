@@ -23,7 +23,7 @@ body {
   width: 50%;
   height: fit-content;
   padding: 10px;
-  padding-bottom: 40px;
+  padding-bottom: 35px;
   background-color: #003052;
   border-radius: 4px 0 0 4px;
   border-radius: 5px;
@@ -84,8 +84,30 @@ body {
     display: block;
   }
 
-  .sign-title {
-    margin-top: 70px;
+  .signin-content, .signup-content{
+    height: 100%;
+    min-height: fit-content;
+  }
+
+  .signin{
+    height: 50%;
+  }
+
+  .signup-text {
+    min-height: 310px;
+    height: fit-content;
+    background-color: #4A2966;
+    border-radius: 0;
+  }
+
+  .signup-form {
+    min-height: 550px;
+  }
+
+  .signin, .signup-text, .signup-form {
+    display:flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .sign-form-form {

@@ -28,7 +28,8 @@ const quiz = Vue.component('quiz', {
             logged: userStore().logged,
             username: userStore().loginInfo.username,
             ranking: [],
-            dailyGame: []
+            dailyGame: [],
+            challenges: []
         }
     },
 
@@ -95,8 +96,22 @@ const quiz = Vue.component('quiz', {
                             <td>{{game.play_count}}</td>
                             <td v-if="logged"><button class="button-table">Play</button></td>
                             <td v-else><button class="button-table" v-b-modal.my-modal>Play</button></td>
-                            <b-modal id="my-modal" ok-only>You must be logged-in to play a normal Game!</b-modal>
                         </tr>
+                    </table>
+                </div>
+                <div class="gameOfTheDay">
+                <p class="text-ranking">Slide the table to Play</p>
+                    <table class="ranking-table">
+                        <tr>
+                            <th>Challenges</th>
+                            <th></th>
+                        </tr>
+                        <tr v-for="challenge in challenges">
+                            <td>{{challenge.username}}</td>
+                            <td v-if="logged"><button class="button-table">Play</button></td>
+                            <td v-else><button class="button-table" v-b-modal.my-modal>Play</button></td>
+                        </tr>
+                        <b-modal id="my-modal" ok-only>You must be logged-in to play a normal Game!</b-modal>
                     </table>
                 </div>
             </div>
@@ -162,8 +177,21 @@ const quiz = Vue.component('quiz', {
         fetch(`http://127.0.0.1:8000/api/daily-game-info`)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
+                console.log(data);
                 this.dailyGame = data;
+            });
+
+        let idUserFormData = new FormData();
+        idUserFormData.append('id_user_challenged', userStore().loginInfo.id_user);
+
+        fetch(`http://127.0.0.1:8000/api/get-challenges`, {
+            method: 'POST',
+            body: idUserFormData
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                this.challenges = data;
             });
     },
     methods: {
@@ -532,6 +560,21 @@ const finishGame = Vue.component('finishGame', {
                 <h2>Wanna try again?</h2>
                 <router-link to="/difficulty" class="button-play">Play</router-link>
             </div>    
+            <div>
+                <h1 style="color:white">Do you want to challenge another user?</h1>
+                <table class="ranking-table">
+                    <tr>
+                        <th>Users</th>
+                        <th></th>
+                    </tr>
+                    <tr v-for="user in users">
+                        <td>{{user.username}}</td>
+                        <td v-if="logged"><button class="button-table" @click="challengeGame(user.id)">Send Challenge</button></td>
+                        <td v-else><button class="button-table" v-b-modal.my-modal>Send Request</button></td>
+                    </tr>
+                    <b-modal id="my-modal" ok-only>You must be logged-in to challenge another user!</b-modal>
+                </table>
+            </div>
         </div>
     </div>
     </div>`,
@@ -541,7 +584,8 @@ const finishGame = Vue.component('finishGame', {
             username: userStore().loginInfo.username,
             id_user: userStore().loginInfo.id_user,
             score: userStore().currentGame.currentScore,
-            correctAnswers: 0
+            correctAnswers: 0,
+            users: []
         }
     },
     mounted() {
@@ -549,7 +593,27 @@ const finishGame = Vue.component('finishGame', {
 
         this.correctAnswers= this.$route.params.correctAnswers;
         console.log(this.correctAnswers);
-    }
+
+        fetch(`http://127.0.0.1:8000/api/users`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.users)
+                this.users = data.users;
+            });
+    },
+    methods: {
+        challengeGame(userChallenged){
+            let challengeUser = new FormData();
+            challengeUser.append('id_user', userStore().loginInfo.id_user);
+            challengeUser.append('id_user_challenged', userChallenged);
+            challengeUser.append('id_game', ususerStore().currentGame.id_game);
+            
+            fetch(`http://127.0.0.1:8000/api/challenge`, {
+                method: POST,
+                body: challengeUser
+            })
+        }
+    } 
 });
 
 
@@ -575,16 +639,19 @@ const login = Vue.component('login', {
     template: `<div style="height:100vh">
     <router-link to="/" class="button home-button">Home</router-link>
         <div class="sign-page">
-            <div class="sign-content">
-                <div v-show="!logged" class="sign-form-text">
+            <div class="sign-content signin-content">
+            <div v-show="!logged" class="sign-form-text signin">
+                <div class="signin-text-content">
                     <h1 class="sign-title">Welcome back</h1>
                     <p>Enter your details and sign in</p>
                     <BR></br>
                     <p>If you still don't have an account sign up here</p>
                     <router-link to="/signup" class="button-router">Sign up</router-link>
                 </div>
-                <div v-show="!logged" class="sign-form-form">
-                <h1>Sign in</h1>
+            </div>
+            <div v-show="!logged" class="sign-form-form signin">
+                <div class="signin-form-content">
+                    <h1>Sign in</h1>
                     <b-input-group class="mb-2" size="sm"> 
                         <b-input-group-append is-text class="input">
                             <b-icon icon="person" shift-h="-4"></b-icon>
@@ -605,8 +672,8 @@ const login = Vue.component('login', {
                         <div v-if="!processing" class="signin-icon"><b-icon icon="check"></b-icon></div>
                         <div v-else="processing" class="signin-icon"><b-spinner class="signin-icon sign-icon-spinner"></b-spinner></div>
                     </b-button>
-                    <div v-show="incorrectLogin">
-                        <p style="color: red; margin: 18%;">Usuario Inexistente!</p> 
+                    <div style="margin: 0; text-align:center" v-show="incorrectLogin">
+                        <p style="color: red; margin-top:10px">Usuario Inexistente!</p> 
                     </div>
                 </div>
                 <div v-show="logged">
@@ -614,6 +681,7 @@ const login = Vue.component('login', {
                 <b-button @click="logOut" variant="primary">Logout</b-button>
                 </div>
             </div>
+        </div>
         </div>
         </div>
         `,
@@ -670,9 +738,10 @@ const signup = Vue.component('signup', {
     template: `<div style="height:100vh">
         <router-link to="/" class="button home-button">Home</router-link>
         <div class="sign-page">
-            <div class="sign-content">
-                <div v-show="!registered" class="sign-form-form">
-                <h1 class="sign-title">Sign up</h1>
+            <div class="sign-content signup-content">
+            <div v-show="!registered" class="sign-form-form signup-form">
+                <div class="signup-form-form">
+                    <h1 class="sign-title">Sign up</h1>
                     <b-input-group class="mb-2" size="sm"> 
                         <b-input-group-append is-text class="input">
                             <b-icon icon="person" shift-h="-4"></b-icon>
@@ -713,7 +782,9 @@ const signup = Vue.component('signup', {
                         <div v-else="processing" class="signin-icon" ><b-spinner></b-spinner></div>
                     </b-button>
                 </div>
-                <div v-show="!registered" class="sign-form-text">
+            </div>
+            <div v-show="!registered" class="sign-form-text signup-text">
+                <div class="signup-text-content">
                     <h1>Welcome back</h1>
                     <p>Create an account and start playing</p>
                     <br></br>
