@@ -739,6 +739,10 @@ audio {
   display: block;
 }
 
+.profile-data h2{
+  color: #d6efff;
+}
+
 .profile-data svg{
   font-size: 100px;
 }

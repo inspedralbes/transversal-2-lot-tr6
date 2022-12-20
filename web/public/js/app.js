@@ -728,13 +728,12 @@ const profile = Vue.component('profile', {
         <div class="profile-content">
             <div class="profile-data">
                 <b-icon icon="person-fill" class="h1"></b-icon>
-                <br/>
                 <h1><strong>{{username}}</strong></h1>
-                <br/>
+                <h2>Max score: {{maxScore}}</h2>
+            </div>
                 <div>
                     <b-table striped hover :items="userData" dark responsive outlined style="width: 50rem; margin: auto;"></b-table>
                 </div>
-            </div>
         </div>
         <b-button @click="logOut" variant="primary">Logout</b-button>
     </div>
@@ -744,7 +743,8 @@ const profile = Vue.component('profile', {
             logged: userStore().logged,
             username: userStore().loginInfo.username,
             id_user: userStore().loginInfo.id_user,
-            userData: []
+            userData: [],
+            maxScore: 0
         }
     },
     methods: {
@@ -767,8 +767,14 @@ const profile = Vue.component('profile', {
         })
         .then((response) => response.json())
             .then((data) => {
-                this.userData=data
+                this.userData=data;
                 console.log(this.userData);
+
+                for (let i = 0; i < this.userData.length; i++) {
+                    this.maxScore += this.userData[i].score
+                }
+
+                console.log(this.maxScore);
         });
     }
 })
