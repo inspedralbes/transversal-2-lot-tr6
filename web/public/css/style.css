@@ -842,7 +842,9 @@ audio {
 }
 
 @media (max-width: 750px) {
-
+  .finish-content {
+    margin-top: 35%;
+  }
   .div-ranking-table,
   .gameOfTheDay {
     overflow: scroll;
