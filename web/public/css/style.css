@@ -384,6 +384,16 @@ input[name='difficulty'] {
   align-items: center;
 }
 
+@media (max-width: 750px) {
+  .play {
+    height: fit-content;
+    min-height: 100vh;
+  }
+  .btn-group-toggle {
+    margin: 2%;
+  }
+}
+
 .setParameters {
   background-color: rgb(184, 184, 184);
   padding: 40px;
@@ -888,7 +898,6 @@ audio {
   }
   .setParameters{
     margin: 1%;
-    margin-top: 58%;
   }
   .div-ranking-table,
   .gameOfTheDay {
@@ -907,6 +916,11 @@ audio {
 .logout-btn{
   margin-left: 43%;
   margin-top: 1%;
+}
+
+.table-container{
+  height: 400px;
+  overflow: scroll;
 }
 
 @media (min-width: 900px) {

@@ -890,7 +890,7 @@ const profile = Vue.component('profile', {
                 <br>
                 <h2 class="maxScore">Max score: {{maxScore}}</h2>
             </div>
-                <div>
+                <div class="table-container">
                     <b-table id="profile-table" striped hover :items="userData" dark responsive outlined style="width: 100%; margin: auto;"></b-table>
                 </div>
                 <div>
