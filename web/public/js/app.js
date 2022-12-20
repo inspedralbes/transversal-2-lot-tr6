@@ -583,10 +583,12 @@ const finishGame = Vue.component('finishGame', {
                         <th>Users</th>
                         <th></th>
                     </tr>
-                    <tr v-for="user in users">
+                    <tr v-if="rerender" v-for="(user, index) in users">
                         <td>{{user.username}}</td>
-                        <td v-if="logged"><button class="button-table" @click="challengeGame(user.id)">Send Challenge</button></td>
-                        <td v-else><button class="button-table" v-b-modal.my-modal>Send Request</button></td>
+                        <td v-if="logged"><button v-if="challengeButton[index]" class="button-table" @click="challengeGame(user.id, index)">Send Challenge</button>
+                            <p v-else>SENT</p>
+                        </td>
+                        <td v-else><button class="button-table" v-b-modal.my-modal>Send Challenge</button></td>
                     </tr>
                     <b-modal id="my-modal" ok-only>You must be logged-in to challenge another user!</b-modal>
                 </table>
@@ -601,33 +603,40 @@ const finishGame = Vue.component('finishGame', {
             id_user: userStore().loginInfo.id_user,
             score: userStore().currentGame.currentScore,
             correctAnswers: 0,
-            users: []
+            users: [],
+            challengeButton: [],
+            rerender: true
         }
     },
     mounted() {
-        userStore().currentGame.id_game = null;
-
         this.correctAnswers= this.$route.params.correctAnswers;
         console.log(this.correctAnswers);
 
         fetch(`http://127.0.0.1:8000/api/users`)
             .then(response => response.json())
             .then(data => {
-                console.log(data.users)
                 this.users = data.users;
+                for (let i = 0; i < this.users.length; i++) {
+                    this.challengeButton[i] = true;
+                }
             });
     },
     methods: {
-        challengeGame(userChallenged){
+        challengeGame(userChallenged, index){
+            this.challengeButton[index] = false;
+            this.rerender = false;
+            console.log(this.challengeButton)
             let challengeUser = new FormData();
             challengeUser.append('id_user', userStore().loginInfo.id_user);
             challengeUser.append('id_user_challenged', userChallenged);
-            challengeUser.append('id_game', ususerStore().currentGame.id_game);
+            challengeUser.append('id_game', userStore().currentGame.id_game);
             
             fetch(`http://127.0.0.1:8000/api/challenge`, {
-                method: POST,
+                method: 'POST',
                 body: challengeUser
             })
+
+            this.rerender = true;
         }
     } 
 });
