@@ -205,7 +205,6 @@ body {
 }
 
 .button-play {
-  background-color: #3660a000;
   border: 1px solid;
   color: #d6efff;
   padding: 10px 25px;
@@ -222,7 +221,7 @@ body {
 .button-play:hover {
   text-decoration: none;
   color: #3660a0;
-  box-shadow: 0px 0px 20px 5px #d6efff
+  box-shadow: 0px 0px 20px 5px #d6efff;
 }
 
 .button {
@@ -890,6 +889,14 @@ audio {
   .gameOfTheDay {
     overflow: scroll;
   }
+
+  .gameOfTheDay {
+    margin-bottom: 0px;
+  }
+
+  .ranking-table{
+    margin-bottom: 20px;
+  }
 }
 
 .logout-btn{
@@ -985,6 +992,7 @@ tbody td:hover:before {
 
 .text-demo {
   color: #646262;
+  font-size: 30px;
 }
 
 .footer {

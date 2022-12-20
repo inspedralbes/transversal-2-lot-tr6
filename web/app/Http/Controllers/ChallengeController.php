@@ -27,7 +27,10 @@ class ChallengeController extends Controller
         $result = DB::table('challenges')->select('*')->where('id_user_challenged', $request->id_user_challenged)->get();
         for ($i=0; $i < count($result); $i++) {
             $resultNameUser = DB::table('users')->select('username')->where('id', $result[$i]->id_user)->get();
+            $resultGame = DB::table('games')->select('category', 'difficulty')->where('id', $result[$i]->id_game)->get();
             $result[$i]->username = $resultNameUser[0]->username;
+            $result[$i]->category = $resultGame[0]->category;
+            $result[$i]->difficulty = $resultGame[0]->difficulty;
         }
 
         return $result;

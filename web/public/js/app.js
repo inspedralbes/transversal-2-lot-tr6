@@ -50,7 +50,7 @@ const quiz = Vue.component('quiz', {
                 </div>
                 <div v-else>
                         <h1 class="title-landing" > Wanna test your knowledge? </h1>
-                        <router-link to="/login" class="button-play" >Play</router-link>
+                        <router-link to="/login" class="button-play button-principal" >Play</router-link>
                         <br>
                         <button  class="button demo-button" @click="btn_play(); $router.push('/difficulty')">Play as guest
                         </button>
@@ -62,7 +62,7 @@ const quiz = Vue.component('quiz', {
             <div class="ranking-tables">
                 <div class="div-ranking-table">
                     <table class="ranking-table">
-                    <thead    
+                    <thead>  
                     <tr>
                             <th>Position</th>
                             <th>Game Name</th>
@@ -94,22 +94,27 @@ const quiz = Vue.component('quiz', {
                         <tr v-for="game in dailyGame">
                             <td>{{game.id}}_{{game.category}}_{{game.difficulty}}</td>
                             <td>{{game.play_count}}</td>
-                            <td v-if="logged"><button class="button-table">Play</button></td>
+                            <td v-if="logged"><button @click="playGame(game.id)" class="button-table">Play</button></td>
                             <td v-else><button class="button-table" v-b-modal.my-modal>Play</button></td>
                         </tr>
                     </table>
-                </div>
-                <div class="gameOfTheDay">
-                <p class="text-ranking">Slide the table to Play</p>
-                    <table class="ranking-table">
+                    <p class="text-ranking">Slide the table to Play</p>
+                    <table class="ranking-table" style="margin-top:10px">
+                        <tr><th colspan="4">Challenges</th></tr>
                         <tr>
-                            <th>Challenges</th>
-                            <th></th>
+                            <th v-if="logged">Game</th>
+                            <th v-if="logged">Difficulty</td>
+                            <th v-if="logged">User</th>
+                            <th v-if="logged"></th>
                         </tr>
                         <tr v-for="challenge in challenges">
-                            <td>{{challenge.username}}</td>
-                            <td v-if="logged"><button class="button-table">Play</button></td>
-                            <td v-else><button class="button-table" v-b-modal.my-modal>Play</button></td>
+                            <td v-if="logged">{{challenge.id_game}} {{challenge.category}}</td>
+                            <td v-if="logged">{{challenge.difficulty}}</td>
+                            <td v-if="logged">{{challenge.username}}</td>
+                            <td v-if="logged"><button @click="playGame(challenge.id)" class="button-table">Play</button></td>
+                        </tr>
+                        <tr v-if="!logged">
+                            <td>Log-in to see your challenges</td>
                         </tr>
                         <b-modal id="my-modal" ok-only>You must be logged-in to play a normal Game!</b-modal>
                     </table>
@@ -272,6 +277,8 @@ const difficulty = Vue.component('difficulty', {
                     </div>
                     <div v-else>
                         <div class="difficulty">
+                            <label>{{categoriaSeleccionada}} - {{dificultadSeleccionada}}</label>
+                            <br>
                             <button @click="fetchPreguntes" class="button button-play">Play</button>
                         </div>
                     </div>
@@ -322,8 +329,17 @@ const difficulty = Vue.component('difficulty', {
     </div>
         `, mounted() {
         if (userStore().currentGame.id_game != null) {
-            this.categoriaSeleccionada = "a";
-            this.dificultadSeleccionada = "a";
+            let idGame = new FormData();
+            idGame.append('id_game', this.id_game);
+            fetch(`http://127.0.0.1:8000/api/get-game`, {
+                method: 'post',
+                body: idGame
+            })
+                .then(response => response.json())
+                .then(data => {
+                    this.categoriaSeleccionada = data[0].category;
+                    this.dificultadSeleccionada = data[0].difficulty;
+                });
         }
     },
     methods: {
