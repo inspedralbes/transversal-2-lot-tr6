@@ -875,10 +875,13 @@ const profile = Vue.component('profile', {
                 <h2 class="maxScore">Max score: {{maxScore}}</h2>
             </div>
                 <div>
-                    <b-table id="profile-table" striped hover :items="userData" dark responsive outlined style="width: 50rem; margin: auto;"></b-table>
+                    <b-table id="profile-table" striped hover :items="userData" dark responsive outlined style="width: 100%; margin: auto;"></b-table>
+                </div>
+                <div>
+                    <b-button class="logout-btn" @click="logOut" variant="primary">Logout</b-button>
                 </div>
         </div>
-        <b-button @click="logOut" variant="primary">Logout</b-button>
+        
     </div>
     </div>`,
     data: function () {
