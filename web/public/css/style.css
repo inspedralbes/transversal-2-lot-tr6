@@ -697,7 +697,8 @@ span {
 
   .home-button-play,
   .user-play,
-  .text-demo {
+  .text-demo,
+  .audioControls {
     display: none;
   }
 }
@@ -864,6 +865,26 @@ tbody td:hover:before {
   cursor: pointer;
   border-radius: 4px;
   transition: box-shadow 0.1s;
+}
+
+.text-demo {
+  color: #646262;
+}
+
+.audioControls {
+  margin-bottom: 2px;
+}
+
+.mute-btn {
+  width: 70px;
+  height: 70px;
+}
+
+.play-btn {
+  width: 70px;
+  height: 70px;
+  background-color: #707070;
+  border-radius: 60px;
 }
 
 /* FI TABLE */

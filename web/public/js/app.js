@@ -31,6 +31,7 @@ const quiz = Vue.component('quiz', {
             dailyGame: []
         }
     },
+
     template: `
         <div class="container-landing">
             <div v-if="!logged">
@@ -38,7 +39,7 @@ const quiz = Vue.component('quiz', {
             </div>
             <div v-else>
                 <router-link to="/profile" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{username}}</p></router-link>   
-            </div>
+            </div>            
             <div class="play">
                 <div v-if="logged">
                         <h1 class="title-landing"> Wanna test your knowledge? </h1>
@@ -64,6 +65,7 @@ const quiz = Vue.component('quiz', {
                     <tr>
                             <th>Position</th>
                             <th>Game Name</th>
+                            <th>Difficulty</th>
                             <th>Play count</th>
                             <th></th>
                         </tr>
@@ -71,7 +73,8 @@ const quiz = Vue.component('quiz', {
                         <tbody>
                         <tr v-for="(position, indexPos) in ranking">
                             <td>{{indexPos + 1}}º</td>
-                            <td>{{position.id}}_{{position.category}}_{{position.difficulty}}</td>
+                            <td>{{position.id}} {{position.category}}</td>
+                            <td>{{position.difficulty}}</td>
                             <td>{{position.play_count}}</td>
                             <td v-if="logged"><button class="button-table" @click="playGame(position.id)">Play</button></td>
                             <td v-else><button class="button-table" v-b-modal.my-modal>Play</button></td>
@@ -102,6 +105,7 @@ const quiz = Vue.component('quiz', {
             </div>
         </div>`,
     mounted() {
+
         userStore().currentGame.id_game = null;
         let users;
         let topScores;
@@ -206,6 +210,10 @@ const difficulty = Vue.component('difficulty', {
                 <router-link to="/profile" class="user user-play"><b-icon icon="person-fill" class="h1"></b-icon><p>{{user.username}}</p></router-link>   
             </div>
             <div>
+                <div class="audioControls">
+                    <img class="mute-btn" @click="btn_pause" src="/css/mute.png"></img>
+                    <img class="play-btn" @click="btn_play" src="/css/play.png"></img>
+                </div>
                 <div v-if="!chosen" class="setParameters">
                     <div v-if="id_game == null">
                         <div v-show="user.logged"class="categories">
@@ -297,6 +305,12 @@ const difficulty = Vue.component('difficulty', {
         }
     },
     methods: {
+        btn_pause: function(){
+            audioStop();
+        },
+        btn_play: function(){
+            audioStart();
+        },
         setTimer: function () {
             var timer = 100;
 
