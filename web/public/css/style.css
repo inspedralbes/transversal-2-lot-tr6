@@ -867,6 +867,10 @@ audio {
   .finish-content {
     margin-top: 35%;
   }
+  .setParameters{
+    margin: 1%;
+    margin-top: 58%;
+  }
   .div-ranking-table,
   .gameOfTheDay {
     overflow: scroll;
