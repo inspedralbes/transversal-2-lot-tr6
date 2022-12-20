@@ -487,7 +487,7 @@ const difficulty = Vue.component('difficulty', {
                     }
 
                     userStore().currentGame.currentScore = score;
-                    
+
                     this.$router.push({
                         name: "finishGame",
                         params: {
@@ -695,7 +695,7 @@ const signup = Vue.component('signup', {
                 </div>
             </div>
             <div class="button" v-show="registered">
-                <p>Te has registrado maquinote</p>
+                <p>You've signed up successfully</p>
                 <router-link to="/login" class="signin-button">Login</router-link>
             </div>
         </div>
