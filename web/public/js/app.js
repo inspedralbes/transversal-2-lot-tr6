@@ -576,20 +576,22 @@ const finishGame = Vue.component('finishGame', {
                 <h2>Wanna try again?</h2>
                 <router-link to="/difficulty" class="button-play">Play</router-link>
             </div>    
-            <div>
-                <h1 style="color:white">Do you want to challenge another user?</h1>
-                <table class="ranking-table">
-                    <tr>
-                        <th>Users</th>
-                        <th></th>
-                    </tr>
-                    <tr v-for="user in users">
-                        <td>{{user.username}}</td>
-                        <td v-if="logged"><button class="button-table" @click="challengeGame(user.id)">Send Challenge</button></td>
-                        <td v-else><button class="button-table" v-b-modal.my-modal>Send Request</button></td>
-                    </tr>
-                    <b-modal id="my-modal" ok-only>You must be logged-in to challenge another user!</b-modal>
-                </table>
+            <div class="challengeContainer">
+                <div>
+                    <h1 style="color:white">Do you want to challenge another user?</h1>
+                    <table class="ranking-table">
+                        <tr>
+                            <th>Users</th>
+                            <th></th>
+                        </tr>
+                        <tr v-for="user in users">
+                            <td>{{user.username}}</td>
+                            <td v-if="logged"><button class="button-table" @click="challengeGame(user.id)">Send Challenge</button></td>
+                            <td v-else><button class="button-table" v-b-modal.my-modal>Send Request</button></td>
+                        </tr>
+                        <b-modal id="my-modal" ok-only>You must be logged-in to challenge another user!</b-modal>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
