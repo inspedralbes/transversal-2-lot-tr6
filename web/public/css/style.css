@@ -834,6 +834,7 @@ audio {
   border-radius: 5px;
   margin: auto;
   margin-top: 5%;
+  padding: 30px;
 }
 
 .finish-data {
@@ -862,6 +863,7 @@ audio {
   .finish-content{
     width: 100%;
     display: block;
+    border-radius: 0;
   }
   
   .challengeContainer{
@@ -935,8 +937,11 @@ audio {
 }
 
 .logout-btn{
-  margin-left: 43%;
-  margin-top: 1%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+  margin-bottom: 30px;
 }
 
 .table-container{

@@ -180,7 +180,6 @@ const quiz = Vue.component('quiz', {
         fetch(`http://127.0.0.1:8000/api/daily-game-info`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 this.dailyGame = data;
             });
 
@@ -193,7 +192,7 @@ const quiz = Vue.component('quiz', {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
+                (data)
                 this.challenges = data;
             });
     },
@@ -610,7 +609,6 @@ const finishGame = Vue.component('finishGame', {
     },
     mounted() {
         this.correctAnswers= this.$route.params.correctAnswers;
-        console.log(this.correctAnswers);
 
         fetch(`http://127.0.0.1:8000/api/users`)
             .then(response => response.json())
@@ -625,7 +623,6 @@ const finishGame = Vue.component('finishGame', {
         challengeGame(userChallenged, index){
             this.challengeButton[index] = false;
             this.rerender = false;
-            console.log(this.challengeButton)
             let challengeUser = new FormData();
             challengeUser.append('id_user', userStore().loginInfo.id_user);
             challengeUser.append('id_user_challenged', userChallenged);
@@ -902,8 +899,8 @@ const profile = Vue.component('profile', {
                 <div class="table-container">
                     <b-table id="profile-table" striped hover :items="userData" dark responsive outlined style="width: 100%; margin: auto;"></b-table>
                 </div>
-                <div>
-                    <b-button class="logout-btn" @click="logOut" variant="primary">Logout</b-button>
+                <div class="logout-btn">
+                    <b-button @click="logOut" variant="primary">Logout</b-button>
                 </div>
         </div>
         
@@ -939,7 +936,6 @@ const profile = Vue.component('profile', {
             .then((response) => response.json())
             .then((data) => {
                 this.userData = data;
-                console.log(this.userData);
 
                 for (let i = 0; i < this.userData.length; i++) {
                     this.maxScore += this.userData[i].score
