@@ -751,6 +751,48 @@ audio {
   font-size: 100px;
 }
 
+.finish-page {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.finish-content {
+  width: 55%;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4A2966;
+  border-radius: 5px;
+  margin: auto;
+  margin-top: 5%;
+}
+
+.finish-data {
+  width: 100%;
+  padding: 25px;
+  border-radius: 4px;
+  text-align: center;
+  color: #d6efff;
+}
+
+.finish-data h1 {
+  color: #d6efff;
+  display: block;
+}
+
+.finish-data h2{
+  color: #d6efff;
+  margin-top: 5%;
+}
+
+.finish-data svg {
+  font-size: 100px;
+}
+
 .ranking {
   margin-left: 10vw;
   margin-right: 10vw;

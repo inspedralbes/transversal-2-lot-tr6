@@ -166,8 +166,6 @@ const difficulty = Vue.component('difficulty', {
             correction: '',
             noTime: false,
             contador: '',
-            verificationAnswers: [],
-            indexVAnswers: 0
         }
     },
     template: `
@@ -415,7 +413,6 @@ const difficulty = Vue.component('difficulty', {
             return answerArray;
         },
         verificate(indexQ, indexA) {
-            this.verificationAnswers[this.indexVAnswers] = indexA;
             this.indexVAnswers++;
             if (this.questions[indexQ].correctIndex == indexA) {
                 this.failed = false;
@@ -469,12 +466,11 @@ const difficulty = Vue.component('difficulty', {
                     this.$router.push({
                         name: "finishGame",
                         params: {
-                            questions: JSON.stringify(this.questions),
-                            verificationAnswers: JSON.stringify(this.verificationAnswers)
+                            correctAnswers: this.correctAnswers,
                         }
                     })
 
-                    this.$router.replace('/finishGame');
+                    // this.$router.replace('/finishGame');
                 }
             }, 100);
         },
@@ -483,23 +479,38 @@ const difficulty = Vue.component('difficulty', {
 
 const finishGame = Vue.component('finishGame', {
     template: `<div>
-        <div class="countAnswers">Your score was {{correctAnswers}}</div>
-        <router-link to="/difficulty" class="button-play">Play Again</router-link> 
-        <router-link to="/" class="button">Home</router-link>
+    <router-link to="/" class="button home-button">Home</router-link>       
+    <div class="finish-page">
+    <div v-if="!logged">
+        <router-link to="/login" class="button login-button button-router">Login</router-link>   
+    </div>
+    <div v-else>
+        <router-link to="/profile" class="user"><b-icon icon="person-fill" class="h1"></b-icon><p>{{username}}</p></router-link>   
+    </div>
+        <div class="finish-content">
+            <div class="finish-data">
+                <h1>You've scored {{this.score}} points!</h1>
+                <h1>You've answered correctly {{correctAnswers}}/10 questions</h1>
+                <h2>Wanna try again?</h2>
+                <router-link to="/difficulty" class="button-play">Play</router-link>
+            </div>    
+        </div>
+    </div>
     </div>`,
     data: function () {
         return {
             logged: userStore().logged,
             username: userStore().loginInfo.username,
             id_user: userStore().loginInfo.id_user,
-            correctAnswers: userStore().currentGame.currentScore
+            score: userStore().currentGame.currentScore,
+            correctAnswers: 0
         }
     },
     mounted() {
         userStore().currentGame.id_game = null;
 
-        let questions = JSON.parse(this.$route.params.questions);
-        let answers = JSON.parse(this.$route.params.verificationAnswers)
+        this.correctAnswers= this.$route.params.correctAnswers;
+        console.log(this.correctAnswers);
     }
 });
 
@@ -795,8 +806,6 @@ const profile = Vue.component('profile', {
                 for (let i = 0; i < this.userData.length; i++) {
                     this.maxScore += this.userData[i].score
                 }
-
-                console.log(this.maxScore);
         });
     }
 })
