@@ -665,9 +665,11 @@ const profile = Vue.component('profile', {
         <div class="profile-content">
             <div class="profile-data">
                 <b-icon icon="person-fill" class="h1"></b-icon>
+                <br/>
                 <h1><strong>{{username}}</strong></h1>
+                <br/>
                 <div>
-                    <b-table striped hover :items="userData" class="table table-dark"></b-table>
+                    <b-table striped hover :items="userData" dark responsive outlined style="width: 50rem; margin: auto;"></b-table>
                 </div>
             </div>
         </div>

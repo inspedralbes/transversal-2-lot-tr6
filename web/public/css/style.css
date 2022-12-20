@@ -733,10 +733,14 @@ audio {
   border-radius: 4px;
   text-align: center;
   color: #d6efff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .profile-data h1{
   color: #d6efff;
+  display: block;
 }
 
 .profile-data svg{
