@@ -528,6 +528,16 @@ const difficulty = Vue.component('difficulty', {
                 if (this.currentQuestion == 10) {
                     let score = parseInt((this.correctAnswers * 10) + this.contador);
 
+                    switch(this.dificultadSeleccionada){
+                        case 'easy':
+                            break;
+                        case 'medium': score = Math.round(score*1.2);
+                            break;
+                        case 'hard': score = Math.round(score*1.5);
+                            break;
+                        default:
+                            break;
+                    }
                     if (userStore().loginInfo.id_user != null) {
                         let scoreUser = new FormData();
                         scoreUser.append('id_user', userStore().loginInfo.id_user);
