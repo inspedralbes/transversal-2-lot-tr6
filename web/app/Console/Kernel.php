@@ -38,7 +38,7 @@ class Kernel extends ConsoleKernel
                     'created_at' => date('Y-m-d H:i:s')
                 )
             );
-        })->dailyAt('23:00');
+        })->daily();
     }
 
     /**
